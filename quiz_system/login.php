@@ -23,6 +23,8 @@
         under certain conditions found in the GNU GPL license
     */
 
+    session_start();
+
     $wrong = "";
     if(isset($_GET['user_msg']) && $_GET['user_msg']!=""){
         $wrong = $_GET['user_msg'];
@@ -90,7 +92,7 @@
 
 	</head>
 	<body>
-		<form action="admin.php" class="login" method="POST">
+		<form action="login_check.php" class="login" method="POST">
           		<p>
 			      <label for="login">Username:</label>
 			      <input type="text" name="login" id="login">

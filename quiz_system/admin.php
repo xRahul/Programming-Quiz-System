@@ -24,29 +24,10 @@
     */
 
 
-/*
- //set username and password for admin here!
-    $username = 'admin';
-    $passwrd = 'cool';
-
-    if(!isset($_POST['type']) || $_POST['type'] == ""){
-*/
-/*	    if( !isset($_POST['login']) || !isset($_POST['password']) ){
-	    	$user_msg = 'Please Login First!';
-			header('location: login.php?user_msg='.$user_msg.'');
-			exit();
-	    }
-
-	    if($_POST['login'] != $username || $_POST['password'] != $passwrd){
-	    	$user_msg = 'Wrong Username or Password!';
-			header('location: login.php?user_msg='.$user_msg.'');
-			exit();
-	    }
-	}
-*/
+    include("session.php");
 
 
-//checking if the required data has been filled
+ //checking if the required data has been filled
 	if(isset($_POST['desc'])){
 		if(!isset($_POST['iscorrect']) || $_POST['iscorrect'] == ""){
 			echo "Sorry, important data to submit your question is missing. Please press back in your browser and try again and make sure you select a correct answer for the question.";
@@ -122,7 +103,7 @@
 			$lastId = mysql_insert_id();
 			mysql_query("UPDATE questions SET question_id='$lastId' WHERE id='$lastId' LIMIT 1")or die(mysql_error());
 
-////// Update answers based on which is correct //////////////
+ ////// Update answers based on which is correct //////////////
 
 	//if inserting a true/false question, insert answers by this-
 		if($type == 'tf'){
@@ -212,7 +193,7 @@
 		mysql_query("TRUNCATE TABLE questions")or die(mysql_error());
 		mysql_query("TRUNCATE TABLE answers")or die(mysql_error());
 
-//checking if truncate is successful
+ //checking if truncate is successful
 	//getting rows from tables
 		$sql1 = mysql_query("SELECT id FROM questions LIMIT 1")or die(mysql_error());
 		$sql2 = mysql_query("SELECT id FROM answers LIMIT 1")or die(mysql_error());
@@ -384,39 +365,40 @@
                 <meta name="msapplication-TileImage" content="img/faviconit/favicon-144.png">
         <!-- ****** faviconit.com favicons ****** -->
 
-     <!-- SYNTAX HIGHLIGHTER -->
-		<link rel="stylesheet" type="text/css" href="sh/styles/shCore.css">
-		<link rel="stylesheet" type="text/css" href="sh/styles/shThemeDefault.css">
-		<script type="text/javascript" src="sh/scripts/shCore.js"></script>
-	   <!-- INCLUDING ALL BRUSHES SCRIPTS -->
-		<script type="text/javascript" src="sh/scripts/shBrushAppleScript.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushAS3.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushBash.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushColdFusion.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushCpp.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushCSharp.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushCss.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushDelphi.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushDiff.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushErlang.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushGroovy.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushJava.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushJavaFX.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushJScript.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushPerl.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushPhp.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushPlain.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushPowerShell.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushPython.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushRuby.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushSass.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushScala.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushSql.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushVb.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushXml.js"></script>
-		<script type="text/javascript">
-		    SyntaxHighlighter.all()
-		</script>
+	    <!-- SYNTAX HIGHLIGHTER -->
+			<link rel="stylesheet" type="text/css" href="sh/styles/shCore.css">
+			<link rel="stylesheet" type="text/css" href="sh/styles/shThemeDefault.css">
+			<script type="text/javascript" src="sh/scripts/shCore.js"></script>
+		   <!-- INCLUDING ALL BRUSHES SCRIPTS -->
+			<script type="text/javascript" src="sh/scripts/shBrushAppleScript.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushAS3.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushBash.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushColdFusion.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushCpp.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushCSharp.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushCss.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushDelphi.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushDiff.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushErlang.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushGroovy.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushJava.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushJavaFX.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushJScript.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushPerl.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushPhp.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushPlain.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushPowerShell.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushPython.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushRuby.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushSass.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushScala.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushSql.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushVb.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushXml.js"></script>
+			<script type="text/javascript">
+			    SyntaxHighlighter.all()
+			</script>
+		<!-- SYNTAX HIGHLIGHTER -->
 
 	<!-- BUGGY CODE INPUT FIELD -->
 		<link rel="stylesheet" href="codemirror/lib/codemirror.css">
@@ -444,7 +426,7 @@
 	-->
 		
 		<script type="text/javascript">
-		 //displaying different code-blocks on button click
+		//displaying different code-blocks on button click
 			function showDiv(el1,el2,el3){
 				document.getElementById(el1).style.display = 'block';
 				document.getElementById(el2).style.display = 'none';
@@ -469,6 +451,41 @@
 				}
 			}
 		</script>
+
+		<script type="text/javascript">
+		//overlays
+			//hiding the overlay
+			    function close_overlay(){
+			        document.getElementById('register').style.display='none';
+			        document.getElementById('fade').style.display='none';
+			    }
+
+			//showing the overlay
+			    function open_overlay(){
+			        document.getElementById('register').style.display='block';
+			        document.getElementById('fade').style.display='block';
+			    }
+		</script>
+
+		<link rel="stylesheet" type="text/css" href="css/register.css">
+
+		<script type="text/javascript">
+
+		function submit(){
+			var x=document.forms["reg_name"]["login"].value;
+			var y=document.forms["reg_name"]["password"].value;
+            if (x==null || x=="" || y==null || y==""){
+                document.getElementById("required").innerHTML = "Enter Both Values";
+                exit();
+            }
+			close_overlay();
+                document.getElementById('reg_name').submit(); 
+                return false;
+            }
+		}
+
+		</script>
+
 	</head>
 
 	<body onLoad="getAllQuestions()">
@@ -482,36 +499,53 @@
 			<p style="color:#06F;">
 		   		<?php echo $msg; ?>
 		   	</p>
-
-			<h2>What type of question would you like to create?</h2>
-
-			<table align="center">
-				<tr>
-					<td align="right">
-						<button onClick="showDiv('tf', 'mc', 'quesans')">True / False</button>
-					</td>
-					<td></td>
-					<td align="left">
-						<button onClick="showDiv('mc', 'tf', 'quesans')">Multiple Choice</button>
-					</td>
-				</tr>
-				<tr>
-				</tr>
-				<tr>
-					<td align="center" colspan="3">
-						<button onClick="showDiv('quesans', 'tf', 'mc')">View Questions</button>
-					</td>
-					<td></td>
-				<!--
-					<td align="left">
-						<span id="resetBtn"><button onclick="resetQuiz()">Reset quiz to zero</button></span>
-					</td>
-				-->
-				</tr>
-
-			</table>
-
-		    <br />
+		   	<br><br>
+			<ul>
+				<span id="Hello">Hello, <span id="usr"><?php echo $login_session; ?>!</span></span>
+				
+				<a href="index.php">
+					<li>Quiz Homepage</li>
+				</a>
+			  	
+			  	<li>Manage Questions
+			  		<ul>
+			  			<li>Create a Question
+			  				<ul>
+			      				<a href="javascript:showDiv('tf', 'mc', 'quesans');">
+			      					<li>True/False</li>
+			      				</a>
+			      				<a href="javascript:showDiv('mc', 'tf', 'quesans');">
+			      					<li>Multiple Choice</li>
+			      				</a>
+			    			</ul>
+			  			</li>
+			      		<a href="javascript:showDiv('quesans', 'tf', 'mc');">
+			  				<li>View All Questions</li>
+			  			</a>
+			      		<a href="javascript:resetQuiz();">
+			  				<li>Delete all Questions</li>
+			  			</a>
+			  		</ul>
+			    </li>
+			  	<li>User Management
+			  		<ul>
+			  			<li>All User Data</li>
+			  			<li>Top 10!</li>
+			  		</ul>
+			  	</li>
+			  	<li>Settings
+			    	<ul>
+			      		<a href="javascript:open_overlay();">
+			      			<li>Register an Admin</li>
+			      		</a>
+			    
+			      		<a href="logout.php">
+			      			<li>LogOut</li>
+			      		</a>
+			    	</ul>
+			  	</li>
+			</ul>
+		    <br /><br />
 		    <span id="resetBtnMsg"></span>
 		</div>
 
@@ -574,13 +608,13 @@
     			<br />
 
             	<input type="text" class="txt_box" id="answer1" name="answer1" value="True" readonly>&nbsp;
-            	<label style="cursor:pointer; color:#06F;">
+            	<label style="cursor:pointer; color:#555;">
             		<input type="radio" name="iscorrect" value="answer1">Correct Answer?
             	</label>
     	  		<br />
    				<br />
             	<input type="text" class="txt_box" id="answer2" name="answer2" value="False" readonly>&nbsp;
-              	<label style="cursor:pointer; color:#06F;">
+              	<label style="cursor:pointer; color:#555;">
             		<input type="radio" name="iscorrect" value="answer2">Correct Answer?
             	</label>
 
@@ -590,9 +624,7 @@
 
 
     			<input type="hidden" value="tf" name="type">
-    			<input type="hidden" value="<?php echo $username; ?>" name='login'>
-    			<input type="hidden" value="<?php echo $passwrd; ?>" name='password'>
-    			<input type="submit" value="Add To Quiz">
+    			<input type="submit" id="add_to_quiz" value="Add To Quiz">
     		</form>
  		</div>
  
@@ -654,7 +686,7 @@
     			<strong>Please create the first answer for the question</strong>
     			<br />
         		<input type="text" class="txt_box" id="mcanswer1" name="answer1">&nbsp;
-          		<label style="cursor:pointer; color:#06F;">
+          		<label style="cursor:pointer; color:#555;">
           			<input type="radio" name="iscorrect" value="answer1">Correct Answer?
         		</label>
       			<br />
@@ -662,7 +694,7 @@
     			<strong>Please create the second answer for the question</strong>
     			<br />
         		<input type="text" class="txt_box" id="mcanswer2" name="answer2">&nbsp;
-          		<label style="cursor:pointer; color:#06F;">
+          		<label style="cursor:pointer; color:#555;">
           			<input type="radio" name="iscorrect" value="answer2">Correct Answer?
         		</label>
       			<br />
@@ -670,7 +702,7 @@
     			<strong>Please create the third answer for the question</strong>
     			<br />
         		<input type="text" class="txt_box" id="mcanswer3" name="answer3">&nbsp;
-          		<label style="cursor:pointer; color:#06F;">
+          		<label style="cursor:pointer; color:#555;">
           			<input type="radio" name="iscorrect" value="answer3">Correct Answer?
         		</label>
       			<br />
@@ -678,15 +710,13 @@
     			<strong>Please create the fourth answer for the question</strong>
     			<br />
         		<input type="text" class="txt_box" id="mcanswer4" name="answer4">&nbsp;
-          		<label style="cursor:pointer; color:#06F;">
+          		<label style="cursor:pointer; color:#555;">
           			<input type="radio" name="iscorrect" value="answer4">Correct Answer?
         		</label>
       			<br />
     			<br />
     			<input type="hidden" value="mc" name="type">
-    			<input type="hidden" value="<?php echo $username; ?>" name='login'>
-    			<input type="hidden" value="<?php echo $passwrd; ?>" name='password'>
-    			<input type="submit" value="Add To Quiz">
+    			<input type="submit" id="add_to_quiz" value="Add To Quiz">
     		</form>
  		</div>
 
@@ -697,6 +727,35 @@
  			</table>
  		</div>
 
+
+ 		<div id="register" class="white_content">
+            <form action="register.php" class="login" method="POST" name="reg_name">
+          		<p>
+			      <label class="reg_label" for="login">Choose a Username:</label>
+			      <input type="text" name="login" id="login" required="required">
+			    </p>
+
+			    <p>
+			      <label class="reg_label" for="password">Choose a Password:</label>
+			      <input type="password" name="password" id="password" required="required">
+			    </p>
+
+			    <p class="login-submit">
+			      <button  onClick="submit()" class="login-button">Register</button>
+			    </p>
+			    <p id="required"></p>
+			</form>
+        </div>
+
+
+
+        <div id="fade_overlay">
+            <a href="javascript:close_overlay();" style="cursor: default;">
+                <div id="fade" class="black_overlay">
+                </div>
+            </a>
+        </div>
+        <br><BR><BR><BR><br><BR><BR><BR>
 
  		<div id="footer" align="bottom">
             <table border="0" cellpadding="0" cellspacing="0" style="width:100%;">

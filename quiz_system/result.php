@@ -55,7 +55,7 @@
 
          //updating the %age and time taken by the user in the DB
         	mysql_query("UPDATE quiz_takers 
-                         SET percentage= '$percent', duration= '$time_taken'
+                         SET marks='$marks', percentage= '$percent', duration= '$time_taken'
                          WHERE username = '$roll_no' ")or die(mysql_error());
         }else{
             $user_msg = 'Hey, Something went wrong! Tell the Admin!!';
