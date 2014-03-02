@@ -1,0 +1,115 @@
+			body{
+                margin: auto;
+                margin-top: 0px;
+                background-color: sRGB(241,241,241);
+            }
+
+            #head{
+                font-size: 0pt;
+                font-family: Arial, sans-serif;
+                font-weight: bolder;
+                display: block;
+                padding-top: 0px;
+                margin-top: 0px;
+            }
+
+
+            img{
+                margin-top: 0px;
+                padding-top: 0px;
+            }
+
+			.content{
+				width: 800px;
+                margin: auto;
+                padding: 10px;
+                border-radius: 20px;
+                box-shadow: 0px 0px 10px #666666;
+                border: 1px solid #CCCCCC;
+                position: relative;
+                top: 10px;
+				display:none;
+			}
+
+			#admin_menu{
+				width:700px;
+				margin-left:auto;
+				margin-right:auto;
+				text-align:center;
+			}
+
+            .lang_selector{
+                font-size: 12pt;
+                width: 150px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                padding-left: 8px;
+                background: url(../img/arrow.jpg) no-repeat right #ddd;
+                -moz-appearance:window;   
+            }
+
+            .lang_selector:hover{
+                box-shadow: 0px 0px 3px #000000;
+            }
+
+            @-moz-document url-prefix() {
+                .css-select-moz{
+                padding-top: 3px;
+                padding-bottom: 3px;
+                padding-left: 8px;
+                border-width: 1px;
+                margin-top: 5px;
+                border-radius: 5px;
+                overflow: hidden;
+                     background: url(../img/arrow.jpg) no-repeat right #ddd;
+                  }
+                .css-select-moz:hover{
+                    box-shadow: 0px 0px 3px #000000;
+                }
+            }
+
+            .CodeMirror {
+                border: 1px solid #eee;
+                height: auto;
+            }
+            .CodeMirror-scroll {
+                overflow-y: hidden;
+                overflow-x: auto;
+            }
+            .CodeMirror-selected  { background-color: #ddd !important; }
+            
+
+            .txt_box{
+                padding: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+                text-align: left;
+                border-radius: 5px;
+                background-color: #cccccc;
+                border-width: 0px;
+                font-size: 16px;
+            }
+
+			#copyright{
+                color:#FFF;
+                font-size:11px;
+                padding:8px;
+                padding-left: 100px;
+            }
+
+            #developer{
+                color:#FFF;
+                font-size:11px;
+                padding:8px;
+                padding-right: 100px;
+            }
+
+            #footer{
+                margin-top: 200px; 
+                background-color:#003366;
+                border-top:6px solid #d4e1e9;
+                bottom: 0px ;
+                position: fixed ;
+                width: 100% ;
+                z-index: 1000 ;
+            }
