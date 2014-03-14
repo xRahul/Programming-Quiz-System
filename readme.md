@@ -1,4 +1,4 @@
-#Programming Multiple Quiz System
+# Programming Multiple Quiz System
 
     A simple Programming Quiz System containing-
   
@@ -17,13 +17,13 @@
   
 ---
 
-####APIs used to enter and Display Programming codes
+#### APIs used to enter and Display Programming codes
 * [CodeMirror](http://codemirror.net/) In-browser code editor.
 * [SyntaxHighlighter](http://alexgorbatchev.com/SyntaxHighlighter/) JavaScript code syntax highlighter.
 
 ---
 
-###Coded & Tested using-
+### Coded & Tested using-
 * __[XAMPP](http://www.apachefriends.org/index.html)__ for __Apache__ server and __MySQL__.
 * __[Sublime Text](http://www.sublimetext.com/)__ for code editing.
 * __Firefox__ and __Chrome__ browsers.
@@ -31,7 +31,7 @@
 
 ---
 
-###How to install on your system-
+### How to install on your system-
 1. Install _XAMPP_ and make sure __Apache Web Server__ and __MySQL Database__ are running
 2. copy-paste the __quiz_system_git__ folder in __htdocs__ folder associated with _XAMPP_
 3. goto __phpMyAdmin__ and _create_ a database.
@@ -45,14 +45,14 @@
     * click on __favicon it!__ and download the __zip__ file.
     * extract the __faviconit.zip__ in the __img__ folder.
 8. Add videos in __webm__(_video.webmhd.webm_) and __mp4__(_video.mp4_) formats in __videos__ folder.
-9. login to the admin page using _http://localhost/quiz_system_git/login.php_
-10. start the quiz @ _http://localhost/quiz_system_git/_
+9. login to the admin page using *http://localhost/quiz_system_git/login.php*
+10. start the quiz @ *http://localhost/quiz_system_git/*
 
 ---
 ---
 ---
 
-##Features provided for the _Admin_ in _admin.php_ page-
+## Features provided for the _Admin_ in _admin.php_ page-
 
 * Clicking on your __username__ in the navbar _refreshes_ the page.
 * __Quiz Homepage__ opens the _Instructions page_ in a new tab.
@@ -179,7 +179,7 @@
 ---
 ---
 
-###Miscellaneous features
+### Miscellaneous features
 
 1. Using *codemirror* to have a better textarea input for programs/codes.
 2. Using *syntax highlighter* to display the code better in a question.
