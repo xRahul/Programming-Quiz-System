@@ -26,6 +26,10 @@
     session_start();
 
     $wrong = "";
+    if(isset($_POST['user_msg']) && $_POST['user_msg']!=""){
+        $wrong = $_POST['user_msg'];
+    }
+
     if(isset($_GET['user_msg']) && $_GET['user_msg']!=""){
         $wrong = $_GET['user_msg'];
     }
@@ -95,7 +99,7 @@
 		<form action="login_check.php" class="login" method="POST">
           		<p>
 			      <label for="login">Username:</label>
-			      <input type="text" name="login" id="login">
+			      <input type="text" name="login" id="login" autofocus>
 			    </p>
 
 			    <p>

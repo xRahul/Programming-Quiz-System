@@ -1,0 +1,514 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>Programming Multiple Quiz System</title>
+
+</head>
+<body>
+<h1>Programming Multiple Quiz System</h1>
+
+<pre><code>A simple Programming Quiz System containing-
+</code></pre>
+
+<ul>
+<li><strong>Instruction page</strong>
+
+<ul>
+<li>Student enters Roll No. here</li>
+</ul>
+</li>
+<li><strong>Quiz page</strong>
+
+<ul>
+<li>Timed-Quiz appears here</li>
+</ul>
+</li>
+<li><strong>Result page</strong>
+
+<ul>
+<li>Result of the user is shown here</li>
+</ul>
+</li>
+<li><strong>Login Page</strong>
+
+<ul>
+<li>Admin has to login here first.<em>(admin, 12345)</em></li>
+</ul>
+</li>
+<li><strong>Admin page</strong>
+
+<ul>
+<li>All admin related functions are here!</li>
+</ul>
+</li>
+<li><strong>Videos</strong>
+
+<ul>
+<li>Users can also watch a video during the quiz. Or anything you want to display to them.</li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+
+<h4>APIs used to enter and Display Programming codes</h4>
+
+<ul>
+<li><a href="http://codemirror.net/">CodeMirror</a> In-browser code editor.</li>
+<li><a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a> JavaScript code syntax highlighter.</li>
+</ul>
+
+
+<hr />
+
+<h3>Coded &amp; Tested using-</h3>
+
+<ul>
+<li><strong><a href="http://www.apachefriends.org/index.html">XAMPP</a></strong> for <strong>Apache</strong> server and <strong>MySQL</strong>.</li>
+<li><strong><a href="http://www.sublimetext.com/">Sublime Text</a></strong> for code editing.</li>
+<li><strong>Firefox</strong> and <strong>Chrome</strong> browsers.</li>
+<li><strong>Mac OSX</strong> &amp; <strong>Windows</strong>.</li>
+</ul>
+
+
+<hr />
+
+<h3>How to install on your system-</h3>
+
+<ol>
+<li>Install <em>XAMPP</em> and make sure <strong>Apache Web Server</strong> and <strong>MySQL Database</strong> are running</li>
+<li>copy-paste the <strong>quiz_system_git</strong> folder in <strong>htdocs</strong> folder associated with <em>XAMPP</em></li>
+<li>goto <strong>phpMyAdmin</strong> and <em>create</em> a database.</li>
+<li><em>import</em> the quiz database from <strong>database</strong> folder into it and make sure it has all <em>5</em> tables.</li>
+<li><em>Truncate</em> the tables to have clean database.</li>
+<li><code>INSERT</code> first admin in the <strong>admins</strong> database.</li>
+<li>make required changes in <strong>scripts/connect_db.php</strong></li>
+<li>Get <em>favicons</em>-
+
+<ul>
+<li>visit <strong><a href="http://faviconit.com/en">faviconit</a></strong> <em>(© 2013-2014 Eduardo Russo)</em>.</li>
+<li>Upload atleast 200x200px img with maximum 1MB size limit.</li>
+<li>click on <strong>favicon it!</strong> and download the <strong>zip</strong> file.</li>
+<li>extract the <strong>faviconit.zip</strong> in the <strong>img</strong> folder.</li>
+</ul>
+</li>
+<li>Add videos in <strong>webm</strong>(<em>video.webmhd.webm</em>) and <strong>mp4</strong>(<em>video.mp4</em>) formats in <strong>videos</strong> folder.</li>
+<li>login to the admin page using <em>http://localhost/quiz_system_git/login.php</em></li>
+<li>start the quiz @ <em>http://localhost/quiz_system_git/</em></li>
+</ol>
+
+
+<hr />
+
+<hr />
+
+<hr />
+
+<h2>Features provided for the <em>Admin</em> in <em>admin.php</em> page-</h2>
+
+<ul>
+<li>Clicking on your <strong>username</strong> in the navbar <em>refreshes</em> the page.</li>
+<li><strong>Quiz Homepage</strong> opens the <em>Instructions page</em> in a new tab.</li>
+</ul>
+
+
+<h4><em>Manage Questions</em>-</h4>
+
+<ul>
+<li><strong>Create a Question</strong>-
+
+<ul>
+<li><em>True/False</em> - Create a Question with 2 options- True and False.</li>
+<li><em>Multiple Choice</em> - Create a Question with 4 options.</li>
+</ul>
+</li>
+<li><strong>View All Questions</strong>-
+
+<ul>
+<li>Shows all the questions of all the quizes on a single page along with the correct answers.</li>
+</ul>
+</li>
+<li><strong>Edit a Question</strong>-
+
+<ul>
+<li>Select one question from all the questions in all quizes to edit.</li>
+</ul>
+</li>
+<li><strong>Delete Some Questions</strong>-
+
+<ul>
+<li>Select as many questions as you want to delete from the database.</li>
+</ul>
+</li>
+<li><strong>Delete All Questions</strong>-
+
+<ul>
+<li>Deletes all the questions from all the quizes, but leaves the quizes intact.</li>
+</ul>
+</li>
+</ul>
+
+
+<h4><em>Quiz Management</em>-</h4>
+
+<pre><code>You will see all your quizes lined up here.
+</code></pre>
+
+<ul>
+<li><strong>Add New Quiz</strong>-
+
+<ul>
+<li>Add a new quiz to the database and allot the Duration for the quiz, and Max no. of Questions to be displayed to the users.</li>
+</ul>
+</li>
+<li>Further list contains <strong>QuizName</strong> along with the time and no. of questions allotted to it.</li>
+</ul>
+
+
+<h6># Hovering over a QuizName-</h6>
+
+<ul>
+<li><strong>Quiz Settings</strong>
+
+<ul>
+<li><em>Set Default</em> - Sets the quiz as default i.e. it will be the one USER will be attempting.</li>
+<li><em>Update Metadata</em> - edit the Duration for the quiz, and Max no. of Questions to be displayed.</li>
+<li><em>Delete this Quiz</em> - Deletes the quiz along with all its questions.</li>
+</ul>
+</li>
+<li><strong>Manage Questions</strong>
+
+<ul>
+<li><em>View All Questions</em> - Shows all Questions of the quiz</li>
+<li><em>Edit a Question</em> - Edit a single question from the quiz</li>
+<li><em>Delete Some Questions</em> - Delete some questions from the quiz</li>
+</ul>
+</li>
+<li><strong>Results</strong>
+
+<ul>
+<li><em>Result(Top 20)</em> - Shows the top 20 Rank Holders.</li>
+<li><em>Result(All)</em> - Shows all the users, sorted according to rank.</li>
+<li><em>Clear the Result</em> - Delete all records of the users who took this quiz.</li>
+</ul>
+</li>
+</ul>
+
+
+<h4><em>Settings</em></h4>
+
+<ul>
+<li><em>Register an Admin</em>
+
+<ul>
+<li>Register a new admin</li>
+</ul>
+</li>
+<li><em>Change Password</em>
+
+<ul>
+<li>Change password to your account</li>
+</ul>
+</li>
+<li><em>Delete Your Account</em>
+
+<ul>
+<li>Delete Your admin account</li>
+</ul>
+</li>
+<li><em>Reset All Tables</em>
+
+<ul>
+<li>Truncates all tables and sets one admin ID as default <em>(admin, 12345)</em></li>
+</ul>
+</li>
+<li><em>LogOut</em>
+
+<ul>
+<li>Log out of your admin account.</li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+
+<h4>Interface for Creating/Editing a Question</h4>
+
+<ol>
+<li>Select/re-select the quiz to which you want to add/transfer the question.
+
+<ul>
+<li>If there are no quizes in the dropdown, create a Quiz first.</li>
+</ul>
+</li>
+<li>Type/Change your Question.</li>
+<li>If there's a program/code in the question,
+
+<ul>
+<li>Select/Change Language of the code</li>
+<li>Add/Edit the code below</li>
+</ul>
+</li>
+<li>If adding a True/False Question-
+
+<ul>
+<li>Select the correct answer</li>
+</ul>
+</li>
+<li>If adding a Multiple Choice Question-
+
+<ul>
+<li>Write/Edit the 4 options(single lined) and choose the correct one.</li>
+</ul>
+</li>
+<li>Click Add to quiz/Save.</li>
+</ol>
+
+
+<h4>Interface for Viewing/SelectingForEdit/DeletingSome Questions</h4>
+
+<ol>
+<li>Quiz_Name is displayed above its question.</li>
+<li>If there's code, it'll be displayed after the text part of the Question.</li>
+<li>Options are displayed below.</li>
+<li>Correct answer is Underlined and Emphasised!</li>
+<li>You can select only 1 question for editing.</li>
+<li>You can select any number of questions to delete.</li>
+</ol>
+
+
+<h4>Result Interface</h4>
+
+<ol>
+<li>List is already sorted according to their <strong>ranks</strong>.</li>
+<li>Ranks are decided on the basis of <em>highest marks first</em>, followed by the <em>time taken by the user</em> to finish the quiz.</li>
+<li>TimeStamp contains the time user started the quiz.</li>
+</ol>
+
+
+<hr />
+
+<hr />
+
+<hr />
+
+<h2>Features provided in other pages</h2>
+
+<h4># index.php(<em>Instructions page</em>)</h4>
+
+<ol>
+<li>Quiz name along with no. of questions to display and durations is displayed here.</li>
+<li>An overlay is provided, currently used to display a video to the user while they wait to start the quiz.</li>
+<li>User can't proceed without entering the username/RollNo.</li>
+<li>User can't attempt the same quiz twice.</li>
+<li>HTML can be edited to add your own rules and the like.</li>
+<li>Right-click is disabled.</li>
+</ol>
+
+
+<h4># quiz.php(<em>Quiz page</em>)</h4>
+
+<ol>
+<li>Quiz name is displayed on the top</li>
+<li>Countdown is fixed &amp; displayed on the top-right of the screen.</li>
+<li>At zero the quiz will automatically be submitted.4.</li>
+<li>There's no negative marking.</li>
+<li>User can answer none, some or all the questions.</li>
+<li>Code/Program will be displayed in color-coded format.</li>
+<li>A confirmation dialog will pop-up if the user tries to close, refresh or navigate away from this page.</li>
+<li>Right-click is disabled.</li>
+<li>An overlay is provided, currently used to display a video to the user during the quiz.</li>
+<li>User can't directly access this page.</li>
+</ol>
+
+
+<h4># result.php(<em>Result page</em>)</h4>
+
+<ol>
+<li>Marks of the user are dosplayed here(1 mark per correct answer).</li>
+<li>An overlay is provided, currently used to display a message to the user on click.</li>
+<li>User can't directly access this page.</li>
+<li>if user clicks on back and goes back to the quiz, he can't resubmit the quiz.</li>
+</ol>
+
+
+<h4># login.php(Admin-Login page)</h4>
+
+<ol>
+<li>A user can login from multiple systems at the same time.</li>
+<li>User can't access admin page before logging in.</li>
+<li>Using sessions to store the session of an admin. Re-login isn't necessary as long as the admin doesn't click logOut.</li>
+</ol>
+
+
+<hr />
+
+<hr />
+
+<h3>Miscellaneous features</h3>
+
+<ol>
+<li>Using <em>codemirror</em> to have a better textarea input for programs/codes.</li>
+<li>Using <em>syntax highlighter</em> to display the code better in a question.</li>
+<li>A lot of <em>MYSQL error checks</em> are in place in case of some unknown error.</li>
+<li>Basic <strong>failsafes</strong> are in place for things like <em>SQL injection</em>.</li>
+<li>Layout is designed keeping <em>different window sizes</em> in mind.</li>
+<li>It isn't designed to work on <strong>Internet Explorer</strong> also. So, it might be displayed differently on that(Styling difference).</li>
+<li>None of the other pages can be accessed directly except the <strong>logout.php</strong> as it can only be accessed by the admin to logout.</li>
+</ol>
+
+</body>
+</html>

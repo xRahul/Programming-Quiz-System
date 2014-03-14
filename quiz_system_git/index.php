@@ -15,20 +15,39 @@
 
         You should have received a copy of the GNU General Public License
         along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    	
-    	Short Quiz Framework -- Copyright (C) 2014  Rahul Jain
+        
+        Short Quiz Framework -- Copyright (C) 2014  Rahul Jain
         This program comes with ABSOLUTELY NO WARRANTY.
         This is free software, and you are welcome to redistribute it
         under certain conditions found in the GNU GPL license
     */
 
+    require_once("scripts/connect_db.php");
+
+
+    $index_selecting_quiz = mysql_query("SELECT quiz_id, display_questions, time_allotted, quiz_name
+                                    FROM quizes WHERE set_default=1");
+    $index_selecting_quiz_row = mysql_fetch_array($index_selecting_quiz);
+    $index_selecting_quiz_num = mysql_num_rows($index_selecting_quiz);
+
+
+
     $user_taken = "";
+    if(isset($_POST['user_msg']) && $_POST['user_msg']!=""){
+        $user_taken = $_POST['user_msg'];
+    }
     if(isset($_GET['user_msg']) && $_GET['user_msg']!=""){
         $user_taken = $_GET['user_msg'];
     }
 
-    $total_time = 15;
-    $total_questions = 5;
+    $total_questions = preg_replace('/[^0-9]/', "", $index_selecting_quiz_row['display_questions']);
+    $total_time = preg_replace('/[^0-9]/', "", $index_selecting_quiz_row['time_allotted']);
+    $quizName = $index_selecting_quiz_row['quiz_name'];
+
+    if($index_selecting_quiz_num>0)
+    	$first_item = 'You\'ve got '.$total_time.' mins for attempting '.$total_questions.' questions.';
+    else
+    	$first_item = '<strong>Sorry, but it seems there are no quizzes Available right now!</strong>';
 ?>
 
 <!doctype html>
@@ -82,20 +101,27 @@
                 return false;
             }
         </script>
+
+        <script language="javascript">
+            document.addEventListener("contextmenu", function(e){
+                e.preventDefault();
+            }, false);
+        </script>
+
     </head>
 
-    <body>
+    <body style="font-family: Arial;">
         <div id="head" align="center">
             <img src="img/header.jpg" alt="Chandigarh Engineering College" />
         </div>
 
         <div id="main_body" align="center">
             <h2>So, you want to try your luck at the <big>QUIZ</big></h2>
-
+            <strong><?php echo $quizName; ?> </strong>
             <h3 align="left">Here are the rules then:</h3>
             <div align="left">
                 <ul>
-                    <li>You've got <?php echo $total_time; ?> mins for attempting <?php echo $total_questions; ?> questions</li>
+                    <li><?php echo $first_item; ?></li>
                     <li>If time runs out, your quiz will automatically be submitted</li>
                     <li>You'll only be getting confirmation pop-up once if you try to leave during the quiz</li>
                     <li>You can only attempt the quiz once</li>
@@ -104,11 +130,11 @@
 
             <h3>GOOD LUCK!</h3>
 
-            <form id="myForm" name="onlyForm" action="quiz.php" method="GET">
+            <form id="myForm" name="onlyForm" action="quiz.php" method="POST">
                 <table align="center">
                     <tr>
                         <td align="center">
-                            <input type="text" name="rollno" placeholder="Enter Your Roll No." autofocus required/>
+                            <input type="text" name="rollno" placeholder="Enter Your Roll No." autofocus/>
                         </td>
                     </tr>
                     <tr>
@@ -119,8 +145,6 @@
                     <tr>
                         <td align="center">
                             <a href="javascript:submit();" class="myButton">Click Here to Begin</a>
-                            <input type="hidden" name="total_time" value="<?php echo $total_time; ?>" />
-                            <input type="hidden" name="total_questions" value="<?php echo $total_questions; ?>" />
                         </td>
                     </tr>
                     <tr>
@@ -168,8 +192,8 @@
                         </td>
                         <td align="right" id="developer" >
                             Quiz Designed &amp; Developed by : 
-                            <a href="mailto: rahulgr8888@gmail.com" class="flink" style="color: #c4dcf5">
-                                Rahul Jain
+                            <a href="mailto: rahul_jain@live.in" class="flink" style="color: #c4dcf5">
+                                Rahul Jain<div id="dev_info">1139234/CSE/6thSEM</div>
                             </a>
                         </td>
                     </tr>
@@ -178,5 +202,4 @@
         </div>
     </body>
 </html>
-
 

@@ -1,4 +1,4 @@
-	/*
+    /*
     Short Quiz Framework
         Copyright (C) 2014  Rahul Jain
 
@@ -75,16 +75,29 @@
             }
 
 /*quiz.php*/
-			#countdown{
-				width: 800px;
-		        margin: auto;
-				margin-top: 40px;
-				padding: 10px;
-				text-align: right;
-				position: fixed;
-				top: 18%;
-				right: 3%;
-			}
+            #countdown{
+                width: 800px;
+                margin: auto;
+                margin-top: 40px;
+                padding: 10px;
+                text-align: right;
+                position: fixed;
+                top: 18%;
+                right: 3%;
+            }
+
+            .question_style{
+              font-family: Arial;
+              padding-top: 0px;
+              white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+			  white-space: -pre-wrap;      /* Opera 4-6 */
+			  white-space: -o-pre-wrap;    /* Opera 7 */
+			  white-space: pre-wrap;       /* css-3 */
+			  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+			  word-break: break-all;
+			  white-space: normal;
+			  width: 780px;
+            }
 
 /*result.php*/
             #score{
@@ -97,7 +110,7 @@
 
             }
 
-			.black_overlay{
+            .black_overlay{
                 display: none;
                 position: fixed;
                 top: 0%;
@@ -133,7 +146,7 @@
 
 
 
-			#copyright{
+            #copyright{
                 color:#FFF;
                 font-size:11px;
                 padding:8px;
@@ -162,7 +175,27 @@
                 z-index: 1000 ;
             }
 
-			.myButton {
+            #dev_info{
+                height:100%;
+                position: absolute;
+                bottom: 35px;
+                right: 2%;
+                margin:0;
+                padding:0;
+                visibility:hidden;
+                font-size: 10pt;
+                padding: 10px;
+                margin-bottom: -15px;
+                padding-bottom: 0px;
+                border-radius: 15px;
+                color: #999;
+            }
+            .flink:hover > #dev_info{
+                visibility:visible;
+            }
+
+
+            .myButton {
                 -moz-box-shadow:inset -1px -1px 25px -10px #91b8b3;
                 -webkit-box-shadow:inset -1px -1px 25px -10px #91b8b3;
                 box-shadow:inset -1px -1px 25px -10px #91b8b3;

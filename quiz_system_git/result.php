@@ -1,6 +1,6 @@
 <?php
 
-	/*
+    /*
     Short Programming Quiz Framework
         Copyright (C) 2014  Rahul Jain
 
@@ -16,47 +16,66 @@
 
         You should have received a copy of the GNU General Public License
         along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    	
-    	Short Programming Quiz Framework -- Copyright (C) 2014  Rahul Jain
+        
+        Short Programming Quiz Framework -- Copyright (C) 2014  Rahul Jain
         This program comes with ABSOLUTELY NO WARRANTY.
         This is free software, and you are welcome to redistribute it
         under certain conditions found in the GNU GPL license
     */
-	
+    
 
-    if(isset($_GET["total_ques"]) && isset($_GET["rollno"]) && isset($_GET["rads1"]))
+    if(isset($_POST["total_ques"]) && isset($_POST["rollno"]) && isset($_POST["quizID"]))
     {
-        if($_GET["total_ques"] != "" && $_GET["rollno"] != "" && $_GET["rads1"] != "")
+        if($_POST["total_ques"] != "" && $_POST["rollno"] != "" && $_POST["quizID"] != "")
         {
-        	require_once("scripts/connect_db.php");
+            require_once("scripts/connect_db.php");
 
          //initializing the variables
-        	$marks = 0;
-        	$total_questions = $_GET["total_ques"];
-        	$roll_no = $_GET["rollno"];
+            $marks = 0;
+            $total_questions = $_POST["total_ques"];
+            $roll_no = $_POST["rollno"];
+            $quiz_ID = $_POST["quizID"];
 
-         //calculating %age
-        	for($i=1 ; $i <= $total_questions ; $i++){
-        		@$fetch_ID = "rads".$i;
-        		@$php_id = $_GET[$fetch_ID];
+            if($total_questions>0){
 
-        		$check_sql = mysql_query("SELECT correct FROM answers 
-                                            WHERE id='$php_id'") or die(mysql_error());
-        		$q_answer = mysql_fetch_array($check_sql);
-        		$marks += $q_answer[0];
-        	}
-        	$percent = ($marks/$total_questions)*100;
+	         //calculating %age
+	            for($i=1 ; $i <= $total_questions ; $i++){
+	                @$fetch_ID = "rads".$i;
+	                @$php_id = $_POST[$fetch_ID];
 
-         //getting total time taken by the user to complete the quiz
-            $get_time_query = mysql_query("SELECT now() - date_time FROM quiz_takers 
-                                            WHERE username = '$roll_no' ") or die(mysql_error());
-            $get_time = mysql_fetch_array($get_time_query);
-            $time_taken = $get_time[0];
+	                $check_sql = mysql_query("SELECT correct FROM answers 
+	                                            WHERE id='$php_id'") or die(mysql_error());
+	                $q_answer = mysql_fetch_array($check_sql);
+	                $marks += $q_answer[0];
+	            }
+	            $percent = ($marks/$total_questions)*100;
 
-         //updating the %age and time taken by the user in the DB
-        	mysql_query("UPDATE quiz_takers 
-                         SET marks='$marks', percentage= '$percent', duration= '$time_taken'
-                         WHERE username = '$roll_no' ")or die(mysql_error());
+	         //getting total time taken by the user to complete the quiz
+	            $get_time_query = mysql_query("SELECT now() - date_time FROM quiz_takers 
+	                                            WHERE username = '$roll_no' ") or die(mysql_error());
+	            $get_time = mysql_fetch_array($get_time_query);
+	            $time_taken = $get_time[0];
+
+	            $check_time_query = mysql_query("SELECT duration FROM quiz_takers 
+	                                            WHERE username = '$roll_no' 
+	                                            AND quiz_id = '$quiz_ID' ") or die(mysql_error());
+	            $check_time = mysql_fetch_array($check_time_query);
+	            $duration = $check_time[0];
+
+	            if($duration==0){
+		         //updating the %age and time taken by the user in the DB
+	            	mysql_query("UPDATE quiz_takers 
+	                	         SET marks='$marks', percentage= '$percent', duration= '$time_taken', quiz_id= '$quiz_ID'
+	                    	     WHERE username = '$roll_no' ")or die(mysql_error());
+	            }else{
+	            	$user_msg = 'Sorry, but re-submission of the quiz isn\'t allowed!';
+	        		header('location: index.php?user_msg='.$user_msg.'');
+	            }
+	        }else{
+	        	$user_msg = 'Hey, Weird, but it seems the quiz had no questions!';
+        		header('location: index.php?user_msg='.$user_msg.'');
+            	exit();
+	        }
         }else{
             $user_msg = 'Hey, Something went wrong! Tell the Admin!!';
         header('location: index.php?user_msg='.$user_msg.'');
@@ -71,15 +90,15 @@
 
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Result</title>
+    <head>
+        <title>Result</title>
 
-		<meta charset="utf-8">
+        <meta charset="utf-8">
 
-		<link rel="stylesheet" type="text/css" href="css/master.css">
+        <link rel="stylesheet" type="text/css" href="css/master.css">
         <script type="text/javascript" src="scripts/overlay.js"></script>
 
-		<!-- ****** favicons ****** -->
+        <!-- ****** favicons ****** -->
             <!-- Basic favicons -->
                 <link rel="shortcut icon" sizes="16x16 32x32 48x48 64x64" href="img/faviconit/favicon.ico">
                 <link rel="shortcut icon" type="image/x-icon" href="img/faviconit/favicon.ico">
@@ -108,20 +127,26 @@
                 <meta name="msapplication-TileColor" content="#FFFFFF">
                 <meta name="msapplication-TileImage" content="img/faviconit/favicon-144.png">
         <!-- ****** favicons ****** -->
-	</head>
 
-	<body>
+        <script language="javascript">
+            document.addEventListener("contextmenu", function(e){
+                e.preventDefault();
+            }, false);
+        </script>
+    </head>
 
-		<div id="head" align="center">
+    <body  style="font-family: Arial;">
+
+        <div id="head" align="center">
             <img src="img/header.jpg" alt="Chandigarh Engineering College" />
         </div>
 
-		<div id="score" align="center">
-			<?php echo $roll_no; ?>, You scored 
-			<?php echo $marks; ?>/<?php echo $total_questions; ?>
-		</div>
+        <div id="score" align="center">
+            <?php echo $roll_no; ?>, You scored 
+            <?php echo $marks; ?>/<?php echo $total_questions; ?>
+        </div>
 
-		<div id="video" class="white_content" onclick="javascript:close_overlay();">
+        <div id="video" class="white_content" onclick="javascript:close_overlay();">
             <h1 style="color: WHITE; margin-top: 185px;">Nice Try, But its time to go now!</h1>
             <br>
             <h2 style="color: WHITE;">You should have watched it before..</h2>
@@ -134,28 +159,31 @@
             </a>
         </div>
 
-		<div id="footer" align="bottom">
+        <div id="footer" align="bottom">
             <table border="0" cellpadding="0" cellspacing="0" style="width:100%;">
                 <tbody>
                     <tr>
                         <td align="left" id="copyright">
-                            © Copyright 2014, under <a href="gnu_gpl.txt" style="color: WHITE; text-decoration: none;" target="_blank">GNU General Public License</a>
+                            © Copyright 2014, under 
+                            <a href="gnu_gpl.txt" style="color: WHITE; text-decoration: none;" target="_blank">
+                                GNU General Public License
+                            </a>
                         </td>
                         <td align="center" id="video_link">
-                            Getting Bored? Watch  
+                            Getting Bored? Watch a
                             <a href="javascript:open_overlay();" style="color: #c4dcf5">
-                                Planet Earth</a>
+                                Video</a>
                             to pass time!
                         </td>
                         <td align="right" id="developer" >
                             Quiz Designed &amp; Developed by : 
-                            <a href="mailto: rahulgr8888@gmail.com" class="flink" style="color: #c4dcf5">
-                                Rahul Jain
+                            <a href="mailto: rahul_jain@live.in" class="flink" style="color: #c4dcf5">
+                                Rahul Jain<div id="dev_info">1139234/CSE/6thSEM</div>
                             </a>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-	</body>
-</html>
+    </body>
+</html

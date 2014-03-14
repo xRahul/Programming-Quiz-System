@@ -29,7 +29,7 @@
 // Place the password for the MySQL database here
     $db_password = ""; 
 // Place the name for the MySQL database here
-    $db_name = "prog_quiz";
+    $db_name = "debug";
 
 // Run the connection here 
     mysql_connect("$db_host","$db_username","$db_password") or die (mysql_error());

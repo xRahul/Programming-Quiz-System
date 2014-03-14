@@ -26,36 +26,43 @@
 
 	require_once("scripts/connect_db.php");
 
+	$selecting_quiz = mysql_query("SELECT quiz_id, display_questions, time_allotted, quiz_name
+									FROM quizes WHERE set_default=1");
+	$selecting_quiz_row = mysql_fetch_array($selecting_quiz);
+
+
 
  //checking if all 3 values are there
-	if(isset($_GET['rollno']) && $_GET['rollno'] != "" &&  
-		isset($_GET['total_time']) && $_GET['total_time'] != "" && 
-			isset($_GET['total_questions']) && $_GET['total_questions'] != "")
+	if(isset($_POST['rollno']) && $_POST['rollno'] != "")
 	{
 		
-
 	 //getting values in variables
-		$roll_no = $_GET['rollno'];
+		$roll_no = $_POST['rollno'];
 		$roll_no = htmlspecialchars($roll_no);
 		$roll_no = mysql_real_escape_string($roll_no);
 
-		$total_questions = preg_replace('/[^0-9]/', "", $_GET['total_questions']);
+		$total_questions = preg_replace('/[^0-9]/', "", $selecting_quiz_row['display_questions']);
 
 	 //total time converted to seconds
-		$total_time = (preg_replace('/[^0-9]/', "", $_GET['total_time']))*60;
+		$total_time = (preg_replace('/[^0-9]/', "", $selecting_quiz_row['time_allotted']))*60;
 
-	 //checking if username already present
+		$final_quiz_ID = preg_replace('/[^0-9]/', "", $selecting_quiz_row['quiz_id']);
+
+		$quzz_name = $selecting_quiz_row['quiz_name'];
+
+	 //checking if user has already taken this quiz
 		$userCheck = mysql_query(" SELECT id FROM quiz_takers 
-										WHERE username = '$roll_no' ")or die(mysql_error());
-	 //if user already exists, redirect to index.php with error
+										WHERE username = '$roll_no' 
+										AND quiz_id='$final_quiz_ID' ")or die(mysql_error());
+	 //if user already did, redirect to index.php with error
 		if(!(mysql_num_rows($userCheck) < 1)){
-			$user_msg = 'Sorry, but '.$roll_no.', has already attempted the quiz!';
+			$user_msg = 'Sorry, but '.$roll_no.', has already attempted the quiz, '.$quzz_name.'!';
 			header('location: index.php?user_msg='.$user_msg.'');
 			exit();
 		}else{
 	 //else inserting few columns into the table
-		mysql_query("INSERT INTO quiz_takers (username, percentage, date_time) 
-					 VALUES ('$roll_no', '0', now())")or die(mysql_error());
+		mysql_query("INSERT INTO quiz_takers (username, percentage, date_time, quiz_id, duration) 
+					 VALUES ('$roll_no', '0', now(), '$final_quiz_ID', '0')")or die(mysql_error());
 		}
 	}else{
 		$user_msg = 'Hey, This is the start Page, So enter your username here first';
@@ -75,8 +82,15 @@
 	$m_output='';
  
  //Getting the questions from DB here
-	$m_questions_from_DB = mysql_query("SELECT * FROM questions  
+	$m_questions_from_DB = mysql_query("SELECT * FROM questions WHERE quiz_id='$final_quiz_ID'
 								ORDER BY rand() LIMIT $total_questions");
+
+		while (mysql_num_rows($m_questions_from_DB)<1) {
+			$user_msg = 'Hey, weird, but it seems there are no questions in this quiz!';
+			header('location: index.php?user_msg='.$user_msg.'');
+			exit();
+		}
+
 	 //setting Question No. to 1 on quiz page(necessary due to rand() above)
 		$m_display_ID = 1;
 
@@ -99,7 +113,7 @@
 							<strong>'.$m_display_ID.'.</strong>
 						</td>
 						<td>
-							<strong><div style="width: 730px; word-wrap: break-word;">'.$m_thisQuestion.'</div></strong>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">'.$m_thisQuestion.'</div></strong></pre>
 						</td>
 					</tr>';
 		 //if programming code is inserted, its html for the code
@@ -164,6 +178,7 @@
 		$m_output .= '<input type="hidden" name="rollno" value="'.$roll_no.'">
 					  <input type="hidden" name="total_ques" value="'.$m_display_ID.'">
 					  <input type="hidden" name="total_time" value="'.$total_time.'">
+					  <input type="hidden" name="quizID" value="'.$final_quiz_ID.'">
 					  ';
 ?>
 
@@ -282,11 +297,16 @@
 				ele.innerHTML = "Your Time Starts Now";			
 				var mins_rem = parseInt(secs/60);
 				var secs_rem = secs%60;
-				if(secs_rem==0)
-					secs_rem = "00";
-				if(mins_rem==0)
-					mins_rem = "00";
-				ele.innerHTML = "Time remaining: "+mins_rem+":"+secs_rem;
+				
+				if(mins_rem<10 && secs_rem>=10)
+					ele.innerHTML = "Time Remaining: "+"0"+mins_rem+":"+secs_rem;
+				else if(secs_rem<10 && mins_rem>=10)
+					ele.innerHTML = "Time Remaining: "+mins_rem+":0"+secs_rem;
+				else if(secs_rem<10 && mins_rem<10)
+					ele.innerHTML = "Time Remaining: "+"0"+mins_rem+":0"+secs_rem;
+				else
+					ele.innerHTML = "Time Remaining: "+mins_rem+":"+secs_rem;
+
 				if(mins_rem=="00" && secs_rem < 1){
 					quiz_submit(); 
 				}
@@ -302,14 +322,22 @@
 			}
 			window.onbeforeunload = closeEditorWarning;
         </script>
+
+        <script language="javascript">
+			document.addEventListener("contextmenu", function(e){
+			    e.preventDefault();
+			}, false);
+		</script>
+		
 	</head>
 
-	<body>
+	<body style="font-family: Arial;">
 
 		<div id="head" align="center">
             <img src="img/header.jpg" alt="Chandigarh Engineering College" />
         </div>
 
+        <br><strong><?php echo $quzz_name; ?></strong>
 
         <div id="countdown">
         	<script type="text/javascript">
@@ -319,7 +347,7 @@
 
 
 		<div id="main_body" align="center" style="margin-bottom: 100px;">
-			<form id="quiz_form" name="quiz_form_name" action="result.php" method="GET">
+			<form id="quiz_form" name="quiz_form_name" action="result.php" method="POST">
 			<br /><BR /><BR />
 				<table width="780px" align="center">
 					<?php echo $m_output ?>
@@ -359,15 +387,15 @@
                             </a>
                         </td>
                         <td align="center" id="video_link">
-                            Getting Bored? Watch  
+                            Getting Bored? Watch a 
                             <a href="javascript:open_overlay();" style="color: #c4dcf5">
-                                a Video</a>
+                                Video</a>
                             to pass time!
                         </td>
                         <td align="right" id="developer" >
                             Quiz Designed &amp; Developed by : 
-                            <a href="mailto: rahulgr8888@gmail.com" class="flink" style="color: #c4dcf5">
-                                Rahul Jain
+                            <a href="mailto: rahul_jain@live.in" class="flink" style="color: #c4dcf5">
+                                Rahul Jain<div id="dev_info">1139234/CSE/6thSEM</div>
                             </a>
                         </td>
                     </tr>
@@ -375,4 +403,4 @@
             </table>
         </div>
 	</body>
-</html>
+</html
