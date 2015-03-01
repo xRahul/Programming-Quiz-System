@@ -1559,9 +1559,8 @@
                 exit();
             }
 			close_overlay();
-                document.getElementById('reg_name').submit(); 
-                return false;
-            }
+            document.getElementById('reg_name').submit(); 
+            return false;
 		}
 
 		</script>
@@ -1575,7 +1574,7 @@
 
 	</head>
 
-	<body onLoad="getAllQuestions()" style="font-family: Arial;">
+	<body style="font-family: Arial;">
 
 		<div id="head" align="center">
             <img src="img/header.jpg" alt="Chandigarh Engineering College" />

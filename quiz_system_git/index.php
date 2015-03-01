@@ -154,7 +154,7 @@
                     </tr>
                 </table>
             </form>
-        </div>
+        </div><br><br><br>
 
         <div id="video" class="white_content">
             <a name="Planet_Earth">
