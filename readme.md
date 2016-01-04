@@ -1,4 +1,10 @@
-### Site is live using [ByetHost](http://progquiz.byethost17.com)
+##Planned Upgrade to Laravel
+* This was coded when I started learning PHP, and while it works fantastically, the code is not upto the mark.
+* I've been working in Laravel/Bootstrap for quite some time now, and will be upgrading the UI as well as the backend to be more modular and readable.
+* Might include some new features too, making it more generalized, than just for programming.
+
+
+### Current code is live using [ByetHost](http://progquiz.byethost17.com)
 
 # Programming Multiple Quiz System
 
