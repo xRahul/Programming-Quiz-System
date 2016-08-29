@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'model' => QuizSystem\User::class,
+    'model' => QuizSystem\Models\Entities\User::class,
 
     /*
     |--------------------------------------------------------------------------

@@ -2,11 +2,16 @@
 
 namespace QuizSystem\Http\Controllers\Auth;
 
-use QuizSystem\User;
-use Validator;
-use QuizSystem\Http\Controllers\Controller;
+use Auth;
+
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+
+use QuizSystem\Http\Controllers\Controller;
+use QuizSystem\Models\Interfaces\IUserRepository;
+
+use QuizSystem\Http\Requests\LoginRequest;
+use QuizSystem\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
@@ -21,45 +26,77 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use ThrottlesLogins;
 
     /**
      * Create a new authentication controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(IUserRepository $userRepository)
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
+        $this->userRepository = $userRepository;
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
+
+    public function getRegister()
     {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
-        ]);
+        return view('auth.register');
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
-     */
-    protected function create(array $data)
+
+    public function getLogin(Request $request)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        return view('auth.login');
     }
+
+
+    public function postLogin(LoginRequest $request)
+    {
+        // logout the current user if any is logged in
+        if (Auth::check()) {
+            Auth::logout();
+        }
+
+        // user is successfully authenticated
+        if (Auth::attempt([
+                'email'     => strtolower($request->email),
+                'password'  => $request->password
+            ], $request->remember == 1 ? true : false)
+        ) {
+            flash()->success(
+                'Success', 
+                'You have logged in successfully!'
+            );
+
+            // redirect user according to their roles
+            if(Auth::user()->hasRole('admin')) {
+                return redirect()->intended(route('adminpage'));
+            } else {
+                return redirect()->intended(route('homepage'));
+            }
+        }
+
+        // user fails authentication
+        flash()->error(
+            'Login Failed!', 
+            'Please check your login details again'
+        );
+        return redirect()->back()->withInput();
+    }
+
+    public function getLogout()
+    {
+        if (!Auth::check()) {
+            flash()->error('Logout Failed!', 'You are not logged in.');
+            return redirect()->route('login.get');
+        }
+
+        Auth::logout();
+
+        flash()->success('Success', 'You have logged out successfully');
+        return redirect()->back();
+    }
+
+    
 }

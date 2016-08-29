@@ -11,6 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PagesController@homepage')
+        ->name('homepage');
+Route::get('/admin', 'PagesController@adminpage')
+        ->name('adminpage');
+
+// Auth routes
+Route::get('auth/register', 'Auth\AuthController@getRegister')
+        ->name('register.get');
+Route::get('auth/login', 'Auth\AuthController@getLogin')
+        ->name('login.get');
+Route::post('auth/login', 'Auth\AuthController@postLogin')
+        ->name('login.post');
+Route::get('auth/logout', 'Auth\AuthController@getLogout')
+        ->middleware('auth:all')
+        ->name('logout.get');

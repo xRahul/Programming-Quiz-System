@@ -11,11 +11,13 @@
 |
 */
 
-$factory->define(QuizSystem\User::class, function (Faker\Generator $faker) {
+$factory->define(QuizSystem\Models\Entities\User::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->safeEmail,
-        'password' => bcrypt(str_random(10)),
+        'first_name' => $faker->firstName,
+        'last_name' => $faker->lastName,
+        'email' => $faker->email,
+        'mobile' => rand(8000000000, 9999999999),
+        'password' => bcrypt('123456'),
         'remember_token' => str_random(10),
     ];
 });

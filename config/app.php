@@ -145,6 +145,11 @@ return [
         QuizSystem\Providers\EventServiceProvider::class,
         QuizSystem\Providers\RouteServiceProvider::class,
 
+        // Custom Service Providers
+        QuizSystem\Models\ModelServiceProvider::class,
+
+        // Installed Packages Service Providers
+        Collective\Html\HtmlServiceProvider::class,
     ],
 
     /*
@@ -192,6 +197,10 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
+
+        // Installed Packages Alias
+        'Form'      => Collective\Html\FormFacade::class,
+        'Html'      => Collective\Html\HtmlFacade::class,
 
     ],
 
