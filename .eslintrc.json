@@ -1,0 +1,43 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "installedESLint": true,
+    "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true,
+            "jsx": true
+        },
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "indent": [
+            "error",
+            "tab"
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single",
+            { 
+                "avoidEscape": true 
+            }
+        ],
+        "semi": [
+            "error",
+            "never"
+        ],
+        "jsx-quotes": [
+            "error", 
+            "prefer-single"
+        ]
+    }
+}
