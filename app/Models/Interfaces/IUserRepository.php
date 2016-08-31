@@ -4,6 +4,7 @@ namespace QuizSystem\Models\Interfaces;
 
 interface IUserRepository {
     
-    public function getAllUsers();
+    // create user function that accepts array of parameters
+    public function createUser($paramsArray);
 
 }

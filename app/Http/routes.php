@@ -12,13 +12,16 @@
 */
 
 Route::get('/', 'PagesController@homepage')
-        ->name('homepage');
+        ->name('pages.homepage');
 Route::get('/admin', 'PagesController@adminpage')
-        ->name('adminpage');
+		->middleware('auth:admin')
+        ->name('pages.adminpage');
 
 // Auth routes
 Route::get('auth/register', 'Auth\AuthController@getRegister')
         ->name('register.get');
+Route::post('auth/register', 'Auth\AuthController@postRegister')
+        ->name('register.post');
 Route::get('auth/login', 'Auth\AuthController@getLogin')
         ->name('login.get');
 Route::post('auth/login', 'Auth\AuthController@postLogin')

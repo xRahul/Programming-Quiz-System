@@ -45,10 +45,10 @@ class Authenticate
             return $next($request);
         }
 
-        // check if user is guest or doesn't has the required role
+        // check if user is a guest or doesn't have the required role
         if ($this->auth->guest() || !$this->auth->user()->hasRole($role)) {
             flash()->error('Authentication Failed', 'You are not privileged.');
-            return redirect()->route('homepage');
+            return redirect()->back()->withInput();
         }
 
         // take user to his request if all 3 condition fails

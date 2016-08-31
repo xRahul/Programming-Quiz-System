@@ -29,6 +29,7 @@ class RegisterRequest extends Request
             'email' => 'required|email|min:5|max:255|unique:users,email',
             'password' => 'required|confirmed|min:6',
             'mobile' => 'integer|digits:10|unique:users,mobile',
+            'admin_user' => 'boolean'
         ];
     }
 }

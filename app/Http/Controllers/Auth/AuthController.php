@@ -4,7 +4,6 @@ namespace QuizSystem\Http\Controllers\Auth;
 
 use Auth;
 
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 
 use QuizSystem\Http\Controllers\Controller;
@@ -38,19 +37,67 @@ class AuthController extends Controller
         $this->userRepository = $userRepository;
     }
 
-
+    /**
+     * GET register user page
+     * @return view auth.register
+     */
     public function getRegister()
     {
         return view('auth.register');
     }
 
+    /**
+     * submit POST request to register user
+     * @param  RegisterRequest $request validated register parameters
+     * @return redirect back if failed, or to defaultUserpage
+     */
+    public function postRegister(RegisterRequest $request)
+    {
+        // convert request parameters to array
+        $requestArray = $request->all();
 
-    public function getLogin(Request $request)
+        // set registering user to non admin if user is 
+        // not being regestered via an admin
+        if (! (Auth::check() && Auth::user()->hasRole('admin')) ) {
+            $requestArray['admin_user'] = 0;
+        }
+
+        // create the user
+        $userCreated = $this->userRepository
+                            ->createUser($requestArray);
+
+        // check if user has been created
+        if($userCreated) {
+            flash()->success(
+                'Success', 
+                "Account for "
+                    .$requestArray['email']
+                    ." has been created successfully!"
+            );
+            return $this->redirectToDefaultUserPage();
+        }
+
+        flash()->error(
+                'Failed', 
+                "Account wasn't created!"
+            );
+        return redirect()->back()->withInput();
+    }
+
+    /**
+     * GET login page
+     * @return view auth.login
+     */
+    public function getLogin()
     {
         return view('auth.login');
     }
 
-
+    /**
+     * submit POST request to login a user
+     * @param  LoginRequest $request Validated login parameters
+     * @return redirect back if failed, or to defaultUserpage 
+     */
     public function postLogin(LoginRequest $request)
     {
         // logout the current user if any is logged in
@@ -68,13 +115,7 @@ class AuthController extends Controller
                 'Success', 
                 'You have logged in successfully!'
             );
-
-            // redirect user according to their roles
-            if(Auth::user()->hasRole('admin')) {
-                return redirect()->intended(route('adminpage'));
-            } else {
-                return redirect()->intended(route('homepage'));
-            }
+            return $this->redirectToDefaultUserPage();
         }
 
         // user fails authentication
@@ -85,18 +126,23 @@ class AuthController extends Controller
         return redirect()->back()->withInput();
     }
 
+    /**
+     * GET request to logout a user
+     * @return redirect login page is not logged in, or
+     *                  back after logging out
+     */
     public function getLogout()
     {
+        // check if user's not logged in
         if (!Auth::check()) {
             flash()->error('Logout Failed!', 'You are not logged in.');
             return redirect()->route('login.get');
         }
 
+        // logout the user
         Auth::logout();
 
         flash()->success('Success', 'You have logged out successfully');
         return redirect()->back();
     }
-
-    
 }

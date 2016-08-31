@@ -1,0 +1,141 @@
+export * from './auth'
+export * from './tabs'
+
+export const LOGIN_REQUEST = 'LOGIN_REQUEST'
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+export const LOGIN_FAILURE = 'LOGIN_FAILURE'
+
+
+
+import { CALL_API, featureReplacementText } from '../middleware/api'
+
+import { 
+	ACTION_TYPE_REQUEST, ACTION_TYPE_SUCCESS, ACTION_TYPE_FAILURE
+ } from './action_types'
+
+
+
+export function fetchX() {
+  return {
+    [CALL_API]: {
+      endpoint: 'features/'+featureReplacementText+'/qqqq',
+      authenticated: true,
+      method: 'GET',
+      types: [ACTION_TYPE_REQUEST, ACTION_TYPE_SUCCESS, ACTION_TYPE_FAILURE]
+    }
+  }
+}
+
+export function addX(fc) {
+  return {
+    [CALL_API]: {
+      endpoint: 'features/'+featureReplacementText+'/qqqq',
+      authenticated: true,
+      method: 'POST',
+      payload: {
+        rfv: fc
+      },
+      types: [ACTION_TYPE_REQUEST, ACTION_TYPE_SUCCESS, ACTION_TYPE_FAILURE]
+    }
+  }
+}
+
+
+
+import 'whatwg-fetch'
+
+import { CALL_API } from '../middleware/api'
+
+import {
+  ACTION_TYPE_REQUEST, ACTION_TYPE_SUCCESS, ACTION_TYPE_FAILURE
+} from './action_types'
+
+
+
+function requestLogin() {
+  return {
+    type: LOGIN_REQUEST
+  }
+}
+function receiveLogin(username, tokenExpireTime) {
+  return {
+    type: LOGIN_SUCCESS,
+    username,
+    tokenExpireTime
+  }
+}
+function loginError(error) {
+  return {
+    type: LOGIN_FAILURE,
+    error: error
+  }
+}
+
+function requestLogout() {
+  return {
+    type: LOGOUT_REQUEST
+  }
+}
+function receiveLogout() {
+  return {
+    type: LOGOUT_SUCCESS
+  }
+}
+function logoutError(error) {
+  return {
+    type: LOGOUT_FAILURE,
+    error
+  }
+}
+
+
+
+// async actions
+export function loginUser(server, creds) {
+  
+  let metadata = {
+    method: 'POST',
+    headers: { 'Content-Type':'application/x-www-form-urlencoded' },
+    body: `username=${creds.username}&password=${creds.password}&grant_type=password&client_id=CLIENTID1&client_secret=CLIENTSECRET1`
+  }
+  
+  return dispatch => {
+    dispatch(requestLogin())
+    return fetch('http://'+server+'.laravelquiz.app/auth/login', metadata)
+      .then(response => 
+          response.json()
+          .then(data => ({data, response}))
+      )
+      .then(({data, response}) => {
+        if (!response.ok) {
+          dispatch(loginError(data.error_description));
+          return Promise.reject(data);
+        }
+        else {
+          const tokenExpireTime = parseInt(data.expires_in) + Math.round(new Date().getTime()/1000)
+          localStorage.setItem('access_token', data.access_token);
+          localStorage.setItem('tokenExpireTime', tokenExpireTime);
+          localStorage.setItem('username', creds.username);
+          dispatch(receiveLogin(creds.username, tokenExpireTime));
+        }
+      })
+      .catch( (err) => {
+        console.log(err)
+        // dispatch(loginError(err.error_description))
+      })
+  }
+}
+
+export function logoutUser() {
+  return dispatch => {
+    dispatch(requestLogout())
+    try {
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('username')
+      localStorage.removeItem('tokenExpireTime')
+      dispatch(receiveLogout())
+    } catch(error) {
+      dispatch(logoutError(error.message))
+    }
+  }
+}

@@ -23,5 +23,6 @@ elixir(function(mix) {
 		    'public/js/app.js',
 		    'node_modules'
 		)
-    	.version(['css/app.css', 'js/app.js']);
+		.webpack('./resources/assets/jsx/index.js')
+    	.version(['css/app.css', 'js/app.js', 'js/admin.js']);
 });

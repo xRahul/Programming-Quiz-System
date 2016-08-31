@@ -1,27 +1,113 @@
-## Laravel PHP Framework
+# MultiQuiz System
+---
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+This is an upgrade of the application written in Laravel 5.1 and Reactjs.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+It is using webpack and elixir 6 to build the react pages.
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+The general flow of the application will remain same, i.e
 
-## Official Documentation
+* For users- `User Dashboard => Quiz Page => Result Page`
+* Admin dashboard
+* Register/Login Pages
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+## Things to do-
+* ~~Auth layer with login/register functionality with admin/user roles~~ (done)
+* Admin Dashboard
+    * Manage Quizzes
+    * Manage Questions/Answers
+    * Manage Results
+    * Account Settings
+* Landing Page
+    * User Dashboard
+* Quiz Page
+* Result Pages
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+---
+## Planned Admin dashboard
 
-## Security Vulnerabilities
+* Manage Quizzes
+    + Create Quiz
+        - QuizName
+        - QuizType-TimeLimit/NotTimed
+        - No of questions to show
+        - active/Inactive quiz
+        - User can take the quiz x number of times
+    + View Quizzes
+        - show list of all quizzes
+        - filter= Active/Inactive/All
+        - sort= 
+            * byDateCreated,
+            * byDateLastTaken,
+            * byTimesTaken
+    + Edit Quiz
+        - Same as Create Quiz
+        - show quiz ChangeLog
+    + Quiz Details
+        - Show all params from create quiz
+        - Quiz Questions numbers
+            * number of all questions linked to the quiz
+            * active/Inactive links, active/Inactive questions
+            * activeLink&activeQuestion, InactiveLink || InactiveQuestion
+            * no of questions by Qtype, Marks
+        - Quiz Result Overview
+            * times quiz attempted
+            * times quiz submitted
+        - Quiz ChangeLog
+        - Lint to Quiz Result Details- byUser, byQuestion
+        - Link to Questions filtered by Quiz | All | All
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+* Manage Questions
+    + Create Question
+        - Active/Inactive Questions
+        - Active/Inactive link to quiz(not delete)
+        - Markdown Support in Questions/Options
+        - Question Types= SingleChoice, MultipleChoice, TrueFalse
+        - n number of options allowed in SCQ/MCQ
+        - Marks?- default 5
+    + View Questions
+        - filters= 
+            * byQuiz
+            * byType[SCQ/MCQ/TF/All]
+            * Active/Inactive/All
+        - sort= 
+            * byDateCreated, 
+            * byDateLastUsed, 
+            * byTimesUsed, 
+            * byTimesAnswered, 
+            * byTimesCorrect
+        - Link To edit Question
+    + Edit Question
+        - Same as create Question
+        - Show Question Edit History below
+    + Question Details
+        - Show all question parameters from create quiz
+        - show all derived parameters for the question
 
-### License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+* View Result of a Quiz
+    + Result by Users
+        - show list of users with their results(Users who have attempted)
+            * sortBy- 
+                + Rank(based on timeTaken&marks), 
+                + Marks, 
+                + Percentage
+            * filters- 
+                + Attempted/Submitted, 
+                + Top10/Top20/Top50/All
+    + Result by questions
+        - Show list of questions linked to the quiz(Active and inactive link)
+            * filterBy- 
+                + Active/Inactive/All-Question, 
+                + Active/Inactive/All-LinkToThisQuiz, 
+                + QuestionType
+            * sortBy- 
+                + TimesShownWhenThisQuizIsAttempted, 
+                + TimesQAttempted, 
+                + %QcorrectlyAnswered, 
+                + Marks
+* Account Settings 
+    + Change Name
+    + Change password
+    + Show Admin activity log
+    + Delete Account(Active/Inactive User)

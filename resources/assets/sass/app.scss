@@ -1,2 +1,7 @@
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "node_modules/sweetalert/dev/sweetalert.scss";
+
+/* For taking care of fixed navbar top */
+body { 
+	padding-top: 70px; 
+}
