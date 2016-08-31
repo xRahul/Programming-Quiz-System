@@ -39,9 +39,7 @@ CREATE TABLE IF NOT EXISTS `admins` (
 --
 
 INSERT INTO `admins` (`id`, `username`, `password`, `last_login`) VALUES
-(1, 'admin', 'coolco', '2014-03-09 21:58:05'),
-(2, 'qwerty', 'yuiop', '2014-03-09 19:21:07'),
-(3, 'asdf', 'zxcv', '0000-00-00 00:00:00');
+(1, 'admin', '12345', '2014-03-09 21:58:05');
 
 -- --------------------------------------------------------
 
