@@ -6499,4 +6499,7 @@ body.stop-scrolling {
 body {
   padding-top: 70px; }
 
+a:hover {
+  cursor: pointer; }
+
 /*# sourceMappingURL=app.css.map */

@@ -1,98 +1,113 @@
 import 'whatwg-fetch'
+import $ from 'jquery'
+import { requestApi } from '../actions/allActions'
+//import { readCookie } from '../helpers/functions'
 
 export const CALL_API = Symbol('Call API')
 export const featureReplacementText = 'replaceThisWithFeatureName'
 
-function callApi(server, endpoint, method, payload) {
+function callApi(endpoint, method, payload) {
 
-  
-  const BASE_URL = 'http://laravelquiz.app/'
-  
-  const token = localStorage.getItem('access_token') || null
-  let metadata = {}
-  
-  if(token) {
-    metadata = {
-      headers: { 
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': `application/json`
-      },
-      method: method != '' ? method : 'GET'
-    }
-    if(payload != '') {
-      if(method == '' || method == 'GET') {
-        endpoint = endpoint+'?server='+payload.server
-        if('action' in payload) {
-          endpoint += '&action='+payload.action
-        }
-      } else {
-        metadata.body = JSON.stringify(payload)
-      }
-    }
-  } else {
-    throw "No token saved!"
-  }
-  
-  return fetch(BASE_URL + endpoint, metadata)
+
+	const BASE_URL = 'http://laravelquiz.app/api/'
+
+	// const token = localStorage.getItem('access_token') || null
+	let metadata = {
+		credentials: 'same-origin',
+		method: method != '' ? method : 'GET',
+		headers: {
+			//'X-XSRF-TOKEN': readCookie('XSRF-TOKEN'),
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
+	}
+
+	if(method !== 'GET'
+			&& typeof payload === 'object' && payload !== null
+			&& Object.keys(payload).length === 0 && payload.constructor === Object) {
+		metadata.body = JSON.stringify(payload)
+	}
+
+	// if(token) {
+	// 	metadata = {
+	// 		headers: {
+	// 			'Authorization': `Bearer ${token}`,
+	// 			'Content-Type': 'application/json'
+	// 		},
+	// 		method: method != '' ? method : 'GET'
+	// 	}
+	// 	if(payload != '') {
+	// 		if(method == '' || method == 'GET') {
+	// 			endpoint = endpoint+'?server='+payload.server
+	// 			if('action' in payload) {
+	// 				endpoint += '&action='+payload.action
+	// 			}
+	// 		} else {
+	// 			metadata.body = JSON.stringify(payload)
+	// 		}
+	// 	}
+	// } else {
+	// 	throw "No token saved!"
+	// }
+
+	return fetch(BASE_URL + endpoint, metadata)
 }
 
 
 
-export default ({ dispatch, getState }) => next => action => {
-  
-  const callAPI = action[CALL_API]
+//export default ({ dispatch, getState }) => next => action => {
+export default ({ dispatch }) => next => action => {
 
-  // So the middleware doesn't get applied to every single action
-  // middleware only applies to actions having [CALL_API]: {}
-  if (typeof callAPI === 'undefined') {
-    return next(action)
-  }
-  
-  const state = getState()
-  const server = state.server.activeServer
-  const username = state.auth.username
-  const configFile = state.tabs.currentTab
+	const callAPI = action[CALL_API]
 
-  // getting the data from action
-  let { endpoint, types, method='GET', payload={} } = callAPI
+	// So the middleware doesn't get applied to every single action
+	// middleware only applies to actions having [CALL_API]: {}
+	if (typeof callAPI === 'undefined') {
+		return next(action)
+	}
 
-  if(payload != '') {
-    payload.server = server.replace("bbb", "ccc")
-  }
-  
-  // add feature name
-  if(endpoint.indexOf(featureReplacementText) > -1) {
-    endpoint = endpoint.replace(featureReplacementText, feature)
-  }
+	// const state = getState()
+	// const server = state.server.activeServer
+	// const username = state.auth.username
+	// const configFile = state.tabs.currentTab
 
-  const [ requestType, successType, errorType ] = types
-  
-  dispatch({type: requestType})
+	// getting the data from action
+	let { endpoint, types, method='GET', payload={} } = callAPI
 
-  return callApi(server, endpoint, method, payload).then(
-    response => response.json().then(
-      data => ({ data, response })
-    )
-  ).then(
-    ({ data, response }) => {
-      if (!response.ok || data.code == 0 || 'error' in data) {
-        if(data.error == "invalid_grant") {
-          dispatch(logoutUser())
-        }
-        return next({
-          error: data,
-          type: errorType
-        })
-      }
-      return next({
-        response: data.data,
-        type: successType
-      })
-    }
-  ).catch(
-    error => next({
-      error: error,
-      type: errorType
-    })
-  )
+	// if(payload != '') {
+	// 	payload.server = server.replace("bbb", "ccc")
+	// }
+
+	// add feature name
+	// if(endpoint.indexOf(featureReplacementText) > -1) {
+	// 	endpoint = endpoint.replace(featureReplacementText, feature)
+	// }
+
+	const [ requestType, successType, errorType ] = types
+
+	dispatch(requestApi(requestType))
+
+	return callApi(endpoint, method, payload).then(
+		response => response.json().then(data => ({ data, response }))
+	).then(
+		({ data, response }) => {
+			if (!response.ok || data.code == 0 || 'error' in data) {
+				// if(data.error == "invalid_grant") {
+				// 	dispatch(logoutUser())
+				// }
+				return next({
+					error: JSON.stringify(data),
+					type: errorType
+				})
+			}
+			return next({
+				response: data,
+				type: successType
+			})
+		}
+	).catch(
+		error => next({
+			error: JSON.stringify(error),
+			type: errorType
+		})
+	)
 }

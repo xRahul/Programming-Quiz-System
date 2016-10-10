@@ -10,10 +10,18 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Route::group(['prefix' => 'api'], function () {
+	Route::get('quiz', 'QuizzesController@index')
+	        ->middleware('auth:admin')
+	        ->name('quizzes.index');
+	Route::delete('quiz/{quiz}', 'QuizzesController@destroy')
+        ->middleware('auth:admin')
+        ->name('quizzes.destroy');
+});
 
 Route::get('/', 'PagesController@homepage')
         ->name('pages.homepage');
-Route::get('/admin', 'PagesController@adminpage')
+Route::get('/admin/{admin1?}/{admin2?}/{admin3?}', 'PagesController@adminpage')
 		->middleware('auth:admin')
         ->name('pages.adminpage');
 

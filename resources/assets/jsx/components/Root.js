@@ -1,18 +1,19 @@
 import React, { PropTypes } from 'react'
 import { Provider } from 'react-redux'
-import { Router, Route, browserHistory } from 'react-router'
+import { Router, browserHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
+import routes from '../routing/routes'
 
+const Root = ({ store }) => {
 
-import App from './App'
+	const history = syncHistoryWithStore(browserHistory, store)
 
-
-const Root = ({ store }) => (
-	<Provider store={store}>
-		<Router history={browserHistory}>
-			<Route path='/admin' component={App} />
-		</Router>
-  </Provider>
-)
+	return (
+		<Provider store={store}>
+			<Router routes={routes} history={history} />
+		</Provider>
+	)
+}
 
 Root.propTypes = {
 	store: PropTypes.object.isRequired

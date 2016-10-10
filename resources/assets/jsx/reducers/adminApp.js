@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux'
-import { routerReducer } from 'react-router-redux'
+import { reducer as form } from 'redux-form'
+import { routerReducer as routing } from 'react-router-redux'
 
-import demo from './demo'
-
+import quiz from './quiz/index'
 
 const adminApp = combineReducers({
-  demo,
-  routing: routerReducer
+	quiz,
+	form,
+	routing
 })
 
 export default adminApp

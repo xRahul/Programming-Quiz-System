@@ -36,7 +36,7 @@ class Authenticate
     {
         // check whether user is logged in or not
         if (!$this->auth->check()) {
-            flash()->error('Logout Failed!', 'You are not logged in.');
+            flash()->info('Auth!', 'You are not logged in.');
             return redirect()->route('login.get');
         }
 

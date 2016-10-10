@@ -2,6 +2,10 @@
 @import "node_modules/sweetalert/dev/sweetalert.scss";
 
 /* For taking care of fixed navbar top */
-body { 
-	padding-top: 70px; 
+body {
+	padding-top: 70px;
+}
+
+a:hover {
+	cursor: pointer;
 }

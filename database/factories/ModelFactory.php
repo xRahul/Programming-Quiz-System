@@ -1,5 +1,8 @@
 <?php
 
+use QuizSystem\Models\Entities\User;
+use QuizSystem\Models\Entities\Quiz;
+
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -11,7 +14,9 @@
 |
 */
 
-$factory->define(QuizSystem\Models\Entities\User::class, function (Faker\Generator $faker) {
+$faker = new Faker\Generator();
+
+$factory->define(User::class, function ($faker) {
     return [
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
@@ -19,5 +24,21 @@ $factory->define(QuizSystem\Models\Entities\User::class, function (Faker\Generat
         'mobile' => rand(8000000000, 9999999999),
         'password' => bcrypt('123456'),
         'remember_token' => str_random(10),
+    ];
+});
+
+$factory->define(Quiz::class, function ($faker) {
+
+		$faker->addProvider(
+			new \BlogArticleFaker\FakerProvider(Faker\Factory::create())
+		);
+
+    return [
+        'name' => $faker->company,
+        'description' => $faker->articleContentMarkdown,
+        'timed' => rand(0, 1),
+        'no_of_questions' => rand(5, 20),
+        'active_status' => rand(0, 1),
+        'user_retries' => $faker->randomDigit,
     ];
 });

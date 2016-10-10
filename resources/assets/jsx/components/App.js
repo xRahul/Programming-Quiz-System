@@ -1,24 +1,20 @@
 import React, { PropTypes } from 'react'
-import { connect } from 'react-redux'
 
-let App = ({ name }) => {
+// import { connect } from 'react-redux'
+
+import NavigationTabs from '../containers/NavigationTabs'
+
+const App = ({ children }) => {
 	return (
-		<div>{name}</div>
+		<div>
+			<NavigationTabs />
+			{children}
+		</div>
 	)
 }
 
 App.propTypes = {
-	name: PropTypes.string.isRequired
+	children: PropTypes.object.isRequired
 }
 
-function mapStateToProps(state) {
-	
-	const { demo } = state
-	const { name } = demo
-	
-	return {
-		name
-	}
-}
-
-export default connect(mapStateToProps)(App)
+export default App
