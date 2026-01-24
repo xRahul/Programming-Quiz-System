@@ -27,11 +27,11 @@
 
     $wrong = "";
     if(isset($_POST['user_msg']) && $_POST['user_msg']!=""){
-        $wrong = $_POST['user_msg'];
+        $wrong = htmlspecialchars($_POST['user_msg']);
     }
 
     if(isset($_GET['user_msg']) && $_GET['user_msg']!=""){
-        $wrong = $_GET['user_msg'];
+        $wrong = htmlspecialchars($_GET['user_msg']);
     }
 
 ?>

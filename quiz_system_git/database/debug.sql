@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `admins` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `last_login` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `admins` (
 --
 
 INSERT INTO `admins` (`id`, `username`, `password`, `last_login`) VALUES
-(1, 'admin', '12345', '2014-03-09 21:58:05');
+(1, 'admin', '$2y$10$Fp6Ozh0DYIp2hoDQ08wqx.xO9kSPLFB3.TwrLoRIBMkNUkDft8iEO', '2014-03-09 21:58:05');
 
 -- --------------------------------------------------------
 

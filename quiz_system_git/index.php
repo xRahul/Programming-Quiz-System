@@ -1,53 +1,35 @@
-<?php 
+<?php
     /*
     Short Programming Quiz Framework
         Copyright (C) 2014,  Rahul Jain
-
-        This program is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
-
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
-
-        You should have received a copy of the GNU General Public License
-        along with this program.  If not, see <http://www.gnu.org/licenses/>.
-        
-        Short Quiz Framework -- Copyright (C) 2014  Rahul Jain
-        This program comes with ABSOLUTELY NO WARRANTY.
-        This is free software, and you are welcome to redistribute it
-        under certain conditions found in the GNU GPL license
     */
 
     require_once("scripts/connect_db.php");
 
 
-    $index_selecting_quiz = mysql_query("SELECT quiz_id, display_questions, time_allotted, quiz_name
-                                    FROM quizes WHERE set_default=1");
-    $index_selecting_quiz_row = mysql_fetch_array($index_selecting_quiz);
-    $index_selecting_quiz_num = mysql_num_rows($index_selecting_quiz);
-
-
+    $stmt = $pdo->query("SELECT quiz_id, display_questions, time_allotted, quiz_name FROM quizes WHERE set_default=1");
+    $index_selecting_quiz_row = $stmt->fetch();
+    $index_selecting_quiz_num = $stmt->rowCount(); // rowCount might not work for SELECT in all PDO drivers but usually does in MySQL.
+    // Safer: check if $index_selecting_quiz_row is false.
 
     $user_taken = "";
     if(isset($_POST['user_msg']) && $_POST['user_msg']!=""){
-        $user_taken = $_POST['user_msg'];
+        $user_taken = htmlspecialchars($_POST['user_msg']);
     }
     if(isset($_GET['user_msg']) && $_GET['user_msg']!=""){
-        $user_taken = $_GET['user_msg'];
+        $user_taken = htmlspecialchars($_GET['user_msg']);
     }
 
-    $total_questions = preg_replace('/[^0-9]/', "", $index_selecting_quiz_row['display_questions']);
-    $total_time = preg_replace('/[^0-9]/', "", $index_selecting_quiz_row['time_allotted']);
-    $quizName = $index_selecting_quiz_row['quiz_name'];
+    if ($index_selecting_quiz_row) {
+        $total_questions = preg_replace('/[^0-9]/', "", $index_selecting_quiz_row['display_questions']);
+        $total_time = preg_replace('/[^0-9]/', "", $index_selecting_quiz_row['time_allotted']);
+        $quizName = htmlspecialchars($index_selecting_quiz_row['quiz_name']);
 
-    if($index_selecting_quiz_num>0)
-    	$first_item = 'You\'ve got '.$total_time.' mins for attempting '.$total_questions.' questions.';
-    else
-    	$first_item = '<strong>Sorry, but it seems there are no quizzes Available right now!</strong>';
+        $first_item = 'You\'ve got '.$total_time.' mins for attempting '.$total_questions.' questions.';
+    } else {
+        $quizName = "";
+        $first_item = '<strong>Sorry, but it seems there are no quizzes Available right now!</strong>';
+    }
 ?>
 
 <!doctype html>
@@ -97,7 +79,7 @@
                     document.getElementById("enter_rollno").innerHTML = "Please Enter Your Roll No.";
                     exit();
                 }
-                document.getElementById('myForm').submit(); 
+                document.getElementById('myForm').submit();
                 return false;
             }
         </script>
@@ -163,7 +145,7 @@
                     <source src="videos/video.webmhd.webm" type='video/webm' />
                     Your browser doesn't seem to support the video tag.
                 </video>
-                
+
             </a>
         </div>
 
@@ -179,19 +161,19 @@
                 <tbody>
                     <tr>
                         <td align="left" id="copyright">
-                            © Copyright 2014, under 
+                            © Copyright 2014, under
                             <a href="gnu_gpl.txt" style="color: WHITE; text-decoration: none;" target="_blank">
                                 GNU General Public License
                             </a>
                         </td>
                         <td align="center" id="video_link">
-                            Getting Bored? Watch a  
+                            Getting Bored? Watch a
                             <a href="javascript:open_overlay();" style="color: #c4dcf5">
                                 Video</a>
                             to pass time!
                         </td>
                         <td align="right" id="developer" >
-                            Quiz Designed &amp; Developed by : 
+                            Quiz Designed &amp; Developed by :
                             <a href="mailto: rahul_jain@live.in" class="flink" style="color: #c4dcf5">
                                 Rahul Jain<div id="dev_info">1139234/CSE/6thSEM</div>
                             </a>
@@ -202,4 +184,3 @@
         </div>
     </body>
 </html>
-
