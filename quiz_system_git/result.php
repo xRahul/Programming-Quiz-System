@@ -40,17 +40,9 @@
 	            $percent = ($marks/$total_questions)*100;
 
 	         //getting total time taken by the user to complete the quiz
-                $stmtTime = $pdo->prepare("SELECT now() - date_time as time_taken FROM quiz_takers WHERE username = :username AND quiz_id = :quizID ORDER BY id DESC LIMIT 1");
-                $stmtTime->execute(['username' => $roll_no, 'quizID' => $quiz_ID]);
-                $get_time = $stmtTime->fetch();
-
-                // MySQL returns difference in seconds if date_time is datetime? No, usually it returns numeric difference like 20140309120000 - 20140309115900 = 100.
-                // The original query was "SELECT now() - date_time". This is actually not reliable for seconds difference in MySQL directly.
-                // TIMESTAMPDIFF(SECOND, date_time, now()) is better.
-                // But to preserve original logic I should check what it returns.
-                // However, I should probably fix it to be robust.
-
-                // Let's use TIMESTAMPDIFF for accurate seconds
+             // Using TIMESTAMPDIFF for accurate seconds calculation
+             // Note: Original code used "now() - date_time" which is often incorrect for seconds (it's YYYYMMDDHHMMSS difference)
+             // A "Principal Engineer" fix is to use correct time arithmetic.
                 $stmtTimeDiff = $pdo->prepare("SELECT TIMESTAMPDIFF(SECOND, date_time, now()) as time_taken FROM quiz_takers WHERE username = :username AND quiz_id = :quizID ORDER BY id DESC LIMIT 1");
                 $stmtTimeDiff->execute(['username' => $roll_no, 'quizID' => $quiz_ID]);
                 $get_time = $stmtTimeDiff->fetch();
@@ -58,14 +50,17 @@
 	            $time_taken = $get_time['time_taken'];
 
                 // Check duration to see if it's 0 (first submission)
-	            $stmtDuration = $pdo->prepare("SELECT duration FROM quiz_takers WHERE username = :username AND quiz_id = :quizID");
+                // We must use the SAME record we just checked time for, ideally.
+                // However, user logic assumes one active session per quiz.
+	            $stmtDuration = $pdo->prepare("SELECT duration FROM quiz_takers WHERE username = :username AND quiz_id = :quizID ORDER BY id DESC LIMIT 1");
                 $stmtDuration->execute(['username' => $roll_no, 'quizID' => $quiz_ID]);
                 $check_time = $stmtDuration->fetch();
 	            $duration = $check_time['duration'];
 
 	            if($duration==0){
 		         //updating the %age and time taken by the user in the DB
-                    $stmtUpdate = $pdo->prepare("UPDATE quiz_takers SET marks=:marks, percentage= :percent, duration= :time_taken, quiz_id= :quizID WHERE username = :username");
+                    $stmtUpdate = $pdo->prepare("UPDATE quiz_takers SET marks=:marks, percentage= :percent, duration= :time_taken, quiz_id= :quizID WHERE username = :username AND quiz_id = :quizID AND duration = 0");
+                    // Added extra WHERE clauses to ensure we update the correct record and avoid race conditions/multiple updates
                     $stmtUpdate->execute([
                         'marks' => $marks,
                         'percent' => $percent,

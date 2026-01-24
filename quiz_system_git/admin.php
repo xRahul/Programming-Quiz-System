@@ -376,12 +376,6 @@
 		$gaq_type = $getaquestion_row['type'];
 	 //converting program into what it ought to be
 		$gaq_code_editor = htmlspecialchars_decode($gaq_code_editor);
-        // Removed mysql_real_escape_string as we are outputting to JS strings, handled below
-        // Just need to escape for JS
-        $gaq_code_editor = addslashes($gaq_code_editor); // Simple escaping for JS string
-		$gaq_code_editor = str_replace(array("\r\n", "\r", "\n"), '\n', $gaq_code_editor);
-
-        $gaq_question = addslashes($gaq_question);
 
         $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id=:questionID");
         $stmtAns->execute(['questionID' => $editAQ]);
@@ -391,16 +385,16 @@
 		if($gaq_type=='tf'){
 			$editQoutput .= '<script>
 								showDiv(\'tf\', \'mc\', \'quesans\');
-								document.getElementById(\'quizIDtf\').value = '.$gaq_quiz_id.';
-								document.getElementById(\'tfDesc\').value = "'.$gaq_question.'";
+								document.getElementById(\'quizIDtf\').value = '.json_encode($gaq_quiz_id).';
+								document.getElementById(\'tfDesc\').value = '.json_encode($gaq_question).';
 							 </script>
 							';
 		 //if there's programming code attached to the question, add this
 			if($gaq_code_type!=""){
 				$editQoutput .=	'<script>
-									document.getElementById(\'prog-lang-tf\').value = \''.$gaq_code_type.'\';
-									change_editor("'.$gaq_code_type.'");
-									tfeditor.setValue("'.$gaq_code_editor.'");
+									document.getElementById(\'prog-lang-tf\').value = '.json_encode($gaq_code_type).';
+									change_editor('.json_encode($gaq_code_type).');
+									tfeditor.setValue('.json_encode($gaq_code_editor).');
 								</script>
 								';
 			}
@@ -438,15 +432,15 @@
 		else if($gaq_type=='mc'){
 			$editQoutput .= '<script>
 								showDiv(\'mc\', \'tf\', \'quesans\');
-								document.getElementById(\'quizIDmc\').value = '.$gaq_quiz_id.';
-								document.getElementById(\'mcdesc\').value = "'.$gaq_question.'";
+								document.getElementById(\'quizIDmc\').value = '.json_encode($gaq_quiz_id).';
+								document.getElementById(\'mcdesc\').value = '.json_encode($gaq_question).';
 							 </script>
 							';
 			if($gaq_code_type!=""){
 				$editQoutput .=	'<script>
-									document.getElementById(\'prog-lang-mc\').value = \''.$gaq_code_type.'\';
-									change_editor("'.$gaq_code_type.'");
-									mceditor.setValue("'.$gaq_code_editor.'");
+									document.getElementById(\'prog-lang-mc\').value = '.json_encode($gaq_code_type).';
+									change_editor('.json_encode($gaq_code_type).');
+									mceditor.setValue('.json_encode($gaq_code_editor).');
 								 </script>
 								';
 			}
@@ -455,7 +449,6 @@
 			while($getanswers_row = $stmtAns->fetch()){
 				$ga_answer = $getanswers_row['answer'];
 				$ga_correct = $getanswers_row['correct'];
-				$ga_answer = addslashes($ga_answer);
 
 				if($ga_correct==1){
 					$editQoutput .= '<script>
@@ -465,7 +458,7 @@
 				}
 
 				$editQoutput .= '<script>
-									document.getElementById(\'mcanswer'.$ga_index.'\').value = \''.$ga_answer.'\';
+									document.getElementById(\'mcanswer'.$ga_index.'\').value = '.json_encode($gaq_answer).';
 								 </script>
 								';
 
