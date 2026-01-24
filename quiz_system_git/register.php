@@ -1,33 +1,36 @@
 <?php
 
-	include('scripts/connect_db.php');
+	require_once('scripts/connect_db.php');
 
     if(isset($_POST['login']) && $_POST['login'] != "" &&
        isset($_POST['password']) && $_POST['password'] != ""){
 
-    
-        $user=mysql_real_escape_string($_POST['login']);
-        $pass=mysql_real_escape_string($_POST['password']);
+        $user = $_POST['login'];
+        $pass = $_POST['password'];
 
-        $fetch=mysql_query("SELECT id FROM admins 
-                            WHERE username='$user'")or die(mysql_error());
-        $count=mysql_num_rows($fetch);
-        if($count!="")
+        $stmt = $pdo->prepare("SELECT id FROM admins WHERE username=:username");
+        $stmt->execute(['username' => $user]);
+
+        if($stmt->rowCount() > 0)
         {
-        	$user_msg = 'Sorry, but \ '.$user.' \ is already taken!';
-            header('location: admin.php?msg='.$user_msg.'');
+		$user_msg = 'Sorry, but \ '.htmlspecialchars($user).' \ is already taken!';
+            header('location: admin.php?msg='.urlencode($user_msg));
+            exit();
         }
         else
         {
-            mysql_query("INSERT INTO admins (username, password) 
-            	VALUES ('$user','$pass')")or die(mysql_error());
+            $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare("INSERT INTO admins (username, password) VALUES (:username, :password)");
+            $stmt->execute(['username' => $user, 'password' => $hashed_password]);
 
-        	$user_msg = 'Admin account, \ '.$user.' \ has been created!';
-            header('location: admin.php?msg='.$user_msg.'');
+		$user_msg = 'Admin account, \ '.htmlspecialchars($user).' \ has been created!';
+            header('location: admin.php?msg='.urlencode($user_msg));
+            exit();
         }
     }else{
         $user_msg = 'Sorry, but Something went wrong';
-        header('location: admin.php?msg='.$user_msg.'');
+        header('location: admin.php?msg='.urlencode($user_msg));
+        exit();
     }
 
 ?>

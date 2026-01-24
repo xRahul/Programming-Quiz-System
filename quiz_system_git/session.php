@@ -1,20 +1,27 @@
 <?php
 	
-    include('scripts/connect_db.php');
+    require_once('scripts/connect_db.php');
 
 	session_start();
 
-	$check=$_SESSION['login_username'];
+    if (!isset($_SESSION['login_username'])) {
+        $user_msg = 'Please Login First!';
+        header('location: login.php?user_msg='.urlencode($user_msg));
+        exit();
+    }
 
-	$session=mysql_query("SELECT username FROM admins WHERE username='$check' ")or die(mysql_error());
+	$check = $_SESSION['login_username'];
 
-	$row=mysql_fetch_array($session);
+    $stmt = $pdo->prepare("SELECT username FROM admins WHERE username=:username");
+    $stmt->execute(['username' => $check]);
+    $row = $stmt->fetch();
 
-	$login_session=$row['username'];
+	$login_session = $row['username'];
 
-	if(!isset($login_session)) {
+	if(!$login_session) {
 		$user_msg = 'Please Login First!';
-		header('location: login.php?user_msg='.$user_msg.'');
+		header('location: login.php?user_msg='.urlencode($user_msg));
+        exit();
 	}
 
 ?>

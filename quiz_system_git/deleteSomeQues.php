@@ -15,35 +15,34 @@
 				@$php_id = $_POST[$fetch_ID];
 
 				if($php_id){
-					$check_sql = mysql_query("SELECT quiz_id FROM questions 
-	                                            WHERE question_id='$php_id'") or die(mysql_error());
-					$qz_id_array = mysql_fetch_array($check_sql);
-	            	$qz_id = $qz_id_array[0];
+                    $stmt = $pdo->prepare("SELECT quiz_id FROM questions WHERE question_id=:questionID");
+                    $stmt->execute(['questionID' => $php_id]);
+					$qz_id_array = $stmt->fetch();
 
-					mysql_query("DELETE FROM questions 
-									WHERE question_id='$php_id'")or die(mysql_error());
-					mysql_query("DELETE FROM answers 
-									WHERE question_id='$php_id'")or die(mysql_error());
+                    if ($qz_id_array) {
+                        $qz_id = $qz_id_array['quiz_id'];
 
-					mysql_query("UPDATE quizes SET total_questions=total_questions-1 
-									WHERE quiz_id='$qz_id' LIMIT 1")or die(mysql_error());
-					$questIDs .= $i.', ';
+                        $stmtDelQ = $pdo->prepare("DELETE FROM questions WHERE question_id=:questionID");
+                        $stmtDelQ->execute(['questionID' => $php_id]);
 
+                        $stmtDelA = $pdo->prepare("DELETE FROM answers WHERE question_id=:questionID");
+                        $stmtDelA->execute(['questionID' => $php_id]);
+
+                        $stmtUpdate = $pdo->prepare("UPDATE quizes SET total_questions=total_questions-1 WHERE quiz_id=:quizID LIMIT 1");
+                        $stmtUpdate->execute(['quizID' => $qz_id]);
+
+                        $questIDs .= $i.', ';
+                    }
 				}
 			}
 		}
 
-		$user_msg = 'Questions, \ '.$questIDs.' \ have been deleted!';
-	    header('location: admin.php?msg='.$user_msg.'');
+		$user_msg = 'Questions, \ '.htmlspecialchars($questIDs).' \ have been deleted!';
+	    header('location: admin.php?msg='.urlencode($user_msg));
+        exit();
 	}else{
 		$user_msg = 'Sorry, but Something went wrong';
-		header('location: admin.php?msg='.$user_msg.'');
+		header('location: admin.php?msg='.urlencode($user_msg));
+        exit();
     }
 ?>
-
-
-
-
-
-
-

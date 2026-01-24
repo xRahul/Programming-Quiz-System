@@ -1,38 +1,41 @@
 <?php
 
-	include('scripts/connect_db.php');
+	require_once('scripts/connect_db.php');
 
         if(isset($_POST['quizName']) && $_POST['quizName'] != ""
         && isset($_POST['quizTime']) && $_POST['quizTime'] != ""
         && isset($_POST['numQues']) && $_POST['numQues'] != ""){
 
-            $qName=mysql_real_escape_string($_POST['quizName']);
-            $qTime=mysql_real_escape_string($_POST['quizTime']);
-            $nQues=mysql_real_escape_string($_POST['numQues']);
+            $qName = $_POST['quizName'];
+            $qTime = $_POST['quizTime'];
+            $nQues = $_POST['numQues'];
 
             $qTime = preg_replace('/[^0-9]/', "", $qTime);
             $nQues = preg_replace('/[^0-9]/', "", $nQues);
 
-            $fetch=mysql_query("SELECT id FROM quizes 
-                                WHERE quiz_name='$qName'")or die(mysql_error());
-            $count=mysql_num_rows($fetch);
-            if($count!="")
-            {
-            	$user_msg = 'Sorry, but \ '.$qName.' \ already exists!';
-                header('location: admin.php?msg='.$user_msg.'');
-            }else{
-                mysql_query("INSERT INTO quizes (quiz_name, display_questions, time_allotted) 
-                	VALUES ('$qName','$nQues','$qTime')")or die(mysql_error());
-                
-                $lastId = mysql_insert_id();
-                mysql_query("UPDATE quizes SET quiz_id='$lastId' 
-                                WHERE id='$lastId' LIMIT 1")or die(mysql_error());
+            $stmt = $pdo->prepare("SELECT id FROM quizes WHERE quiz_name=:quizName");
+            $stmt->execute(['quizName' => $qName]);
 
-            	$user_msg = 'Quiz, \ '.$qName.' \ has been created!';
-                header('location: admin.php?msg='.$user_msg.'');
+            if($stmt->rowCount() > 0)
+            {
+		$user_msg = 'Sorry, but \ '.htmlspecialchars($qName).' \ already exists!';
+                header('location: admin.php?msg='.urlencode($user_msg));
+                exit();
+            }else{
+                $stmtInsert = $pdo->prepare("INSERT INTO quizes (quiz_name, display_questions, time_allotted) VALUES (:quizName, :nQues, :qTime)");
+                $stmtInsert->execute(['quizName' => $qName, 'nQues' => $nQues, 'qTime' => $qTime]);
+                
+                $lastId = $pdo->lastInsertId();
+                $stmtUpdate = $pdo->prepare("UPDATE quizes SET quiz_id=:lastId WHERE id=:lastId LIMIT 1");
+                $stmtUpdate->execute(['lastId' => $lastId]);
+
+		$user_msg = 'Quiz, \ '.htmlspecialchars($qName).' \ has been created!';
+                header('location: admin.php?msg='.urlencode($user_msg));
+                exit();
             }
         }else{
             $user_msg = 'Sorry, but Something went wrong';
-            header('location: admin.php?msg='.$user_msg.'');
+            header('location: admin.php?msg='.urlencode($user_msg));
+            exit();
         }
 ?>

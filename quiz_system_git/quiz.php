@@ -3,34 +3,13 @@
 	/*
     Short Programming Quiz Framework
         Copyright (C) 2014  Rahul Jain
-
-        This program is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
-
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
-
-        You should have received a copy of the GNU General Public License
-        along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    	
-    	Short Programming Quiz Framework -- Copyright (C) 2014  Rahul Jain
-        This program comes with ABSOLUTELY NO WARRANTY.
-        This is free software, and you are welcome to redistribute it
-        under certain conditions found in the GNU GPL license
     */
 
 
 	require_once("scripts/connect_db.php");
 
-	$selecting_quiz = mysql_query("SELECT quiz_id, display_questions, time_allotted, quiz_name
-									FROM quizes WHERE set_default=1");
-	$selecting_quiz_row = mysql_fetch_array($selecting_quiz);
-
-
+    $stmt = $pdo->query("SELECT quiz_id, display_questions, time_allotted, quiz_name FROM quizes WHERE set_default=1");
+    $selecting_quiz_row = $stmt->fetch();
 
  //checking if all 3 values are there
 	if(isset($_POST['rollno']) && $_POST['rollno'] != "")
@@ -39,7 +18,6 @@
 	 //getting values in variables
 		$roll_no = $_POST['rollno'];
 		$roll_no = htmlspecialchars($roll_no);
-		$roll_no = mysql_real_escape_string($roll_no);
 
 		$total_questions = preg_replace('/[^0-9]/', "", $selecting_quiz_row['display_questions']);
 
@@ -48,25 +26,25 @@
 
 		$final_quiz_ID = preg_replace('/[^0-9]/', "", $selecting_quiz_row['quiz_id']);
 
-		$quzz_name = $selecting_quiz_row['quiz_name'];
+		$quzz_name = htmlspecialchars($selecting_quiz_row['quiz_name']);
 
 	 //checking if user has already taken this quiz
-		$userCheck = mysql_query(" SELECT id FROM quiz_takers 
-										WHERE username = '$roll_no' 
-										AND quiz_id='$final_quiz_ID' ")or die(mysql_error());
+        $stmtCheck = $pdo->prepare("SELECT id FROM quiz_takers WHERE username = :username AND quiz_id=:quizID");
+        $stmtCheck->execute(['username' => $roll_no, 'quizID' => $final_quiz_ID]);
+
 	 //if user already did, redirect to index.php with error
-		if(!(mysql_num_rows($userCheck) < 1)){
+		if($stmtCheck->rowCount() > 0){
 			$user_msg = 'Sorry, but '.$roll_no.', has already attempted the quiz, '.$quzz_name.'!';
-			header('location: index.php?user_msg='.$user_msg.'');
+			header('location: index.php?user_msg='.urlencode($user_msg));
 			exit();
 		}else{
 	 //else inserting few columns into the table
-		mysql_query("INSERT INTO quiz_takers (username, percentage, date_time, quiz_id, duration) 
-					 VALUES ('$roll_no', '0', now(), '$final_quiz_ID', '0')")or die(mysql_error());
+        $stmtInsert = $pdo->prepare("INSERT INTO quiz_takers (username, percentage, date_time, quiz_id, duration) VALUES (:username, '0', now(), :quizID, '0')");
+        $stmtInsert->execute(['username' => $roll_no, 'quizID' => $final_quiz_ID]);
 		}
 	}else{
 		$user_msg = 'Hey, This is the start Page, So enter your username here first';
-		header('location: index.php?user_msg='.$user_msg.'');
+		header('location: index.php?user_msg='.urlencode($user_msg));
 			exit();
 	}
 
@@ -82,12 +60,22 @@
 	$m_output='';
  
  //Getting the questions from DB here
-	$m_questions_from_DB = mysql_query("SELECT * FROM questions WHERE quiz_id='$final_quiz_ID'
-								ORDER BY rand() LIMIT $total_questions");
+    // Note: ORDER BY RAND() is not efficient for large tables, but fine for this scale.
+    // PDO doesn't have a direct equivalent to LIMIT taking a variable in query string if emulation is off,
+    // but default emulation is usually on or we can bind param.
+    // However, LIMIT parameter binding in PDO can be tricky with string types.
+    // Since $total_questions is strictly regexed to numbers, direct interpolation is safe-ish,
+    // but better to use binding or ensure it is int.
+    $total_questions = (int)$total_questions;
 
-		while (mysql_num_rows($m_questions_from_DB)<1) {
+    $stmtQ = $pdo->prepare("SELECT * FROM questions WHERE quiz_id=:quizID ORDER BY rand() LIMIT :limit");
+    $stmtQ->bindValue(':quizID', $final_quiz_ID);
+    $stmtQ->bindValue(':limit', $total_questions, PDO::PARAM_INT);
+    $stmtQ->execute();
+
+		if ($stmtQ->rowCount() < 1) {
 			$user_msg = 'Hey, weird, but it seems there are no questions in this quiz!';
-			header('location: index.php?user_msg='.$user_msg.'');
+			header('location: index.php?user_msg='.urlencode($user_msg));
 			exit();
 		}
 
@@ -95,7 +83,7 @@
 		$m_display_ID = 1;
 
 	 //looping through the questions and adding them on the page
-		while($m_row = mysql_fetch_array($m_questions_from_DB)){
+		while($m_row = $stmtQ->fetch()){
 		 //initializing the options
 			$m_answers='';
 				
@@ -128,15 +116,15 @@
 			}
 
 		 //gathering options of the question here
-			$m_options_from_DB = mysql_query("SELECT * FROM answers 
-									WHERE question_id='$m_question_id' ORDER BY rand()");
+            $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id=:questionID ORDER BY rand()");
+            $stmtAns->execute(['questionID' => $m_question_id]);
 
 				$m_answers .=  '<tr>
 									<td></td>
 									<td>
 								';
 				 //adding html to individual options here
-					while($m_row2 = mysql_fetch_array($m_options_from_DB)){
+					while($m_row2 = $stmtAns->fetch()){
 					 //getting row attributes in variables
 						$m_answer = $m_row2['answer'];
 						$m_answer_ID = $m_row2['id'];
