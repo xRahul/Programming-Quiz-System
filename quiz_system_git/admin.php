@@ -242,9 +242,9 @@
 		$m_output='';
 
 		if($editQ=='allthequestions') {
-			$stmt = $pdo->query("SELECT * FROM questions");
+			$stmt = $pdo->query("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.quiz_id");
         } else {
-            $stmt = $pdo->prepare("SELECT * FROM questions WHERE quiz_id = :quizID");
+            $stmt = $pdo->prepare("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.quiz_id WHERE questions.quiz_id = :quizID");
             $stmt->execute(['quizID' => $get_quiz_id]);
         }
 
@@ -260,11 +260,7 @@
 				$m_code = $m_row['code'];
 				$m_code_type = $m_row['code_type'];
 				$m_quiz_id = $m_row['quiz_id'];
-
-                $stmtQuizName = $pdo->prepare("SELECT quiz_name FROM quizes WHERE id=:quizID");
-                $stmtQuizName->execute(['quizID' => $m_quiz_id]);
-				$m_quiz_id_SQL_row = $stmtQuizName->fetch();
-				$m_quiz_name = $m_quiz_id_SQL_row['quiz_name'];
+				$m_quiz_name = $m_row['quiz_name'];
 
 
 				$m_q = '<tr>
@@ -494,9 +490,9 @@
 		$m_output='';
 
 		if($deleteSQ=='allthequestions') {
-			$stmt = $pdo->query("SELECT * FROM questions");
+			$stmt = $pdo->query("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.quiz_id");
         } else {
-            $stmt = $pdo->prepare("SELECT * FROM questions WHERE quiz_id = :quizID");
+            $stmt = $pdo->prepare("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.quiz_id WHERE questions.quiz_id = :quizID");
             $stmt->execute(['quizID' => $get_quiz_id]);
         }
 
@@ -513,10 +509,7 @@
 				$m_code_type = $m_row['code_type'];
 				$m_quiz_id = $m_row['quiz_id'];
 
-                $stmtQuizName = $pdo->prepare("SELECT quiz_name FROM quizes WHERE id=:quizID");
-                $stmtQuizName->execute(['quizID' => $m_quiz_id]);
-                $m_quiz_id_SQL_row = $stmtQuizName->fetch();
-				$m_quiz_name = $m_quiz_id_SQL_row['quiz_name'];
+				$m_quiz_name = $m_row['quiz_name'];
 
 
 				$m_q = '<tr>
