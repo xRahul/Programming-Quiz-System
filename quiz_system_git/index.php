@@ -7,7 +7,7 @@
     require_once("scripts/connect_db.php");
 
 
-    $stmt = $pdo->query("SELECT quiz_id, display_questions, time_allotted, quiz_name FROM quizes WHERE set_default=1");
+    $stmt = $pdo->query("SELECT id as quiz_id, display_questions, time_allotted, quiz_name FROM quizes WHERE set_default=1");
     $index_selecting_quiz_row = $stmt->fetch();
     $index_selecting_quiz_num = $stmt->rowCount(); // rowCount might not work for SELECT in all PDO drivers but usually does in MySQL.
     // Safer: check if $index_selecting_quiz_row is false.
