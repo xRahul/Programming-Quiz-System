@@ -93,19 +93,23 @@
 
 	 //if inserting a true/false question, insert answers by this-
 		if($type == 'tf'){
-            $stmtInsert = $pdo->prepare("INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES (:quizID, :q_id, :answer, :correct)");
+            $stmtInsert = $pdo->prepare("INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES (:quizID1, :q_id1, :answer1, :correct1), (:quizID2, :q_id2, :answer2, :correct2)");
 		 //if answer1 is marked correct, do this--
 			if($isCorrect == "answer1"){
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer1, 'correct' => '1']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer2, 'correct' => '0']);
+                $stmtInsert->execute([
+                    'quizID1' => $quizID, 'q_id1' => $q_id, 'answer1' => $answer1, 'correct1' => '1',
+                    'quizID2' => $quizID, 'q_id2' => $q_id, 'answer2' => $answer2, 'correct2' => '0'
+                ]);
 				$msg = 'Thanks, question no.'.$q_id.' has been edited';
 				header('location: admin.php?msg='.urlencode($msg));
 				exit();
 			}
 		 //if answer2 is marked correct, do this--
 			if($isCorrect == "answer2"){
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer2, 'correct' => '1']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer1, 'correct' => '0']);
+                $stmtInsert->execute([
+                    'quizID1' => $quizID, 'q_id1' => $q_id, 'answer1' => $answer2, 'correct1' => '1',
+                    'quizID2' => $quizID, 'q_id2' => $q_id, 'answer2' => $answer1, 'correct2' => '0'
+                ]);
 				$msg = 'Thanks, question no.'.$q_id.' has been edited';
 				header('location: admin.php?msg='.urlencode($msg));
 				exit();
@@ -114,43 +118,55 @@
 
 	 //if inserting a multiple choice question, insert answers by this-
 		if($type == 'mc'){
-            $stmtInsert = $pdo->prepare("INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES (:quizID, :q_id, :answer, :correct)");
+            $stmtInsert = $pdo->prepare("INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES
+                (:quizID1, :q_id1, :answer1, :correct1),
+                (:quizID2, :q_id2, :answer2, :correct2),
+                (:quizID3, :q_id3, :answer3, :correct3),
+                (:quizID4, :q_id4, :answer4, :correct4)");
 		 //if answer1 is marked correct, do this--
 			if($isCorrect == "answer1"){
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer1, 'correct' => '1']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer2, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer3, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer4, 'correct' => '0']);
+                $stmtInsert->execute([
+                    'quizID1' => $quizID, 'q_id1' => $q_id, 'answer1' => $answer1, 'correct1' => '1',
+                    'quizID2' => $quizID, 'q_id2' => $q_id, 'answer2' => $answer2, 'correct2' => '0',
+                    'quizID3' => $quizID, 'q_id3' => $q_id, 'answer3' => $answer3, 'correct3' => '0',
+                    'quizID4' => $quizID, 'q_id4' => $q_id, 'answer4' => $answer4, 'correct4' => '0'
+                ]);
 				$msg = 'Thanks, question no.'.$q_id.' has been edited';
 				header('location: admin.php?msg='.urlencode($msg));
 				exit();
 			}
 		 //if answer2 is marked correct, do this--
 			if($isCorrect == "answer2"){
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer2, 'correct' => '1']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer1, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer3, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer4, 'correct' => '0']);
+                $stmtInsert->execute([
+                    'quizID1' => $quizID, 'q_id1' => $q_id, 'answer1' => $answer2, 'correct1' => '1',
+                    'quizID2' => $quizID, 'q_id2' => $q_id, 'answer2' => $answer1, 'correct2' => '0',
+                    'quizID3' => $quizID, 'q_id3' => $q_id, 'answer3' => $answer3, 'correct3' => '0',
+                    'quizID4' => $quizID, 'q_id4' => $q_id, 'answer4' => $answer4, 'correct4' => '0'
+                ]);
 				$msg = 'Thanks, question no.'.$q_id.' has been edited';
 				header('location: admin.php?msg='.urlencode($msg));
 				exit();
 			}
 		 //if answer3 is marked correct, do this--
 			if($isCorrect == "answer3"){
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer3, 'correct' => '1']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer1, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer2, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer4, 'correct' => '0']);
+                $stmtInsert->execute([
+                    'quizID1' => $quizID, 'q_id1' => $q_id, 'answer1' => $answer3, 'correct1' => '1',
+                    'quizID2' => $quizID, 'q_id2' => $q_id, 'answer2' => $answer1, 'correct2' => '0',
+                    'quizID3' => $quizID, 'q_id3' => $q_id, 'answer3' => $answer2, 'correct3' => '0',
+                    'quizID4' => $quizID, 'q_id4' => $q_id, 'answer4' => $answer4, 'correct4' => '0'
+                ]);
 				$msg = 'Thanks, question no.'.$q_id.' has been edited';
 				header('location: admin.php?msg='.urlencode($msg));
 				exit();
 			}
 		 //if answer4 is marked correct, do this--
 			if($isCorrect == "answer4"){
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer4, 'correct' => '1']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer1, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer2, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'q_id' => $q_id, 'answer' => $answer3, 'correct' => '0']);
+                $stmtInsert->execute([
+                    'quizID1' => $quizID, 'q_id1' => $q_id, 'answer1' => $answer4, 'correct1' => '1',
+                    'quizID2' => $quizID, 'q_id2' => $q_id, 'answer2' => $answer1, 'correct2' => '0',
+                    'quizID3' => $quizID, 'q_id3' => $q_id, 'answer3' => $answer2, 'correct3' => '0',
+                    'quizID4' => $quizID, 'q_id4' => $q_id, 'answer4' => $answer3, 'correct4' => '0'
+                ]);
 				$msg = 'Thanks, question no.'.$q_id.' has been edited';
 				header('location: admin.php?msg='.urlencode($msg));
 				exit();
