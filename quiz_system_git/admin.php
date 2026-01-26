@@ -98,7 +98,7 @@
             $stmt->execute(['lastId' => $lastId]);
 
 	 ///////Updating value of total questions in quizes
-        $stmt = $pdo->prepare("UPDATE quizes SET total_questions=total_questions+1 WHERE quiz_id=:quizID LIMIT 1");
+        $stmt = $pdo->prepare("UPDATE quizes SET total_questions=total_questions+1 WHERE id=:quizID LIMIT 1");
         $stmt->execute(['quizID' => $quizID]);
 
 
@@ -233,7 +233,7 @@
         $m_quiz_name = '';
 
         if($editQ != 'allthequestions') {
-		$stmt = $pdo->prepare("SELECT quiz_id FROM quizes WHERE quiz_name = :quizName");
+		$stmt = $pdo->prepare("SELECT id as quiz_id FROM quizes WHERE quiz_name = :quizName");
             $stmt->execute(['quizName' => $editQ]);
             $row = $stmt->fetch();
 		$get_quiz_id = $row['quiz_id'];
@@ -481,7 +481,7 @@
 
         $get_quiz_id = '';
         if($deleteSQ != 'allthequestions') {
-            $stmt = $pdo->prepare("SELECT quiz_id FROM quizes WHERE quiz_name = :quizName");
+            $stmt = $pdo->prepare("SELECT id as quiz_id FROM quizes WHERE quiz_name = :quizName");
             $stmt->execute(['quizName' => $deleteSQ]);
             $row = $stmt->fetch();
             $get_quiz_id = $row['quiz_id'];
@@ -729,12 +729,12 @@
 		$deleteQ = $_POST['deleteQuiz'];
 
 	//resetting the tables
-        $stmt = $pdo->prepare("SELECT quiz_id FROM quizes WHERE quiz_name = :quizName");
+        $stmt = $pdo->prepare("SELECT id as quiz_id FROM quizes WHERE quiz_name = :quizName");
         $stmt->execute(['quizName' => $deleteQ]);
         $row = $stmt->fetch();
         $qz_id = $row['quiz_id'];
 
-        $stmtDel = $pdo->prepare("DELETE FROM quizes WHERE quiz_id = :quizID");
+        $stmtDel = $pdo->prepare("DELETE FROM quizes WHERE id = :quizID");
         $stmtDel->execute(['quizID' => $qz_id]);
 
         $stmtDelQ = $pdo->prepare("DELETE FROM questions WHERE quiz_id = :quizID");
@@ -751,7 +751,7 @@
         $stmt2 = $pdo->prepare("SELECT id FROM answers WHERE quiz_id = :quizID LIMIT 1");
         $stmt2->execute(['quizID' => $qz_id]);
 
-        $stmt3 = $pdo->prepare("SELECT id FROM quizes WHERE quiz_id = :quizID LIMIT 1");
+        $stmt3 = $pdo->prepare("SELECT id FROM quizes WHERE id = :quizID LIMIT 1");
         $stmt3->execute(['quizID' => $qz_id]);
 
 	//getting number of rows that were returned
@@ -778,7 +778,7 @@
 	$quizSelect = "";
 	$quizesMenu = "";
 
-	$stmt = $pdo->query("SELECT quiz_id, quiz_name, display_questions, time_allotted FROM quizes");
+	$stmt = $pdo->query("SELECT id as quiz_id, quiz_name, display_questions, time_allotted FROM quizes");
 
 	 //getting individual quiz's info!
 		while($quizID_row = $stmt->fetch()){
@@ -848,7 +848,7 @@
 	if(isset($_POST['usersQuiz']) && $_POST['usersQuiz'] != ""){
 		$usersQ = $_POST['usersQuiz'];
 
-        $stmt = $pdo->prepare("SELECT quiz_id FROM quizes WHERE quiz_name = :quizName");
+        $stmt = $pdo->prepare("SELECT id as quiz_id FROM quizes WHERE quiz_name = :quizName");
         $stmt->execute(['quizName' => $usersQ]);
         $row = $stmt->fetch();
 		$get_quiz_id = $row['quiz_id'];
@@ -908,7 +908,7 @@
 	if(isset($_POST['usersAll']) && $_POST['usersAll'] != ""){
 		$usersQ = $_POST['usersAll'];
 
-        $stmt = $pdo->prepare("SELECT quiz_id FROM quizes WHERE quiz_name = :quizName");
+        $stmt = $pdo->prepare("SELECT id as quiz_id FROM quizes WHERE quiz_name = :quizName");
         $stmt->execute(['quizName' => $usersQ]);
         $row = $stmt->fetch();
 		$get_quiz_id = $row['quiz_id'];
@@ -971,7 +971,7 @@
 
         $get_quiz_id = '';
         if($questionsQ != 'allthequestions') {
-            $stmt = $pdo->prepare("SELECT quiz_id FROM quizes WHERE quiz_name = :quizName");
+            $stmt = $pdo->prepare("SELECT id as quiz_id FROM quizes WHERE quiz_name = :quizName");
             $stmt->execute(['quizName' => $questionsQ]);
             $row = $stmt->fetch();
             $get_quiz_id = $row['quiz_id'];
@@ -999,7 +999,7 @@
 				$m_code_type = $m_row['code_type'];
 				$m_quiz_id = $m_row['quiz_id'];
 
-                $stmtQuizName = $pdo->prepare("SELECT quiz_name FROM quizes WHERE quiz_id=:quizID");
+                $stmtQuizName = $pdo->prepare("SELECT quiz_name FROM quizes WHERE id=:quizID");
                 $stmtQuizName->execute(['quizID' => $m_quiz_id]);
                 $m_quiz_id_SQL_row = $stmtQuizName->fetch();
 				$m_quiz_name = $m_quiz_id_SQL_row['quiz_name'];

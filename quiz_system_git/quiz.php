@@ -8,7 +8,7 @@
 
 	require_once("scripts/connect_db.php");
 
-    $stmt = $pdo->query("SELECT quiz_id, display_questions, time_allotted, quiz_name FROM quizes WHERE set_default=1");
+    $stmt = $pdo->query("SELECT id as quiz_id, display_questions, time_allotted, quiz_name FROM quizes WHERE set_default=1");
     $selecting_quiz_row = $stmt->fetch();
 
  //checking if all 3 values are there

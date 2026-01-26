@@ -28,7 +28,7 @@
                         $stmtDelA = $pdo->prepare("DELETE FROM answers WHERE question_id=:questionID");
                         $stmtDelA->execute(['questionID' => $php_id]);
 
-                        $stmtUpdate = $pdo->prepare("UPDATE quizes SET total_questions=total_questions-1 WHERE quiz_id=:quizID LIMIT 1");
+                        $stmtUpdate = $pdo->prepare("UPDATE quizes SET total_questions=total_questions-1 WHERE id=:quizID LIMIT 1");
                         $stmtUpdate->execute(['quizID' => $qz_id]);
 
                         $questIDs .= $i.', ';

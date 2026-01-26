@@ -25,10 +25,6 @@
                 $stmtInsert = $pdo->prepare("INSERT INTO quizes (quiz_name, display_questions, time_allotted) VALUES (:quizName, :nQues, :qTime)");
                 $stmtInsert->execute(['quizName' => $qName, 'nQues' => $nQues, 'qTime' => $qTime]);
                 
-                $lastId = $pdo->lastInsertId();
-                $stmtUpdate = $pdo->prepare("UPDATE quizes SET quiz_id=:lastId WHERE id=:lastId LIMIT 1");
-                $stmtUpdate->execute(['lastId' => $lastId]);
-
 		$user_msg = 'Quiz, \ '.htmlspecialchars($qName).' \ has been created!';
                 header('location: admin.php?msg='.urlencode($user_msg));
                 exit();
