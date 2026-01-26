@@ -22,21 +22,39 @@
 
             if($total_questions>0){
 
-                $stmtCheck = $pdo->prepare("SELECT correct FROM answers WHERE id=:php_id");
-
-	         //calculating %age
-	            for($i=1 ; $i <= $total_questions ; $i++){
-	                @$fetch_ID = "rads".$i;
-	                @$php_id = $_POST[$fetch_ID];
+                // calculating %age
+                // Optimization: Fetch all correct answers in one query instead of N queries
+                $php_ids = [];
+                // Collect IDs first
+                for($i=1 ; $i <= $total_questions ; $i++){
+                    @$fetch_ID = "rads".$i;
+                    @$php_id = $_POST[$fetch_ID];
 
                     if(isset($php_id) && $php_id != "") {
-                        $stmtCheck->execute(['php_id' => $php_id]);
-                        $q_answer = $stmtCheck->fetch();
-                        if ($q_answer) {
-                            $marks += $q_answer['correct'];
+                        $php_ids[] = $php_id;
+                    }
+                }
+
+                if (!empty($php_ids)) {
+                    $unique_ids = array_unique($php_ids);
+                    // Use placeholders for WHERE IN clause
+                    $placeholders = implode(',', array_fill(0, count($unique_ids), '?'));
+
+                    $stmtCheck = $pdo->prepare("SELECT id, correct FROM answers WHERE id IN ($placeholders)");
+                    $stmtCheck->execute(array_values($unique_ids));
+
+                    $correct_map = [];
+                    while ($q_answer = $stmtCheck->fetch()) {
+                        $correct_map[$q_answer['id']] = $q_answer['correct'];
+                    }
+
+                    // Calculate marks using the map
+                    foreach ($php_ids as $pid) {
+                        if (isset($correct_map[$pid])) {
+                            $marks += $correct_map[$pid];
                         }
                     }
-	            }
+                }
 	            $percent = ($marks/$total_questions)*100;
 
 	         //getting total time taken by the user to complete the quiz
