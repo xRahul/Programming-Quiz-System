@@ -68,12 +68,38 @@
     // but better to use binding or ensure it is int.
     $total_questions = (int)$total_questions;
 
-    $stmtQ = $pdo->prepare("SELECT * FROM questions WHERE quiz_id=:quizID ORDER BY rand() LIMIT :limit");
-    $stmtQ->bindValue(':quizID', $final_quiz_ID);
-    $stmtQ->bindValue(':limit', $total_questions, PDO::PARAM_INT);
-    $stmtQ->execute();
+    // Optimized: Fetch IDs first, shuffle in PHP, then fetch rows.
+    // This avoids ORDER BY RAND() which is slow on large datasets.
+    $stmtIDs = $pdo->prepare("SELECT id FROM questions WHERE quiz_id=:quizID");
+    $stmtIDs->bindValue(':quizID', $final_quiz_ID);
+    $stmtIDs->execute();
+    $all_ids = $stmtIDs->fetchAll(PDO::FETCH_COLUMN);
 
-		if ($stmtQ->rowCount() < 1) {
+    shuffle($all_ids);
+    $selected_ids = array_slice($all_ids, 0, $total_questions);
+
+    $sorted_questions = [];
+    if (!empty($selected_ids)) {
+        // Fetch the questions for the selected IDs
+        $inQuery = implode(',', array_map('intval', $selected_ids));
+        $stmtQ = $pdo->query("SELECT * FROM questions WHERE id IN ($inQuery)");
+        $fetched_rows = $stmtQ->fetchAll(PDO::FETCH_ASSOC);
+
+        // Map them by ID for easy lookup
+        $rows_map = [];
+        foreach ($fetched_rows as $row) {
+            $rows_map[$row['id']] = $row;
+        }
+
+        // Reconstruct the array in the shuffled order
+        foreach ($selected_ids as $id) {
+            if (isset($rows_map[$id])) {
+                $sorted_questions[] = $rows_map[$id];
+            }
+        }
+    }
+
+		if (empty($sorted_questions)) {
 			$user_msg = 'Hey, weird, but it seems there are no questions in this quiz!';
 			header('location: index.php?user_msg='.urlencode($user_msg));
 			exit();
@@ -83,7 +109,7 @@
 		$m_display_ID = 1;
 
 	 //looping through the questions and adding them on the page
-		while($m_row = $stmtQ->fetch()){
+		foreach($sorted_questions as $m_row){
 		 //initializing the options
 			$m_answers='';
 				
