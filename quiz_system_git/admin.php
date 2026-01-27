@@ -1178,6 +1178,7 @@
 	<!-- BUGGY CODE INPUT FIELD -->
 		<link rel="stylesheet" href="codemirror/lib/codemirror.css">
 		<script type="text/javascript" src="codemirror/codemirror-compressed.js"></script>
+		<script type="text/javascript" src="codemirror/addon/mode/loadmode.js"></script>
 	<!--
 		<script src="codemirror/lib/codemirror.js"></script>
 
@@ -1884,6 +1885,7 @@
 
     <!-- Script for the codeMirror api -->
         <script type="text/javascript">
+            CodeMirror.modeURL = "codemirror/mode/%N/%N.js";
 
 	        var tfeditor = CodeMirror.fromTextArea(document.getElementById("tfcodeDesc"), {
 										lineNumbers: true,
@@ -1923,52 +1925,40 @@
 				}
 
 				function change_editor(which){
+                    var changedMode = "text/plain";
+                    var modeName = "";
 
-					if(which=="cpp")
-						var changedMode = "text/x-c++src";
-					else if(which=="css")
-					   var changedMode = "text/css";
-					else if(which=="diff")
-					   var changedMode = "text/x-diff";
-					else if(which=="erlang")
-					   var changedMode = "text/x-erlang";
-					else if(which=="groovy")
-					   var changedMode = "text/x-groovy";
-					else if(which=="java" || which=="javafx")
-					   var changedMode = "text/x-java";
-					else if(which=="js")
-					   var changedMode = "text/javascript";
-					else if(which=="perl")
-					   var changedMode = "text/x-perl";
-					else if(which=="php")
-					   var changedMode = "text/x-httpd-php";
-					else if(which=="python")
-					   var changedMode = "text/x-python";
-					else if(which=="ruby")
-					   var changedMode = "text/x-ruby";
-					else if(which=="sass")
-					   var changedMode = "text/x-sass";
-					else if(which=="scala")
-					   var changedMode = "text/x-scala";
-					else if(which=="shell")
-					   var changedMode = "text/x-sh";
-					else if(which=="sql")
-					   var changedMode = "text/x-sql";
-					else if(which=="vbnet")
-					   var changedMode = "text/x-vb";
-					else if(which=="html")
-					   var changedMode = "text/x-html";
-					else if(which=="csharp")
-					   var changedMode = "text/x-csharp";
-					else if(which=="")
-					   var changedMode = "text/plain";
-					else
-					   var changedMode = "text/plain";
+					if(which=="cpp") { changedMode = "text/x-c++src"; modeName = "clike"; }
+					else if(which=="css") { changedMode = "text/css"; modeName = "css"; }
+					else if(which=="diff") { changedMode = "text/x-diff"; modeName = "diff"; }
+					else if(which=="erlang") { changedMode = "text/x-erlang"; modeName = "erlang"; }
+					else if(which=="groovy") { changedMode = "text/x-groovy"; modeName = "groovy"; }
+					else if(which=="java" || which=="javafx") { changedMode = "text/x-java"; modeName = "clike"; }
+					else if(which=="js") { changedMode = "text/javascript"; modeName = "javascript"; }
+					else if(which=="perl") { changedMode = "text/x-perl"; modeName = "perl"; }
+					else if(which=="php") { changedMode = "text/x-httpd-php"; modeName = "php"; }
+					else if(which=="python") { changedMode = "text/x-python"; modeName = "python"; }
+					else if(which=="ruby") { changedMode = "text/x-ruby"; modeName = "ruby"; }
+					else if(which=="sass") { changedMode = "text/x-sass"; modeName = "sass"; }
+					else if(which=="scala") { changedMode = "text/x-scala"; modeName = "clike"; }
+					else if(which=="shell") { changedMode = "text/x-sh"; modeName = "shell"; }
+					else if(which=="sql") { changedMode = "text/x-sql"; modeName = "sql"; }
+					else if(which=="vbnet") { changedMode = "text/x-vb"; modeName = "vb"; }
+					else if(which=="html") { changedMode = "text/x-html"; modeName = "xml"; }
+					else if(which=="csharp") { changedMode = "text/x-csharp"; modeName = "clike"; }
+                    else if(which=="applescript") { modeName = "applescript"; }
+                    else if(which=="actionscript3") { modeName = "clike"; }
+                    else if(which=="coldfusion") { modeName = "coldfusion"; }
+                    else if(which=="delphi") { changedMode = "text/x-pascal"; modeName = "pascal"; }
+                    else if(which=="powershell") { modeName = "powershell"; }
+
+                    if (modeName) {
+					CodeMirror.autoLoadMode(tfeditor, modeName);
+					CodeMirror.autoLoadMode(mceditor, modeName);
+                    }
 
 					tfeditor.setOption("mode", changedMode);
-					CodeMirror.autoLoadMode(tfeditor, changedMode);
 					mceditor.setOption("mode", changedMode);
-					CodeMirror.autoLoadMode(mceditor, changedMode);
 				}
 
 
