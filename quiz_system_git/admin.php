@@ -250,7 +250,29 @@
 
 			$m_display_ID = 1;
 
-			while($m_row = $stmt->fetch()){
+            $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Collect IDs
+            $questionIDs = [];
+            foreach ($questions as $q) {
+                $questionIDs[] = $q['question_id'];
+            }
+
+            // Batch fetch answers
+            $answersByQuestion = [];
+            if (!empty($questionIDs)) {
+                $chunks = array_chunk($questionIDs, 500);
+                foreach ($chunks as $chunk) {
+                    $placeholders = implode(',', array_fill(0, count($chunk), '?'));
+                    $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id IN ($placeholders)");
+                    $stmtAns->execute($chunk);
+                    while ($row = $stmtAns->fetch(PDO::FETCH_ASSOC)) {
+                        $answersByQuestion[$row['question_id']][] = $row;
+                    }
+                }
+            }
+
+			foreach ($questions as $m_row){
 				$m_answers='';
 			 //id var = id column and so on
 				$m_id = $m_row['id'];
@@ -296,8 +318,7 @@
 				}
 
 			 //gathering answers of question here
-                $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id=:questionID");
-                $stmtAns->execute(['questionID' => $m_question_id]);
+                $currentAnswers = isset($answersByQuestion[$m_question_id]) ? $answersByQuestion[$m_question_id] : [];
 
 				$m_answers .=  '<tr>
 									<td></td>
@@ -305,7 +326,7 @@
 										<ol type="a">
 								';
 
-					while($m_row2 = $stmtAns->fetch()){
+					foreach ($currentAnswers as $m_row2){
 					//putting column values in variables
 						$m_answer = $m_row2['answer'];
 						$m_correct = $m_row2['correct'];
