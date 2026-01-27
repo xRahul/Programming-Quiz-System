@@ -33,7 +33,7 @@
         $stmtCheck->execute(['username' => $roll_no, 'quizID' => $final_quiz_ID]);
 
 	 //if user already did, redirect to index.php with error
-		if($stmtCheck->rowCount() > 0){
+		if($stmtCheck->fetch()){
 			$user_msg = 'Sorry, but '.$roll_no.', has already attempted the quiz, '.$quzz_name.'!';
 			header('location: index.php?user_msg='.urlencode($user_msg));
 			exit();
@@ -73,7 +73,9 @@
     $stmtQ->bindValue(':limit', $total_questions, PDO::PARAM_INT);
     $stmtQ->execute();
 
-		if ($stmtQ->rowCount() < 1) {
+		$questions = $stmtQ->fetchAll(PDO::FETCH_ASSOC);
+
+		if (count($questions) < 1) {
 			$user_msg = 'Hey, weird, but it seems there are no questions in this quiz!';
 			header('location: index.php?user_msg='.urlencode($user_msg));
 			exit();
@@ -82,8 +84,28 @@
 	 //setting Question No. to 1 on quiz page(necessary due to rand() above)
 		$m_display_ID = 1;
 
+	 // Gather question IDs
+		$questionIDs = array();
+		foreach ($questions as $q) {
+			$questionIDs[] = $q['question_id'];
+		}
+
+	 // Fetch all answers for these questions
+		$answersByQuestion = array();
+		if (!empty($questionIDs)) {
+			// Create placeholders string (?,?,?)
+			$inQuery = implode(',', array_fill(0, count($questionIDs), '?'));
+			$stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id IN ($inQuery)");
+			$stmtAns->execute($questionIDs);
+			$allAnswers = $stmtAns->fetchAll(PDO::FETCH_ASSOC);
+
+			foreach ($allAnswers as $ans) {
+				$answersByQuestion[$ans['question_id']][] = $ans;
+			}
+		}
+
 	 //looping through the questions and adding them on the page
-		while($m_row = $stmtQ->fetch()){
+		foreach($questions as $m_row){
 		 //initializing the options
 			$m_answers='';
 				
@@ -116,15 +138,15 @@
 			}
 
 		 //gathering options of the question here
-            $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id=:questionID ORDER BY rand()");
-            $stmtAns->execute(['questionID' => $m_question_id]);
+			$current_answers = isset($answersByQuestion[$m_question_id]) ? $answersByQuestion[$m_question_id] : array();
+			shuffle($current_answers); // Randomize answers order
 
 				$m_answers .=  '<tr>
 									<td></td>
 									<td>
 								';
 				 //adding html to individual options here
-					while($m_row2 = $stmtAns->fetch()){
+					foreach($current_answers as $m_row2){
 					 //getting row attributes in variables
 						$m_answer = $m_row2['answer'];
 						$m_answer_ID = $m_row2['id'];
