@@ -31,9 +31,10 @@
 	 //checking if user has already taken this quiz
         $stmtCheck = $pdo->prepare("SELECT id FROM quiz_takers WHERE username = :username AND quiz_id=:quizID");
         $stmtCheck->execute(['username' => $roll_no, 'quizID' => $final_quiz_ID]);
+        $taken = $stmtCheck->fetch();
 
 	 //if user already did, redirect to index.php with error
-		if($stmtCheck->rowCount() > 0){
+		if($taken){
 			$user_msg = 'Sorry, but '.$roll_no.', has already attempted the quiz, '.$quzz_name.'!';
 			header('location: index.php?user_msg='.urlencode($user_msg));
 			exit();
@@ -72,8 +73,9 @@
     $stmtQ->bindValue(':quizID', $final_quiz_ID);
     $stmtQ->bindValue(':limit', $total_questions, PDO::PARAM_INT);
     $stmtQ->execute();
+    $questions = $stmtQ->fetchAll();
 
-		if ($stmtQ->rowCount() < 1) {
+		if (count($questions) < 1) {
 			$user_msg = 'Hey, weird, but it seems there are no questions in this quiz!';
 			header('location: index.php?user_msg='.urlencode($user_msg));
 			exit();
@@ -83,7 +85,7 @@
 		$m_display_ID = 1;
 
 	 //looping through the questions and adding them on the page
-		while($m_row = $stmtQ->fetch()){
+		foreach($questions as $m_row){
 		 //initializing the options
 			$m_answers='';
 				
@@ -116,15 +118,17 @@
 			}
 
 		 //gathering options of the question here
-            $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id=:questionID ORDER BY rand()");
+            $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id=:questionID");
             $stmtAns->execute(['questionID' => $m_question_id]);
+            $answers = $stmtAns->fetchAll();
+            shuffle($answers);
 
 				$m_answers .=  '<tr>
 									<td></td>
 									<td>
 								';
 				 //adding html to individual options here
-					while($m_row2 = $stmtAns->fetch()){
+					foreach($answers as $m_row2){
 					 //getting row attributes in variables
 						$m_answer = $m_row2['answer'];
 						$m_answer_ID = $m_row2['id'];
