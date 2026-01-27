@@ -248,9 +248,24 @@
             $stmt->execute(['quizID' => $get_quiz_id]);
         }
 
+            $m_questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Fetch answers for all questions at once
+            $m_question_ids = array_column($m_questions, 'question_id');
+            $m_all_answers = [];
+
+            if (!empty($m_question_ids)) {
+                $inQuery = implode(',', array_fill(0, count($m_question_ids), '?'));
+                $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id IN ($inQuery)");
+                $stmtAns->execute($m_question_ids);
+                while ($ans = $stmtAns->fetch(PDO::FETCH_ASSOC)) {
+                    $m_all_answers[$ans['question_id']][] = $ans;
+                }
+            }
+
 			$m_display_ID = 1;
 
-			while($m_row = $stmt->fetch()){
+			foreach($m_questions as $m_row){
 				$m_answers='';
 			 //id var = id column and so on
 				$m_id = $m_row['id'];
@@ -296,8 +311,7 @@
 				}
 
 			 //gathering answers of question here
-                $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id=:questionID");
-                $stmtAns->execute(['questionID' => $m_question_id]);
+                $current_answers = isset($m_all_answers[$m_question_id]) ? $m_all_answers[$m_question_id] : [];
 
 				$m_answers .=  '<tr>
 									<td></td>
@@ -305,7 +319,7 @@
 										<ol type="a">
 								';
 
-					while($m_row2 = $stmtAns->fetch()){
+					foreach($current_answers as $m_row2){
 					//putting column values in variables
 						$m_answer = $m_row2['answer'];
 						$m_correct = $m_row2['correct'];
@@ -496,9 +510,24 @@
             $stmt->execute(['quizID' => $get_quiz_id]);
         }
 
+            $m_questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Fetch answers for all questions at once
+            $m_question_ids = array_column($m_questions, 'question_id');
+            $m_all_answers = [];
+
+            if (!empty($m_question_ids)) {
+                $inQuery = implode(',', array_fill(0, count($m_question_ids), '?'));
+                $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id IN ($inQuery)");
+                $stmtAns->execute($m_question_ids);
+                while ($ans = $stmtAns->fetch(PDO::FETCH_ASSOC)) {
+                    $m_all_answers[$ans['question_id']][] = $ans;
+                }
+            }
+
 			$m_display_ID = 1;
 
-			while($m_row = $stmt->fetch()){
+			foreach($m_questions as $m_row){
 				$m_answers='';
 			 //id var = id column and so on
 				$m_id = $m_row['id'];
@@ -545,8 +574,7 @@
 				}
 
 			 //gathering answers of question here
-                $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id=:questionID");
-                $stmtAns->execute(['questionID' => $m_question_id]);
+                $current_answers = isset($m_all_answers[$m_question_id]) ? $m_all_answers[$m_question_id] : [];
 				//running loop on all the answers
 
 				$m_answers .=  '<tr>
@@ -555,7 +583,7 @@
 										<ol type="a">
 								';
 
-					while($m_row2 = $stmtAns->fetch()){
+					foreach($current_answers as $m_row2){
 					//putting column values in variables
 						$m_answer = $m_row2['answer'];
 						$m_correct = $m_row2['correct'];
