@@ -986,9 +986,28 @@
             $stmt->execute(['quizID' => $get_quiz_id]);
         }
 
+            $all_questions = $stmt->fetchAll();
+
+            // Gather all question IDs
+            $question_ids = [];
+            foreach ($all_questions as $q) {
+                $question_ids[] = $q['question_id'];
+            }
+
+            // Fetch all answers in one go
+            $answers_map = [];
+            if (!empty($question_ids)) {
+                $placeholders = implode(',', array_fill(0, count($question_ids), '?'));
+                $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id IN ($placeholders)");
+                $stmtAns->execute($question_ids);
+                while ($row = $stmtAns->fetch()) {
+                    $answers_map[$row['question_id']][] = $row;
+                }
+            }
+
 			$m_display_ID = 1;
 
-			while($m_row = $stmt->fetch()){
+			foreach($all_questions as $m_row){
 				$m_answers='';
 			 //id var = id column and so on
 				$m_id = $m_row['id'];
@@ -1031,25 +1050,24 @@
 				}
 
 			 //gathering answers of question here
-                $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id=:questionID");
-                $stmtAns->execute(['questionID' => $m_question_id]);
-
 				$m_answers .=  '<tr>
 									<td></td>
 									<td>
 										<ol type="a">
 								';
 
-					while($m_row2 = $stmtAns->fetch()){
-					//putting column values in variables
-						$m_answer = $m_row2['answer'];
-						$m_correct = $m_row2['correct'];
+					if (isset($answers_map[$m_question_id])) {
+						foreach($answers_map[$m_question_id] as $m_row2){
+						//putting column values in variables
+							$m_answer = $m_row2['answer'];
+							$m_correct = $m_row2['correct'];
 
-						if($m_correct == 1)
-							$m_answers .= '<u><i>';
-						$m_answers .= '<div style="width: 730px; word-wrap: break-word;"><li>'.$m_answer.'</li></div>';
-						if($m_correct == 1)
-							$m_answers .= '</i></u>';
+							if($m_correct == 1)
+								$m_answers .= '<u><i>';
+							$m_answers .= '<div style="width: 730px; word-wrap: break-word;"><li>'.$m_answer.'</li></div>';
+							if($m_correct == 1)
+								$m_answers .= '</i></u>';
+						}
 					}
 
 				$m_answers .=  '		</ol>
