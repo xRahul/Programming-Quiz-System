@@ -304,6 +304,9 @@ final class CorrectnessFixesTest extends TestCase
     /**
      * @dataProvider messageFlowProvider
      */
+    /**
+     * @dataProvider messageFlowProvider
+     */
     public function testUserMessagesCarryNoBackslashArtifacts(string $flow): void
     {
         self::login();
@@ -375,6 +378,31 @@ final class CorrectnessFixesTest extends TestCase
             ['addNewQuiz'],
             ['updateExistingQuiz'],
         ];
+    }
+
+    public function testQuizTimerUsesIntervalAndStopsOnSubmit(): void
+    {
+        $src = (string) file_get_contents(dirname(__DIR__) . '/quiz.php');
+
+        $this->assertStringNotContainsString('setTimeout(', $src, 'timer must not use the string-eval setTimeout form');
+        $this->assertStringContainsString('setInterval(render_time, 1000)', $src, 'countdown must tick via a function-reference interval');
+        $this->assertStringContainsString('clearInterval(time_again)', $src, 'an interval-clearing stop_timer must exist');
+        $this->assertSame(
+            1,
+            preg_match('/function quiz_submit\(\)\{.*?stop_timer\(\);.*?\}/s', $src),
+            'the submit path must stop the timer'
+        );
+    }
+
+    public function testIndexSubmitValidatorReturnsFalseInsteadOfExit(): void
+    {
+        $src = (string) file_get_contents(dirname(__DIR__) . '/index.php');
+        $this->assertSame(
+            1,
+            preg_match('/function submit\(\)\{(?:(?!function ).)*?return false;.*?\}/s', $src),
+            'submit() must bail with return false on invalid rollno'
+        );
+        $this->assertStringNotContainsString('exit();', $src, 'browser-side exit() is a no-op and must be gone');
     }
 
     private function insertFixtureQuiz(): int

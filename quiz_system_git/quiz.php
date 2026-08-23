@@ -304,16 +304,37 @@
 	     //function that submits the quiz
 			function quiz_submit(){
 				window.onbeforeunload = null;
-	            document.getElementById('quiz_form').submit(); 
+				stop_timer();
+				document.getElementById('quiz_form').submit();
 	        }
+
+	     //function that stops the countdown so it does not keep counting (negative) after submit
+			function stop_timer(){
+				if(time_again !== null){
+					clearInterval(time_again);
+					time_again = null;
+				}
+			}
+
+			var time_again = null;
+			var secs_left = 0;
 
 	     //function that keeps the counter going
 			function timer(secs){
+				secs_left = secs;
+				render_time();
+			 //to animate the timer otherwise it'd just stay at the number entered
+			 //calling render_time() every 1 sec through an interval (no string eval)
+				time_again = setInterval(render_time, 1000);
+			}
+
+	     //renders one tick of the countdown
+			function render_time(){
 				var ele = document.getElementById("countdown");
-				ele.innerHTML = "Your Time Starts Now";			
-				var mins_rem = parseInt(secs/60);
-				var secs_rem = secs%60;
-				
+				ele.innerHTML = "Your Time Starts Now";
+				var mins_rem = parseInt(secs_left/60);
+				var secs_rem = secs_left%60;
+
 				if(mins_rem<10 && secs_rem>=10)
 					ele.innerHTML = "Time Remaining: "+"0"+mins_rem+":"+secs_rem;
 				else if(secs_rem<10 && mins_rem>=10)
@@ -324,15 +345,14 @@
 					ele.innerHTML = "Time Remaining: "+mins_rem+":"+secs_rem;
 
 				if(mins_rem=="00" && secs_rem < 1){
-					quiz_submit(); 
+					stop_timer();
+					quiz_submit();
+					return;
 				}
-				secs--;
-			 //to animate the timer otherwise it'd just stay at the number entered
-			 //calling timer() again after 1 sec
-				var time_again = setTimeout('timer('+secs+')',1000);
+				secs_left--;
 			}
 
-		 //wwarning confirmation that appears on closing/refreshing the quiz window/tab
+	 //wwarning confirmation that appears on closing/refreshing the quiz window/tab
 			function closeEditorWarning(){
     				return "really wanna quit!? You can't take the test again you know!";
 			}

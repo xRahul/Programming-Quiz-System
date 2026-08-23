@@ -79,7 +79,7 @@
                 var x=document.forms["onlyForm"]["rollno"].value;
                 if (x==null || x==""){
                     document.getElementById("enter_rollno").innerHTML = "Please Enter Your Roll No.";
-                    exit();
+                    return false;
                 }
                 document.getElementById('myForm').submit();
                 return false;
