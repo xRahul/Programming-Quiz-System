@@ -1,4 +1,7 @@
 vendor/
+# pinned frontend vendors live under assets/vendor (phase 6A); do not
+# confuse them with the composer vendor dir matched by the rule above
+!quiz_system_git/assets/vendor/
 node_modules/
 .env
 .worktrees/
