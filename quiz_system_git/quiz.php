@@ -271,9 +271,10 @@
         <br><strong><?php echo htmlspecialchars($quzz_name, ENT_QUOTES); ?></strong>
 
         <div id="countdown">
-        <script id="quiz-boot" type="application/json"><?php echo json_encode(array('total_time' => (int) $total_time), JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
+        <script id="quiz-boot" type="application/json"><?php echo json_encode(array('total_time' => (int) $total_time, 'total_ques' => (int) $m_display_ID), JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
         <script src="assets/js/quiz.js"></script>
         </div>
+        <span id="progress"></span>
 
 
 		<div id="main_body" align="center" style="margin-bottom: 100px;">

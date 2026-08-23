@@ -78,3 +78,42 @@ if (!QUIZ_BOOT.total_time) {
 }
 
 timer(QUIZ_BOOT.total_time);
+
+//progress indicator (T5.6): "X/Y answered" under the countdown
+(function(){
+    var total = parseInt(QUIZ_BOOT.total_ques, 10);
+    if(!total || total < 1){
+     //fallback: count the radio groups actually rendered
+        var groups = {};
+        var radios = document.querySelectorAll('input[type="radio"]');
+        for(var i = 0; i < radios.length; i++){
+            groups[radios[i].name] = true;
+        }
+        total = Object.keys(groups).length;
+    }
+    if(total < 1){
+        return;
+    }
+
+    function countAnsweredGroups(){
+        var answered = {};
+        var checked = document.querySelectorAll('input[type="radio"]:checked');
+        for(var i = 0; i < checked.length; i++){
+            if(/^rads\d+$/.test(checked[i].name)){
+                answered[checked[i].name] = true;
+            }
+        }
+        return Object.keys(answered).length;
+    }
+
+    document.addEventListener("change", function(e){
+        if(!e.target || e.target.type !== "radio" || !/^rads\d+$/.test(e.target.name)){
+            return;
+        }
+
+        var progress = document.getElementById("progress");
+        if(progress){
+            progress.textContent = countAnsweredGroups() + "/" + total + " answered";
+        }
+    }, false);
+})();
