@@ -349,7 +349,17 @@ final class MigrationTest extends TestCase
 
         $desc = 'P3 STRICT PROBE ' . bin2hex(random_bytes(4));
         self::$probeDesc = $desc;
-        [$status, $redirect] = self::request('POST', 'admin.php', [
+
+        try {
+            $this->createQuestionProbe($desc, $token);
+        } finally {
+            // The probe must not leak into later runs, on success or failure.
+            $this->deleteQuestionProbe($desc);
+        }
+    }
+
+    private function createQuestionProbe(string $desc, string $token): void
+    {        [$status, $redirect] = self::request('POST', 'admin.php', [
             'desc' => $desc,
             'code_desc' => '',
             'prog-lang' => 'plain',
@@ -381,20 +391,30 @@ final class MigrationTest extends TestCase
         $this->assertSame(2, (int) $stmt->fetchColumn(), 'both tf answers must be stored');
     }
 
+    /**
+     * Remove the HTTP probe row and its answers, restoring quizes.total_questions.
+     */
+    private function deleteQuestionProbe(string $desc): void
+    {
+        $stmt = self::$pdo->prepare('SELECT id FROM questions WHERE question = :question');
+        $stmt->execute(['question' => $desc]);
+        foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $id) {
+            self::$pdo->prepare('DELETE FROM answers WHERE question_id = :id')->execute(['id' => $id]);
+            self::$pdo->prepare('DELETE FROM questions WHERE id = :id')->execute(['id' => $id]);
+            self::$pdo->exec(
+                'UPDATE quizes SET total_questions = total_questions - 1 WHERE id = 1 AND total_questions > 0'
+            );
+        }
+        self::$probeDesc = null;
+    }
+
     protected function onNotSuccessfulTest(\Throwable $t): never
     {
-        // Best-effort cleanup of the HTTP probe so failures do not leak rows.
+        // Best-effort cleanup of the HTTP probe so failures do not leak rows
+        // (the happy path cleans up via its own finally).
         if (self::$probeDesc !== null && self::$pdo !== null) {
             try {
-                $stmt = self::$pdo->prepare('SELECT id FROM questions WHERE question = :question');
-                $stmt->execute(['question' => self::$probeDesc]);
-                foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $id) {
-                    self::$pdo->prepare('DELETE FROM answers WHERE question_id = :id')->execute(['id' => $id]);
-                    self::$pdo->prepare('DELETE FROM questions WHERE id = :id')->execute(['id' => $id]);
-                    self::$pdo->exec(
-                        'UPDATE quizes SET total_questions = total_questions - 1 WHERE id = 1 AND total_questions > 0'
-                    );
-                }
+                $this->deleteQuestionProbe(self::$probeDesc);
             } catch (\Throwable) {
                 // never mask the original failure
             }
