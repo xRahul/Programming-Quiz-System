@@ -89,6 +89,18 @@
                         'quizID' => $quiz_ID,
                         'username' => $roll_no
                     ]);
+
+                 //race guard: if nothing was updated, a concurrent submission already claimed
+                 //the row; block the replay exactly like a detected resubmission
+                    if ($stmtUpdate->rowCount() === 0) {
+                        $stmtTaken = $pdo->prepare("SELECT id FROM quiz_takers WHERE username = :username AND quiz_id = :quizID AND duration > 0 LIMIT 1");
+                        $stmtTaken->execute(['username' => $roll_no, 'quizID' => $quiz_ID]);
+                        if ($stmtTaken->fetch() !== false) {
+                            $user_msg = 'Sorry, but re-submission of the quiz isn\'t allowed!';
+						header('location: index.php?user_msg='.urlencode($user_msg));
+                            exit();
+                        }
+                    }
 	            }else{
 	            	$user_msg = 'Sorry, but re-submission of the quiz isn\'t allowed!';
 				header('location: index.php?user_msg='.urlencode($user_msg));

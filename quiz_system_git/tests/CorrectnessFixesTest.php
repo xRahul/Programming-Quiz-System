@@ -439,6 +439,62 @@ final class CorrectnessFixesTest extends TestCase
         return (int) $stmt->fetchColumn();
     }
 
+    public function testResultResubmissionGuardBlocksSecondSubmission(): void
+    {
+        $rollno = 'p2resub_' . bin2hex(random_bytes(4));
+
+        $stmtAns = self::$pdo->query(
+            "SELECT id FROM answers WHERE quiz_id = 2 AND correct = '1' ORDER BY id LIMIT 3"
+        );
+        $answerIds = $stmtAns->fetchAll(PDO::FETCH_COLUMN);
+        $this->assertCount(3, $answerIds, 'seed quiz 2 must have at least 3 correct answers for this fixture');
+
+        // Start the quiz: creates the duration=0 row via the public flow.
+        [$status, $redirect] = self::request('POST', 'quiz.php', ['rollno' => $rollno]);
+        $this->assertSame(200, $status, 'quiz.php should render the quiz page, got redirect to ' . $redirect);
+
+        $rowState = static function () use ($rollno): array {
+            $stmt = self::$pdo->prepare(
+                'SELECT COUNT(*) AS rows_count, MAX(duration) AS max_duration, MAX(marks) AS marks FROM quiz_takers WHERE username = :username'
+            );
+            $stmt->execute(['username' => $rollno]);
+
+            return (array) $stmt->fetch();
+        };
+
+        try {
+            $post = [
+                'total_ques' => '3',
+                'rollno' => $rollno,
+                'quizID' => '2',
+                'rads1' => $answerIds[0],
+                'rads2' => $answerIds[1],
+                'rads3' => $answerIds[2],
+            ];
+
+            [$status, , $body] = self::request('POST', 'result.php', $post);
+            $this->assertSame(200, $status, 'first submission must render the result page');
+            $this->assertStringContainsString('You scored', $body);
+
+            $afterFirst = $rowState();
+            $this->assertSame(1, (int) $afterFirst['rows_count']);
+            $this->assertGreaterThan(0, (int) $afterFirst['max_duration'], 'first submission must record a duration');
+            $this->assertGreaterThan(0, (int) $afterFirst['marks'], 'marks must be recorded once');
+
+            [$status, $redirect] = self::request('POST', 'result.php', $post);
+            $this->assertSame(302, $status, 'replayed submission must be blocked');
+            $this->assertStringContainsString('user_msg=', (string) $redirect);
+            parse_str((string) parse_url((string) $redirect, PHP_URL_QUERY), $query);
+            $this->assertStringContainsStringIgnoringCase('re-submission', (string) ($query['user_msg'] ?? ''));
+
+            $afterSecond = $rowState();
+            $this->assertSame($afterFirst, $afterSecond, 'replayed submission must not touch the recorded row');
+        } finally {
+            self::$pdo->prepare('DELETE FROM quiz_takers WHERE username = :username')
+                ->execute(['username' => $rollno]);
+        }
+    }
+
     private static function login(): void
     {
         @unlink(self::$authJar);
