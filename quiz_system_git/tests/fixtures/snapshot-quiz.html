@@ -1,0 +1,625 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>Quiz</title>
+
+		<meta charset="utf-8">
+
+		<link rel="stylesheet" type="text/css" href="css/master.css">
+        <script type="text/javascript" src="scripts/overlay.js"></script>
+
+        <!-- ****** faviconit.com favicons ****** -->
+            <!-- Basic favicons -->
+                <link rel="shortcut icon" sizes="16x16 32x32 48x48 64x64" href="img/faviconit/favicon.ico">
+                <link rel="shortcut icon" type="image/x-icon" href="img/faviconit/favicon.ico">
+
+            <!--[if IE]><link rel="shortcut icon" href="/favicon.ico"><![endif]-->
+
+            <!-- For Opera Speed Dial -->
+                <link rel="icon" type="image/png" sizes="195x195" href="img/faviconit/favicon-195.png">
+            <!-- For iPad with high-resolution Retina Display running iOS ≥ 7 -->
+                <link rel="apple-touch-icon" sizes="152x152" href="img/faviconit/favicon-152.png">
+            <!-- For iPad with high-resolution Retina Display running iOS ≤ 6 -->
+                <link rel="apple-touch-icon" sizes="144x144" href="img/faviconit/favicon-144.png">
+            <!-- For iPhone with high-resolution Retina Display running iOS ≥ 7 -->
+                <link rel="apple-touch-icon" sizes="120x120" href="img/faviconit/favicon-120.png">
+            <!-- For iPhone with high-resolution Retina Display running iOS ≤ 6 -->
+                <link rel="apple-touch-icon" sizes="114x114" href="img/faviconit/favicon-114.png">
+            <!-- For Google TV devices -->
+                <link rel="icon" type="image/png" sizes="96x96" href="img/faviconit/favicon-96.png">
+            <!-- For iPad Mini -->
+                <link rel="apple-touch-icon" sizes="76x76" href="img/faviconit/favicon-76.png">
+            <!-- For first- and second-generation iPad -->
+                <link rel="apple-touch-icon" sizes="72x72" href="img/faviconit/favicon-72.png">
+            <!-- For non-Retina iPhone, iPod Touch and Android 2.1+ devices -->
+                <link rel="apple-touch-icon" href="img/faviconit/favicon-57.png">
+            <!-- Windows 8 Tiles -->
+                <meta name="msapplication-TileColor" content="#FFFFFF">
+                <meta name="msapplication-TileImage" content="img/faviconit/favicon-144.png">
+        <!-- ****** faviconit.com favicons ****** -->
+
+     <!-- SYNTAX HIGHLIGHTER LINKS & SCRIPTS -->
+        <link rel="stylesheet" type="text/css" href="sh/styles/shCore.css">
+		<link rel="stylesheet" type="text/css" href="sh/styles/shThemeDefault.css">
+		<script type="text/javascript" src="sh/scripts/shCore.js"></script>
+	 <!-- INCLUDING ALL SCRIPTS FOR BRUSHES -->
+		<script type="text/javascript" src="sh/scripts/shBrushAppleScript.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushAS3.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushBash.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushColdFusion.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushCpp.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushCSharp.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushCss.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushDelphi.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushDiff.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushErlang.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushGroovy.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushJavaFX.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushJScript.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushPerl.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushPhp.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushPlain.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushPowerShell.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushPython.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushRuby.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushSass.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushScala.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushSql.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushVb.js"></script>
+		<script type="text/javascript" src="sh/scripts/shBrushXml.js"></script>
+		<script type="text/javascript">
+		    SyntaxHighlighter.all()
+		</script>
+
+        <script type="text/javascript">
+	     //function that submits the quiz
+			function quiz_submit(){
+				window.onbeforeunload = null;
+				stop_timer();
+				document.getElementById('quiz_form').submit();
+	        }
+
+	     //function that stops the countdown so it does not keep counting (negative) after submit
+			function stop_timer(){
+				if(time_again !== null){
+					clearInterval(time_again);
+					time_again = null;
+				}
+			}
+
+			var time_again = null;
+			var secs_left = 0;
+
+	     //function that keeps the counter going
+			function timer(secs){
+				secs_left = secs;
+				render_time();
+			 //to animate the timer otherwise it'd just stay at the number entered
+			 //calling render_time() every 1 sec through an interval (no string eval)
+				time_again = setInterval(render_time, 1000);
+			}
+
+	     //renders one tick of the countdown
+			function render_time(){
+				var ele = document.getElementById("countdown");
+				ele.innerHTML = "Your Time Starts Now";
+				var mins_rem = parseInt(secs_left/60);
+				var secs_rem = secs_left%60;
+
+				if(mins_rem<10 && secs_rem>=10)
+					ele.innerHTML = "Time Remaining: "+"0"+mins_rem+":"+secs_rem;
+				else if(secs_rem<10 && mins_rem>=10)
+					ele.innerHTML = "Time Remaining: "+mins_rem+":0"+secs_rem;
+				else if(secs_rem<10 && mins_rem<10)
+					ele.innerHTML = "Time Remaining: "+"0"+mins_rem+":0"+secs_rem;
+				else
+					ele.innerHTML = "Time Remaining: "+mins_rem+":"+secs_rem;
+
+				if(mins_rem=="00" && secs_rem < 1){
+					stop_timer();
+					quiz_submit();
+					return;
+				}
+				secs_left--;
+			}
+
+	 //wwarning confirmation that appears on closing/refreshing the quiz window/tab
+			function closeEditorWarning(){
+    				return "really wanna quit!? You can't take the test again you know!";
+			}
+			window.onbeforeunload = closeEditorWarning;
+        </script>
+
+        <script language="javascript">
+			document.addEventListener("contextmenu", function(e){
+			    e.preventDefault();
+			}, false);
+		</script>
+		
+	</head>
+
+	<body style="font-family: Arial;">
+
+		<div id="head" align="center">
+            <img src="img/header.jpg" alt="Chandigarh Engineering College" />
+        </div>
+
+        <br><strong>LEVEL2(HARD)</strong>
+
+        <div id="countdown">
+        	<script type="text/javascript">
+        		timer(1200);
+        	</script>
+        </div>
+
+
+		<div id="main_body" align="center" style="margin-bottom: 100px;">
+			<form id="quiz_form" name="quiz_form_name" action="result.php" method="POST">
+			<br /><BR /><BR />
+				<table width="780px" align="center">
+					<tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>1.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include<stdio.h>
+char *str = "char *str = %c%s%c; main(){ 
+printf(str, 34, str, 34);}";
+
+int main()
+{
+printf(str, 34, str, 34);
+return 0;
+}
+</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads1" value="91">char *str = "char *str = %c%s%c; main(){ printf(str, 34, str, 34);}";</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads1" value="94">Error in program</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads1" value="93">No output </label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads1" value="92">char *str = %c%s%c; main(){ printf(str, 34, str, 34);} </label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								   <tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>2.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">enum colors {BLACK,BLUE,GREEN}
+main()
+{
+
+printf("%d..%d..%d",BLACK,BLUE,GREEN);
+
+return(1);
+}
+</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads2" value="98">2..1..0</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads2" value="95">0..1..2</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads2" value="96">compiler error</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads2" value="97">0..0..0</label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								   <tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>3.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error and the  output...</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include<stdio.h>
+void main() 
+{ 
+int a=320; 
+char *ptr; 
+ptr=(char *)&a; 
+printf("%d",*ptr); 
+getch();
+}
+</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads3" value="78">a cannot be converted from char to char*</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads3" value="75">64</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads3" value="77">syntax error</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads3" value="76">compilation error</label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								   <tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>4.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error...</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">typedefstruct
+{
+int data;
+    NODEPTR link;
+}*NODEPTR;
+</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads4" value="102">None of above</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads4" value="101">No error </label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads4" value="100">Error: in *NODEPTR</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads4" value="99"> Error: typedef cannot be used until it is defined </label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								   <tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>5.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include<stdio.h>
+int main()
+{
+void fun();
+inti = 1;
+while(i<= 5)
+    {
+printf("%d\n", i);
+if(i>2)
+goto here;
+    }
+return0;
+}
+void fun()
+{
+    here:
+printf("It works");
+}
+</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads5" value="107">Error: goto cannot takeover control to other function </label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads5" value="110">No error</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads5" value="108">No Error: prints "It works"</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads5" value="109"> Error: fun() cannot be accessed </label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								   <tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>6.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error..</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">main() 
+{ 
+inti; 
+clrscr(); 
+printf("%d", &i)+1; 
+scanf("%d", i)-1; 
+} 
+</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads6" value="121">syntax error</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads6" value="120">access violation</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads6" value="119">compiler error</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads6" value="122">none of the above</label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								   <tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>7.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the  error</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include<stdio.h>
+int main(){
+char ch;
+int i;
+scanf("%c", &i);
+scanf("%d", &ch);
+printf("%c %d", ch, i);
+return0;
+}</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads7" value="85">No error </label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads7" value="84">Error: suspicious char to in conversion in scanf()  </label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads7" value="83">Error: we may not get input for second scanf() statement</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads7" value="86">None of above</label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								   <tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>8.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error..</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">4.	#include<stdio.h>
+main()
+{
+struct xx
+{
+int x=3;
+char name[]="hello";
+ };
+struct xx *s;
+printf("%d",s->x);
+printf("%s",s->name);
+}
+</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads8" value="115">you should not initialize variable in declaration</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads8" value="116">syntax error</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads8" value="117">no error</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads8" value="118">lvalue required here</label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								   <tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>9.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">	main()
+{
+char string[]="Hello World";
+	display(string);
+}
+void display(char *string)
+{
+	printf("%s",string);
+}
+</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads9" value="74">Error: Rvalue required</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads9" value="72">Error: Expression syntax</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads9" value="71">type mismatch in redeclaration</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads9" value="73">Error: LValue required</label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								     <tr>
+							<td colspan="2" align="center">
+								<span id="m_btnSpan">
+									<a href="javascript:{}" onclick="quiz_submit()" class="myButton">Submit</a>
+								</span>
+							</td>
+						</tr><input type="hidden" name="rollno" value="snapshot_runner">
+					  <input type="hidden" name="total_ques" value="9">
+					  <input type="hidden" name="total_time" value="1200">
+					  <input type="hidden" name="quizID" value="2">
+					  				</table>
+			</form>
+		</div>
+
+
+		<div id="video" class="white_content">
+            <a name="Planet_Earth">
+                <video id="video_player" controls preload="meta" height="480">
+                    <source src="videos/video.mp4" type='video/mp4' />
+                    <source src="videos/video.webmhd.webm" type='video/webm' />
+                    Your browser doesn't seem to support the video tag.
+                </video>
+                
+            </a>
+        </div>
+
+
+        <div id="fade_overlay">
+            <a href="javascript:close_overlay();" style="cursor: default;">
+                <div id="fade" class="black_overlay">
+                </div>
+            </a>
+        </div>
+
+
+		<div id="footer" align="bottom">
+            <table border="0" cellpadding="0" cellspacing="0" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td align="left" id="copyright">
+                            © Copyright 2014, under 
+                            <a href="gnu_gpl.txt" style="color: WHITE; text-decoration: none;" target="_blank">
+                            	GNU General Public License
+                            </a>
+                        </td>
+                        <td align="center" id="video_link">
+                            Getting Bored? Watch a 
+                            <a href="javascript:open_overlay();" style="color: #c4dcf5">
+                                Video</a>
+                            to pass time!
+                        </td>
+                        <td align="right" id="developer" >
+                            Quiz Designed &amp; Developed by : 
+                            <a href="mailto: rahul_jain@live.in" class="flink" style="color: #c4dcf5">
+                                Rahul Jain<div id="dev_info">1139234/CSE/6thSEM</div>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+	</body>
+</html>

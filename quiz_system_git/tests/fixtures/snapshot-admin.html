@@ -1,0 +1,1050 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<title>Admin</title>
+
+		<!-- ****** faviconit.com favicons ****** -->
+            <!-- Basic favicons -->
+                <link rel="shortcut icon" sizes="16x16 32x32 48x48 64x64" href="img/faviconit/favicon.ico">
+                <link rel="shortcut icon" type="image/x-icon" href="img/faviconit/favicon.ico">
+
+            <!--[if IE]><link rel="shortcut icon" href="/favicon.ico"><![endif]-->
+
+            <!-- For Opera Speed Dial -->
+                <link rel="icon" type="image/png" sizes="195x195" href="img/faviconit/favicon-195.png">
+            <!-- For iPad with high-resolution Retina Display running iOS ≥ 7 -->
+                <link rel="apple-touch-icon" sizes="152x152" href="img/faviconit/favicon-152.png">
+            <!-- For iPad with high-resolution Retina Display running iOS ≤ 6 -->
+                <link rel="apple-touch-icon" sizes="144x144" href="img/faviconit/favicon-144.png">
+            <!-- For iPhone with high-resolution Retina Display running iOS ≥ 7 -->
+                <link rel="apple-touch-icon" sizes="120x120" href="img/faviconit/favicon-120.png">
+            <!-- For iPhone with high-resolution Retina Display running iOS ≤ 6 -->
+                <link rel="apple-touch-icon" sizes="114x114" href="img/faviconit/favicon-114.png">
+            <!-- For Google TV devices -->
+                <link rel="icon" type="image/png" sizes="96x96" href="img/faviconit/favicon-96.png">
+            <!-- For iPad Mini -->
+                <link rel="apple-touch-icon" sizes="76x76" href="img/faviconit/favicon-76.png">
+            <!-- For first- and second-generation iPad -->
+                <link rel="apple-touch-icon" sizes="72x72" href="img/faviconit/favicon-72.png">
+            <!-- For non-Retina iPhone, iPod Touch and Android 2.1+ devices -->
+                <link rel="apple-touch-icon" href="img/faviconit/favicon-57.png">
+            <!-- Windows 8 Tiles -->
+                <meta name="msapplication-TileColor" content="#FFFFFF">
+                <meta name="msapplication-TileImage" content="img/faviconit/favicon-144.png">
+        <!-- ****** faviconit.com favicons ****** -->
+
+	    <!-- SYNTAX HIGHLIGHTER -->
+			<link rel="stylesheet" type="text/css" href="sh/styles/shCore.css">
+			<link rel="stylesheet" type="text/css" href="sh/styles/shThemeDefault.css">
+			<script type="text/javascript" src="sh/scripts/shCore.js"></script>
+		   <!-- INCLUDING ALL BRUSHES SCRIPTS -->
+			<script type="text/javascript" src="sh/scripts/shBrushAppleScript.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushAS3.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushBash.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushColdFusion.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushCpp.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushCSharp.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushCss.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushDelphi.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushDiff.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushErlang.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushGroovy.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushJava.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushJavaFX.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushJScript.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushPerl.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushPhp.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushPlain.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushPowerShell.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushPython.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushRuby.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushSass.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushScala.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushSql.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushVb.js"></script>
+			<script type="text/javascript" src="sh/scripts/shBrushXml.js"></script>
+			<script type="text/javascript">
+			    SyntaxHighlighter.all()
+			</script>
+		<!-- SYNTAX HIGHLIGHTER -->
+
+	<!-- BUGGY CODE INPUT FIELD -->
+		<link rel="stylesheet" href="codemirror/lib/codemirror.css">
+		<script type="text/javascript" src="codemirror/codemirror-compressed.js"></script>
+		<script type="text/javascript" src="codemirror/addon/mode/loadmode.js"></script>
+	<!--
+		<script src="codemirror/lib/codemirror.js"></script>
+
+		<script src="codemirror/mode/clike/clike.js"></script>
+		<script src="codemirror/mode/css/css.js"></script>
+		<script src="codemirror/mode/diff/diff.js"></script>
+		<script src="codemirror/mode/erlang/erlang.js"></script>
+		<script src="codemirror/mode/groovy/groovy.js"></script>
+		<script src="codemirror/mode/javascript/javascript.js"></script>
+		<script src="codemirror/mode/perl/perl.js"></script>
+		<script src="codemirror/mode/php/php.js"></script>
+		<script src="codemirror/mode/python/python.js"></script>
+		<script src="codemirror/mode/ruby/ruby.js"></script>
+		<script src="codemirror/mode/sass/sass.js"></script>
+		<script src="codemirror/mode/scala/scala.js"></script>
+		<script src="codemirror/mode/shell/shell.js"></script>
+		<script src="codemirror/mode/sql/sql.js"></script>
+		<script src="codemirror/mode/vb/vb.js"></script>
+		<script src="codemirror/mode/xml/xml.js"></script>
+	-->
+
+		<link rel="stylesheet" type="text/css" href="css/admin.css">
+
+
+
+		<script type="text/javascript">
+		//CSRF token appended to every XHR body (mirrors the hidden input in each form)
+			function csrfQS(){
+				return '&csrf_token=' + encodeURIComponent(document.querySelector('input[name=csrf_token]').value);
+			}
+
+		//displaying different code-blocks on button click
+			function showDiv(el1,el2,el3){
+				document.getElementById(el1).style.display = 'block';
+				document.getElementById(el2).style.display = 'none';
+				document.getElementById(el3).style.display = 'none';
+			}
+
+		 //hide all divs
+			function hideDivs(){
+				document.getElementById('tf').style.display = 'none';
+				document.getElementById('mc').style.display = 'none';
+				document.getElementById('quesans').style.display = 'none';
+			}
+
+
+
+/*SETTING TIMELOCKS
+			function set_timelock(quizz){
+
+			}
+
+			function remove_timelock(quizzz){
+
+			}
+*/
+
+
+			function clear_result(qquizID){
+				if(confirm("Really wanna clear the result of all users of this quiz?!")) {
+					var x = new XMLHttpRequest();
+					var url = "admin.php";
+					var vars = 'clearResult='+qquizID;
+					x.open("POST", url, true);
+					x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					x.onreadystatechange = function() {
+						if(x.readyState == 4 && x.status == 200) {
+							document.getElementById("msg").innerHTML = x.responseText;
+						}
+					}
+					x.send(vars + csrfQS());
+					document.getElementById("msg").innerHTML = "processing...";
+				}
+			}
+
+
+
+
+			function reset_tables(){
+				if(confirm("Really wanna reset all the tables?!")) {
+					if(confirm("Your admin ID will be \'admin\' and password \'12345\'")){
+						var x = new XMLHttpRequest();
+						var url = "admin.php";
+						var vars = 'resetTables='+'yes';
+						x.open("POST", url, true);
+						x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+						x.onreadystatechange = function() {
+							if(x.readyState == 4 && x.status == 200) {
+								window.open("login.php?user_msg="+x.responseText, "_self");
+							}
+						}
+						x.send(vars + csrfQS());
+						document.getElementById("msg").innerHTML = "processing...";
+					}
+				}
+			}
+
+
+
+
+			function delete_account(){
+				if(confirm("Really wanna delete this admin Account?!")) {
+					var x = new XMLHttpRequest();
+					var url = "admin.php";
+					var vars = 'deleteAdmin='+'admin';
+					x.open("POST", url, true);
+					x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					x.onreadystatechange = function() {
+						if(x.readyState == 4 && x.status == 200) {
+							document.getElementById("msg").innerHTML = x.responseText;
+						}
+					}
+					x.send(vars + csrfQS());
+					document.getElementById("msg").innerHTML = "processing...";
+				}
+			}
+
+
+			function top_users(qiiizName){
+				var x = new XMLHttpRequest();
+				var url = "admin.php";
+				var vars = 'usersQuiz='+qiiizName;
+				x.open("POST", url, true);
+				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				x.onreadystatechange = function() {
+					if(x.readyState == 4 && x.status == 200) {
+						showDiv('quesans', 'mc', 'tf');
+						document.getElementById("quesans_table").innerHTML = x.responseText;
+						document.getElementById("msg").innerHTML = "";
+
+					}
+				}
+				x.send(vars + csrfQS());
+				document.getElementById("msg").innerHTML = "processing...";
+			}
+
+
+
+			function all_users(qqizName){
+				var x = new XMLHttpRequest();
+				var url = "admin.php";
+				var vars = 'usersAll='+qqizName;
+				x.open("POST", url, true);
+				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				x.onreadystatechange = function() {
+					if(x.readyState == 4 && x.status == 200) {
+						showDiv('quesans', 'mc', 'tf');
+						document.getElementById("quesans_table").innerHTML = x.responseText;
+						document.getElementById("msg").innerHTML = "";
+					}
+				}
+				x.send(vars + csrfQS());
+				document.getElementById("msg").innerHTML = "processing...";
+			}
+
+
+			function delete_some_questions(quizzName){
+				var x = new XMLHttpRequest();
+				var url = "admin.php";
+				var vars = 'deleteSomeQuestions='+quizzName;
+				x.open("POST", url, true);
+				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				x.onreadystatechange = function() {
+					if(x.readyState == 4 && x.status == 200) {
+						showDiv('quesans', 'mc', 'tf');
+						document.getElementById("quesans_table").innerHTML = x.responseText;
+						SyntaxHighlighter.highlight();
+						document.getElementById("msg").innerHTML = "";
+					}
+				}
+				x.send(vars + csrfQS());
+				document.getElementById("msg").innerHTML = "processing...";
+			}
+
+
+
+			function edit_question(qzname){
+				var x = new XMLHttpRequest();
+				var url = "admin.php";
+				var vars = 'editaquestion='+qzname;
+				x.open("POST", url, true);
+				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				x.onreadystatechange = function() {
+					if(x.readyState == 4 && x.status == 200) {
+						showDiv('quesans', 'mc', 'tf');
+						document.getElementById("quesans_table").innerHTML = x.responseText;
+						SyntaxHighlighter.highlight();
+						document.getElementById("msg").innerHTML = "";
+					}
+				}
+				x.send(vars + csrfQS());
+				document.getElementById("msg").innerHTML = "processing...";
+			}
+
+
+			function editQ_submit(){
+				document.deleteedit.action = "admin.php";
+	            document.getElementById('deleteedit').submit();
+	        }
+
+
+			function view_questions(qiizName){
+				var x = new XMLHttpRequest();
+				var url = "admin.php";
+				var vars = 'questionsQuiz='+qiizName;
+				x.open("POST", url, true);
+				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				x.onreadystatechange = function() {
+					if(x.readyState == 4 && x.status == 200) {
+						showDiv('quesans', 'mc', 'tf');
+						document.getElementById("quesans_table").innerHTML = x.responseText;
+						SyntaxHighlighter.highlight();
+						document.getElementById("msg").innerHTML = "";
+					}
+				}
+				x.send(vars + csrfQS());
+				document.getElementById("msg").innerHTML = "processing...";
+			}
+
+			function default_quiz(qizName){
+				var x = new XMLHttpRequest();
+				var url = "admin.php";
+				var vars = 'defaultQuiz='+qizName;
+				x.open("POST", url, true);
+				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				x.onreadystatechange = function() {
+					if(x.readyState == 4 && x.status == 200) {
+						document.getElementById("resetBtnMsg").innerHTML = x.responseText;
+					}
+				}
+				x.send(vars + csrfQS());
+				document.getElementById("resetBtnMsg").innerHTML = "processing...";
+			}
+
+
+		//truncating the tables and resetting the quiz
+			function delete_quiz(qzName){
+				if(confirm("Really wanna delete this Quiz and all its Questions?!")) {
+					var x = new XMLHttpRequest();
+					var url = "admin.php";
+					var vars = 'deleteQuiz='+qzName;
+					x.open("POST", url, true);
+					x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					x.onreadystatechange = function() {
+						if(x.readyState == 4 && x.status == 200) {
+							document.getElementById("resetBtnMsg").innerHTML = x.responseText;
+						}
+					}
+					x.send(vars + csrfQS());
+					document.getElementById("resetBtnMsg").innerHTML = "processing...";
+				}
+			}
+
+
+		 //truncating the tables and resetting the quiz
+			function resetQuiz(){
+				if(confirm("Really wanna delete all the Questions from all the quizes?!")) {
+					var x = new XMLHttpRequest();
+					var url = "admin.php";
+					var vars = 'reset=yes';
+					x.open("POST", url, true);
+					x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					x.onreadystatechange = function() {
+						if(x.readyState == 4 && x.status == 200) {
+							document.getElementById("resetBtnMsg").innerHTML = x.responseText;
+						}
+					}
+					x.send(vars + csrfQS());
+					document.getElementById("resetBtnMsg").innerHTML = "processing...";
+				}
+			}
+		</script>
+
+		<script type="text/javascript">
+	 //updating metadata for a quiz
+		function update_quiz(qname){
+			open_overlay('regNewQuiz', 'regNewAdmin');
+			document.newQuiz_name.action = "updateExistingQuiz.php";
+			document.getElementById('quizName').value = qname;
+			document.getElementById('quizName').readOnly = true;
+			document.getElementById('quizTime').focus();
+		}
+
+
+		function change_pass(){
+			open_overlay('regNewAdmin', 'regNewQuiz');
+			document.reg_name.action = "changePassword.php";
+			document.getElementById('login').value = 'admin';
+			document.getElementById('login').readOnly = true;
+			document.getElementById("password").focus();
+		}
+
+		</script>
+
+		<script type="text/javascript">
+		//overlays
+			//hiding the overlay
+			    function close_overlay(){
+			        document.getElementById('register').style.display='none';
+			        document.getElementById('fade').style.display='none';
+			    }
+
+			//showing the overlay
+			    function open_overlay(ele1, ele2){
+
+				document.getElementById(ele1).style.display = 'block';
+					document.getElementById(ele2).style.display = 'none';
+
+			        document.getElementById('register').style.display='block';
+			        document.getElementById('fade').style.display='block';
+
+				if(ele1=='regNewAdmin'){
+					document.getElementById("register").style.height = '200px';
+					document.getElementById("login").focus();
+				}
+				else{
+					document.getElementById("register").style.height = '300px';
+					document.getElementById("quizName").focus();
+				}
+			    }
+		</script>
+
+		<link rel="stylesheet" type="text/css" href="css/register.css">
+		<link rel="stylesheet" type="text/css" href="css/addNewQuiz.css">
+
+		<script type="text/javascript">
+
+		function submit_admin(){
+			var x=document.forms["reg_name"]["login"].value;
+			var y=document.forms["reg_name"]["password"].value;
+            if (x==null || x=="" || y==null || y==""){
+                document.getElementById("required").innerHTML = "Enter Both Values";
+                exit();
+            }
+			close_overlay();
+            document.getElementById('reg_name').submit();
+            return false;
+		}
+
+		</script>
+
+		<script type="text/javascript">
+			function quiz_submit(){
+				document.deleteedit.action = "deleteSomeQues.php";
+	            document.getElementById('deleteedit').submit();
+	        }
+		</script>
+
+	</head>
+
+	<body style="font-family: Arial;">
+
+		<div id="head" align="center">
+            <img src="img/header.jpg" alt="Chandigarh Engineering College" />
+        </div>
+
+
+		<div id="admin_menu">
+			<p style="color:#06F;" id="msg">
+							</p>
+			<br><br>
+			<ul>
+				<span id="Hello">Hello, <a href="admin.php"><span id="usr">admin!</span></a></span>
+
+				<a href="index.php" target="_blank">
+					<li>Quiz Homepage</li>
+				</a>
+
+				<li>Manage Questions
+					<ul>
+						<li>Create a Question
+							<ul>
+							<a href="javascript:showDiv('tf', 'mc', 'quesans');">
+								<li>True/False</li>
+							</a>
+							<a href="javascript:showDiv('mc', 'tf', 'quesans');">
+								<li>Multiple Choice</li>
+							</a>
+						</ul>
+						</li>
+					<a href="javascript:view_questions('allthequestions');">
+							<li>View All Questions</li>
+						</a>
+						<a href="javascript:edit_question('allthequestions');">
+							<li>Edit a Question</li>
+						</a>
+						<a href="javascript:delete_some_questions('allthequestions');">
+							<li>Delete Some Questions</li>
+						</a>
+					<a href="javascript:resetQuiz();">
+							<li>Delete all Questions</li>
+						</a>
+					</ul>
+			    </li>
+				<li>Quiz Management
+					<ul>
+						<a href="javascript:open_overlay('regNewQuiz','regNewAdmin');">
+							<li><span class="plus">+&nbsp;</span> Add New Quiz</li>
+						</a>
+						<li>LEVEL1(EASY) (Q=20, T=30)
+								<ul>
+									<li>Quiz Settings
+										<ul>
+											<a href="javascript:default_quiz('LEVEL1(EASY)')">
+												<li>Set Default</li>
+											</a>
+											<a href="javascript:update_quiz('LEVEL1(EASY)')">
+												<li>Update Metadata</li>
+											</a>
+											<a href="javascript:delete_quiz('LEVEL1(EASY)')">
+												<li>Delete this Quiz</li>
+											</a>
+										</ul>
+									</li>
+
+									<li>Manage Questions
+										<ul>
+											<a href="javascript:view_questions('LEVEL1(EASY)')">
+												<li>View all Questions</li>
+											</a>
+											<a href="javascript:edit_question('LEVEL1(EASY)')">
+												<li>Edit a Question</li>
+											</a>
+											<a href="javascript:delete_some_questions('LEVEL1(EASY)')">
+												<li>Delete Some Questions</li>
+											</a>
+										</ul>
+									</li>
+
+
+
+									<li>Results
+										<ul>
+											<a href="javascript:top_users('LEVEL1(EASY)')">
+												<li>Result(Top 20)</li>
+											</a>
+											<a href="javascript:all_users('LEVEL1(EASY)')">
+												<li>Result(All)</li>
+											</a>
+											<a href="javascript:clear_result('1')">
+												<li>Clear the Result</li>
+											</a>
+										</ul>
+									</li>
+								</ul>
+							</li><li>LEVEL2(HARD) (Q=10, T=20)
+								<ul>
+									<li>Quiz Settings
+										<ul>
+											<a href="javascript:default_quiz('LEVEL2(HARD)')">
+												<li>Set Default</li>
+											</a>
+											<a href="javascript:update_quiz('LEVEL2(HARD)')">
+												<li>Update Metadata</li>
+											</a>
+											<a href="javascript:delete_quiz('LEVEL2(HARD)')">
+												<li>Delete this Quiz</li>
+											</a>
+										</ul>
+									</li>
+
+									<li>Manage Questions
+										<ul>
+											<a href="javascript:view_questions('LEVEL2(HARD)')">
+												<li>View all Questions</li>
+											</a>
+											<a href="javascript:edit_question('LEVEL2(HARD)')">
+												<li>Edit a Question</li>
+											</a>
+											<a href="javascript:delete_some_questions('LEVEL2(HARD)')">
+												<li>Delete Some Questions</li>
+											</a>
+										</ul>
+									</li>
+
+
+
+									<li>Results
+										<ul>
+											<a href="javascript:top_users('LEVEL2(HARD)')">
+												<li>Result(Top 20)</li>
+											</a>
+											<a href="javascript:all_users('LEVEL2(HARD)')">
+												<li>Result(All)</li>
+											</a>
+											<a href="javascript:clear_result('2')">
+												<li>Clear the Result</li>
+											</a>
+										</ul>
+									</li>
+								</ul>
+							</li>					</ul>
+				</li>
+
+				<li>Settings
+				<ul>
+					<a href="javascript:open_overlay('regNewAdmin','regNewQuiz');">
+						<li>Register an Admin</li>
+					</a>
+					<a href="javascript:change_pass();">
+						<li>Change Password</li>
+					</a>
+					<a href="javascript:delete_account();">
+						<li>Delete Your Account</li>
+					</a>
+					<a href="javascript:reset_tables();">
+						<li>Reset all Tables</li>
+					</a>
+					<a href="logout.php">
+						<li>LogOut</li>
+					</a>
+				</ul>
+				</li>
+			</ul>
+
+		    <br /><br />
+
+		    <span id="resetBtnMsg"></span>
+		</div>
+
+
+		<div class="content" id="tf" style="margin-bottom: 100px;">
+			<h2>True or false</h2>
+
+		<form action="admin.php" name="addQuestion" method="POST">
+			<input type="hidden" name="csrf_token" value="0a75f5b01f298026ab7a3803530ea17ab2b77d86b69bf64c9a8df7e9c85c6c2d">
+			<strong>Select the quiz in which to enter the Question</strong>
+			<select class="quizIDselect" name="quizID" id="quizIDtf">
+				 <option value="1">LEVEL1(EASY)</option> <option value="2">LEVEL2(HARD)</option>			</select>
+			<br />
+			<br />
+
+			<strong>Please type your new question here:</strong>
+			<br />
+
+			<textarea class="txt_area" id="tfDesc" name="desc"></textarea>
+			<br />
+			<br />
+
+
+			<strong>If there's a programming code, enter here</strong>
+			<br />
+
+			<strong style="font-family: Times;">Select Language of the code: </strong>
+			<span class='css-select-moz'>
+				<select class="lang_selector" name="prog-lang" onchange="lang_chosen(this);" id="prog-lang-tf">
+					<option value=""> ------ </option>
+						<option value="applescript">AppleScript</option>
+						<option value="actionscript3">ActionScript3</option>
+						<option value="shell">Bash/Shell</option>
+						<option value="coldfusion">ColdFusion</option>
+						<option value="csharp">C#</option>
+						<option value="cpp">C/C++</option>
+						<option value="css">CSS</option>
+						<option value="delphi">Delphi</option>
+						<option value="diff">Diff</option>
+						<option value="erlang">Erlang</option>
+						<option value="groovy">Groovy</option>
+						<option value="js">JavaScript</option>
+						<option value="java">Java</option>
+						<option value="javafx">JavaFX</option>
+						<option value="perl">Perl</option>
+						<option value="php">PHP</option>
+						<option value="plain">Plain Text</option>
+						<option value="powershell">PowerShell</option>
+						<option value="python">Python</option>
+						<option value="ruby">Ruby on Rails</option>
+						<option value="sass">Sass</option>
+						<option value="scala">Scala</option>
+						<option value="sql">SQL</option>
+						<option value="vbnet">VB.net</option>
+						<option value="html">HTML/XML/xHTML/XSLT</option>
+					</select>
+				</span>
+			<br />
+			<textarea class="txt_area" id="tfcodeDesc" name="code_desc" style="width:400px;height:95px;"></textarea>
+			<br />
+
+			<br />
+
+
+			<strong>Select whether true or false is the Correct Answer</strong>
+			<br />
+
+		<input type="text" class="tf_txt_box" id="answer1" name="answer1" value="True" readonly>&nbsp;
+		<label style="cursor:pointer; color:#555;">
+			<input type="radio" id="tfans1" name="iscorrect" value="answer1">Correct Answer?
+		</label>
+			<br />
+				<br />
+		<input type="text" class="tf_txt_box" id="answer2" name="answer2" value="False" readonly>&nbsp;
+		<label style="cursor:pointer; color:#555;">
+			<input type="radio" id="tfans2" name="iscorrect" value="answer2">Correct Answer?
+		</label>
+
+
+			<br />
+			<br />
+
+
+			<input type="hidden" value="tf" name="type">
+			<input type="hidden" value="" name="questionID">
+				<input type="submit" class="add_to_quiz" id="addToQuizTF" value="Add To Quiz">
+		</form>
+		</div>
+
+
+		<div class="content" id="mc" style="margin-bottom: 100px;">
+			<h2>Multiple Choice</h2>
+
+		<form action="admin.php" name="addMcQuestion" method="POST">
+			<input type="hidden" name="csrf_token" value="0a75f5b01f298026ab7a3803530ea17ab2b77d86b69bf64c9a8df7e9c85c6c2d">
+			<strong>Select the quiz in which to enter the Question</strong>
+			<select class="quizIDselect" name="quizID" id="quizIDmc">
+				 <option value="1">LEVEL1(EASY)</option> <option value="2">LEVEL2(HARD)</option>			</select>
+			<br />
+			<br />
+
+			<strong>Please type your new question here:</strong>
+			<br />
+
+			<textarea class="txt_area" id="mcdesc" name="desc"></textarea>
+			<br />
+			<br />
+
+
+			<strong>If there's a programming code, enter here</strong>
+			<br />
+
+			<strong style="font-family: Times;">Select Language of the code: </strong>
+			<span class='css-select-moz'>
+				<select class="lang_selector" name="prog-lang" onchange="lang_chosen(this);" id="prog-lang-mc">
+					<option value=""> ------ </option>
+						<option value="applescript">AppleScript</option>
+						<option value="actionscript3">ActionScript3</option>
+						<option value="shell">Bash/Shell</option>
+						<option value="coldfusion">ColdFusion</option>
+						<option value="csharp">C#</option>
+						<option value="cpp">C/C++</option>
+						<option value="css">CSS</option>
+						<option value="delphi">Delphi</option>
+						<option value="diff">Diff</option>
+						<option value="erlang">Erlang</option>
+						<option value="groovy">Groovy</option>
+						<option value="js">JavaScript</option>
+						<option value="java">Java</option>
+						<option value="javafx">JavaFX</option>
+						<option value="perl">Perl</option>
+						<option value="php">PHP</option>
+						<option value="plain">Plain Text</option>
+						<option value="powershell">PowerShell</option>
+						<option value="python">Python</option>
+						<option value="ruby">Ruby on Rails</option>
+						<option value="sass">Sass</option>
+						<option value="scala">Scala</option>
+						<option value="sql">SQL</option>
+						<option value="vbnet">VB.net</option>
+						<option value="html">HTML/XML/xHTML/XSLT</option>
+					</select>
+				</span>
+				<br />
+			<pre><textarea class="txt_area" id="mccodeDesc" name="code_desc" style="width:400px;height:95px;"></textarea>
+			</pre>
+
+			<br />
+			<br />
+
+
+			<strong>First Option</strong>
+			<br />
+			<input type="text" class="mc_txt_box" id="mcanswer1" name="answer1">&nbsp;
+			<label style="cursor:pointer; color:#555;">
+				<input type="radio" id="mcans1" name="iscorrect" value="answer1">Correct Answer?
+			</label>
+			<br />
+			<br />
+			<strong>Second Option</strong>
+			<br />
+			<input type="text" class="mc_txt_box" id="mcanswer2" name="answer2">&nbsp;
+			<label style="cursor:pointer; color:#555;">
+				<input type="radio" id="mcans2" name="iscorrect" value="answer2">Correct Answer?
+			</label>
+			<br />
+			<br />
+			<strong>Third Option</strong>
+			<br />
+			<input type="text" class="mc_txt_box" id="mcanswer3" name="answer3">&nbsp;
+			<label style="cursor:pointer; color:#555;">
+				<input type="radio"  id="mcans3" name="iscorrect" value="answer3">Correct Answer?
+			</label>
+			<br />
+			<br />
+			<strong>Fourth Option</strong>
+			<br />
+			<input type="text" class="mc_txt_box" id="mcanswer4" name="answer4">&nbsp;
+			<label style="cursor:pointer; color:#555;">
+				<input type="radio"  id="mcans4" name="iscorrect" value="answer4">Correct Answer?
+			</label>
+			<br />
+			<br />
+			<input type="hidden" value="mc" name="type">
+			<input type="hidden" value="" name="questionID">
+			<input type="submit" class="add_to_quiz" id="addToQuizMC" value="Add To Quiz">
+		</form>
+		</div>
+
+
+		<div class="content" id="quesans"  style="margin-bottom: 100px;">
+			<form id="deleteedit" name="deleteedit" action="deleteSomeQues.php" method="POST">
+				<input type="hidden" name="csrf_token" value="0a75f5b01f298026ab7a3803530ea17ab2b77d86b69bf64c9a8df7e9c85c6c2d">				<table width="780px" align="center" id="quesans_table">
+				</table>
+			</form>
+		</div>
+
+
+		<div id="register" class="white_content">
+
+            <form action="register.php" class="login" method="POST" name="reg_name" id="regNewAdmin">
+			<input type="hidden" name="csrf_token" value="0a75f5b01f298026ab7a3803530ea17ab2b77d86b69bf64c9a8df7e9c85c6c2d">			<p>
+			      <label class="reg_label" for="login">Choose a Username:</label>
+			      <input type="text" name="login" id="login" required="required">
+			    </p>
+			    <p>
+			      <label class="reg_label" for="password">Choose a Password:</label>
+			      <input type="password" name="password" id="password" required="required">
+			    </p>
+			    <p class="login-submit">
+			      <button  onClick="submit_admin()" id="reg_button" class="login-button">Register</button>
+			    </p>
+			    <p id="required"></p>
+			</form>
+
+			<form action="addNewQuiz.php" class="newQuiz" method="POST" name="newQuiz_name" id="regNewQuiz">
+				<input type="hidden" name="csrf_token" value="0a75f5b01f298026ab7a3803530ea17ab2b77d86b69bf64c9a8df7e9c85c6c2d">				<p>
+			      <label class="reg_label" for="quizName">Quiz Name:</label><br>
+			      <input type="text" name="quizName" id="quizName" required="required">
+			    </p>
+			    <p>
+			      <label class="reg_label" for="quizTime">Time Allotted:</label><br>
+			      <input type="text" name="quizTime" id="quizTime" required="required">
+			    </p>
+			    <p>
+			      <label class="reg_label" for="numQues">No. of Questions to Display:</label><br>
+			      <input type="text" name="numQues" id="numQues" required="required">
+			    </p>
+			    <p class="addQuiz-submit">
+			      <button  onClick="submit()" id="addQuiz_button" class="addQuiz-button">Add</button>
+			    </p>
+			    <p id="required"></p>
+			</form>
+
+        </div>
+
+
+
+        <div id="fade_overlay">
+            <a href="javascript:close_overlay();" style="cursor: default;">
+                <div id="fade" class="black_overlay">
+                </div>
+            </a>
+        </div>
+
+        <br><BR><BR><BR><br><BR><BR><BR>
+
+		<div id="footer" align="bottom">
+            <table border="0" cellpadding="0" cellspacing="0" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td align="left" id="copyright">
+                            © Copyright 2014, under
+                            <a href="gnu_gpl.txt" style="color: WHITE; text-decoration: none;" target="_blank">
+				GNU General Public License
+                            </a>
+                        </td>
+
+                        <td align="right" id="developer" >
+                            Quiz Designed &amp; Developed by :
+                            <a href="mailto: rahul_jain@live.in" class="flink" style="color: #c4dcf5">
+                                Rahul Jain<div id="dev_info">1139234/CSE/6thSEM</div>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Script for the codeMirror api -->
+        <script type="text/javascript">
+            CodeMirror.modeURL = "codemirror/mode/%N/%N.js";
+
+	        var tfeditor = CodeMirror.fromTextArea(document.getElementById("tfcodeDesc"), {
+										lineNumbers: true,
+								        matchBrackets: true,
+								        indentUnit: 4,
+								        indentWithTabs: true,
+								        smartIndent: true,
+								        styleActiveLine: true,
+								        autoCloseBrackets: true,
+								        autoCloseTags: true,
+								        viewportMargin: Infinity,
+								        fixedGutter: true
+							});
+			 var mceditor = CodeMirror.fromTextArea(document.getElementById("mccodeDesc"), {
+										lineNumbers: true,
+								        matchBrackets: true,
+								        indentUnit: 4,
+								        indentWithTabs: true,
+								        smartIndent: true,
+								        styleActiveLine: true,
+								        autoCloseBrackets: true,
+								        autoCloseTags: true,
+								        viewportMargin: Infinity,
+								        fixedGutter: true
+							});
+
+
+
+			 //JS for changing the textarea
+				function lang_chosen(selectObj){
+				 // get the index of the selected option
+					var idx = selectObj.selectedIndex;
+				 // get the value of the selected option
+					var which = selectObj.options[idx].value;
+
+					change_editor(which);
+				}
+
+				function change_editor(which){
+                    var changedMode = "text/plain";
+                    var modeName = "";
+
+					if(which=="cpp") { changedMode = "text/x-c++src"; modeName = "clike"; }
+					else if(which=="css") { changedMode = "text/css"; modeName = "css"; }
+					else if(which=="diff") { changedMode = "text/x-diff"; modeName = "diff"; }
+					else if(which=="erlang") { changedMode = "text/x-erlang"; modeName = "erlang"; }
+					else if(which=="groovy") { changedMode = "text/x-groovy"; modeName = "groovy"; }
+					else if(which=="java" || which=="javafx") { changedMode = "text/x-java"; modeName = "clike"; }
+					else if(which=="js") { changedMode = "text/javascript"; modeName = "javascript"; }
+					else if(which=="perl") { changedMode = "text/x-perl"; modeName = "perl"; }
+					else if(which=="php") { changedMode = "text/x-httpd-php"; modeName = "php"; }
+					else if(which=="python") { changedMode = "text/x-python"; modeName = "python"; }
+					else if(which=="ruby") { changedMode = "text/x-ruby"; modeName = "ruby"; }
+					else if(which=="sass") { changedMode = "text/x-sass"; modeName = "sass"; }
+					else if(which=="scala") { changedMode = "text/x-scala"; modeName = "clike"; }
+					else if(which=="shell") { changedMode = "text/x-sh"; modeName = "shell"; }
+					else if(which=="sql") { changedMode = "text/x-sql"; modeName = "sql"; }
+					else if(which=="vbnet") { changedMode = "text/x-vb"; modeName = "vb"; }
+					else if(which=="html") { changedMode = "text/x-html"; modeName = "xml"; }
+					else if(which=="csharp") { changedMode = "text/x-csharp"; modeName = "clike"; }
+                    else if(which=="applescript") { modeName = "applescript"; }
+                    else if(which=="actionscript3") { modeName = "clike"; }
+                    else if(which=="coldfusion") { modeName = "coldfusion"; }
+                    else if(which=="delphi") { changedMode = "text/x-pascal"; modeName = "pascal"; }
+                    else if(which=="powershell") { modeName = "powershell"; }
+
+                    if (modeName) {
+					CodeMirror.autoLoadMode(tfeditor, modeName);
+					CodeMirror.autoLoadMode(mceditor, modeName);
+                    }
+
+					tfeditor.setOption("mode", changedMode);
+					mceditor.setOption("mode", changedMode);
+				}
+
+
+        </script>
+
+        
+	</body>
+</html>
