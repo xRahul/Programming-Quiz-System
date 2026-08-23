@@ -46,16 +46,14 @@
 				}
 			}
 
-		 //set-based deletes: one DELETE per table instead of 4 queries per row
+		 //set-based delete: questions go in one chunked DELETE; their
+		 //answers follow via fk_answers_question ON DELETE CASCADE
 			if(!empty($idList)){
 				foreach(array_chunk($idList, 500) as $chunk){
 					$placeholders = implode(',', array_fill(0, count($chunk), '?'));
 
 					$stmtDelQ = $pdo->prepare("DELETE FROM questions WHERE id IN ($placeholders)");
 					$stmtDelQ->execute($chunk);
-
-					$stmtDelA = $pdo->prepare("DELETE FROM answers WHERE question_id IN ($placeholders)");
-					$stmtDelA->execute($chunk);
 				}
 
 			 //decrement total_questions once per affected quiz
