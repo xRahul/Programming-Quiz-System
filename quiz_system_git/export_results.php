@@ -60,6 +60,13 @@ declare(strict_types=1);
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="results-' . $slug . '-' . date('Ymd') . '.csv"');
 
+ //CSV formula-injection guard: spreadsheet apps interpret cells whose first
+ //character is = + - @ (or a tab/CR) as formulas, so every exported field
+ //gets a leading apostrophe -- the standard inert-prefix mitigation
+    $csvSafe = static function (string $value): string {
+        return preg_match('/^[=+\-@\t\r]/', $value) === 1 ? "'" . $value : $value;
+    };
+
     $out = fopen('php://output', 'w');
     fputcsv($out, ['username', 'marks', 'percentage', 'date_time', 'duration']);
 
@@ -68,11 +75,11 @@ declare(strict_types=1);
         $percentage = $divisor > 0 ? round(($marks / $divisor) * 100, 2) : 0;
 
         fputcsv($out, [
-            (string) $row['username'],
-            (string) $row['marks'],
-            (string) $percentage,
-            (string) $row['date_time'],
-            (string) $row['duration'],
+            $csvSafe((string) $row['username']),
+            $csvSafe((string) $row['marks']),
+            $csvSafe((string) $percentage),
+            $csvSafe((string) $row['date_time']),
+            $csvSafe((string) $row['duration']),
         ]);
     }
 

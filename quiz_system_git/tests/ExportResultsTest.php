@@ -215,6 +215,64 @@ final class ExportResultsTest extends TestCase
     }
 
     /**
+     * CSV formula-injection guard: taker-controlled text (the username) that
+     * starts with = + - @ or a tab/CR must export with a leading apostrophe,
+     * so spreadsheet apps treat the cell as inert text instead of a formula.
+     */
+    public function testFormulaInjectionPayloadsExportInert(): void
+    {
+        $payloads = [
+            "=cmd|' /C calc'!A0",
+            '+1+1',
+            '-2+3',
+            '@SUM(1+1)',
+            "\tTAB_LEAD",
+            "\rCR_LEAD",
+            'plain_user_stays_untouched',
+        ];
+
+        $stmt = self::$pdo->prepare(
+            "INSERT INTO quiz_takers (username, percentage, date_time, quiz_id, duration, marks)
+             VALUES (:username, '50', '2026-03-04 05:06:07', :quizId, :duration, :marks)"
+        );
+        foreach ($payloads as $i => $payload) {
+            $stmt->execute([
+                'username' => $payload,
+                'quizId' => self::SEED_QUIZ_ID,
+                'duration' => 900 + $i,
+                'marks' => 0,
+            ]);
+        }
+
+        try {
+            [$status, , $body] = self::request(
+                'GET',
+                'export_results.php?quiz=' . self::SEED_QUIZ_ID . '&scope=all',
+                null,
+                self::$authJar
+            );
+            $this->assertSame(200, $status);
+
+            $usernames = array_map(
+                static fn (array $row): string => (string) $row[0],
+                $this->parseRows((string) $body)
+            );
+
+            foreach ($payloads as $payload) {
+                if ($payload === 'plain_user_stays_untouched') {
+                    continue;
+                }
+                $this->assertContains("'" . $payload, $usernames, 'hostile payload must export apostrophe-prefixed');
+            }
+            $this->assertContains('plain_user_stays_untouched', $usernames, 'benign usernames must not be prefixed');
+        } finally {
+            // restore class-level seed state so neighbouring count/order tests stay valid
+            self::$pdo->prepare('DELETE FROM quiz_takers WHERE quiz_id = :qid AND duration >= 900')
+                ->execute(['qid' => self::SEED_QUIZ_ID]);
+        }
+    }
+
+    /**
      * Minimal CSV parse: our seeded data never contains commas/quotes, so a
      * plain split keeps the assertions readable.
      *
