@@ -2,6 +2,9 @@
 
 //inserting the questions into the database
  //checking if the required data has been filled
+	require_once __DIR__ . '/lib/auth.php';
+	require_admin();
+
 	if(isset($_POST['desc'])){
 		if(!isset($_POST['iscorrect']) || $_POST['iscorrect'] == ""){
 			echo "Sorry, important data to submit your question is missing. Please press back in your browser and try again and make sure you select a correct answer for the question.";
