@@ -1,9 +1,7 @@
 vendor/
 node_modules/
-/bootstrap
-/storage
-Homestead.yaml
-Homestead.json
 .env
 .worktrees/
 .phpunit.result.cache
+.superpowers/
+.DS_Store
