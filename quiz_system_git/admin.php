@@ -170,11 +170,16 @@
 		$resetT = preg_replace('/[^a-z]/', "", $resetT);
 
 		if($resetT=='yes'){
-			$pdo->exec("TRUNCATE TABLE admins");
+		//children before parents, FK checks lifted for the wipe window:
+		//InnoDB refuses TRUNCATE on any referenced table (empty or not),
+		//and a half-done wipe must never leave the DB without its admin
+			$pdo->exec("SET FOREIGN_KEY_CHECKS=0");
 			$pdo->exec("TRUNCATE TABLE answers");
+			$pdo->exec("TRUNCATE TABLE quiz_takers");
 			$pdo->exec("TRUNCATE TABLE questions");
 			$pdo->exec("TRUNCATE TABLE quizes");
-			$pdo->exec("TRUNCATE TABLE quiz_takers");
+			$pdo->exec("TRUNCATE TABLE admins");
+			$pdo->exec("SET FOREIGN_KEY_CHECKS=1");
 
             // Default password hash for '12345'
             $default_pass_hash = password_hash('12345', PASSWORD_DEFAULT);

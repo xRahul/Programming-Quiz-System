@@ -129,23 +129,14 @@ final class ResetTablesReseedTest extends TestCase
             'csrf_token' => self::token(),
         ]);
 
-        // KNOWN DEFECT (T8 gap test, unfixed by design): the handler runs
-        // bare TRUNCATEs in parent-before-child order; the FK constraints
-        // added by migrations make "TRUNCATE TABLE questions" abort with
-        // error 1701, so the request dies as a blank HTTP/1.0 500 AFTER
-        // admins was truncated but BEFORE the default-admin reseed -- the
-        // database is left half-reset and locked out. Full repro in
-        // task-phase8-report.md. The skip keeps this suite green while
-        // documenting the defect; every assertion below activates the
-        // moment the handler is repaired.
-        if ($status === 500) {
-            self::markTestSkipped(
-                'resetTables handler fatals under FK constraints (blank 500, half-reset DB) '
-                . '-- see docs task-phase8-report.md'
-            );
-        }
-
-        $this->assertSame(200, $status, 'resetTables must answer 200 once fixed');
+        // Regression guard for the FK half-reset defect (T8, fixed in fix
+        // round 1): the handler used to run bare TRUNCATEs in
+        // parent-before-child order, so "TRUNCATE TABLE questions" aborted
+        // with MariaDB error 1701 -- blank HTTP/1.0 500 AFTER admins was
+        // truncated but BEFORE the default-admin reseed, leaving the DB
+        // locked out. The handler now wipes child-first inside a lifted
+        // FK_CHECKS window; this test proves the full end-to-end contract.
+        $this->assertSame(200, $status, 'resetTables must answer 200');
         $this->assertStringContainsString('your database is now reset', $body);
 
         $count = static fn (string $table): int => (int) ResetTablesReseedTest::db()
