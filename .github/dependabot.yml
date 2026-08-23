@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: composer
+    directory: "/quiz_system_git"
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
