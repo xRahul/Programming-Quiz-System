@@ -34,42 +34,8 @@
     }
 ?>
 
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-
-        <title>Instructions</title>
-
-        <!-- ****** faviconit.com favicons ****** -->
-            <!-- Basic favicons -->
-                <link rel="shortcut icon" sizes="16x16 32x32 48x48 64x64" href="img/faviconit/favicon.ico">
-                <link rel="shortcut icon" type="image/x-icon" href="img/faviconit/favicon.ico">
-
-            <!--[if IE]><link rel="shortcut icon" href="/favicon.ico"><![endif]-->
-
-            <!-- For Opera Speed Dial -->
-                <link rel="icon" type="image/png" sizes="195x195" href="img/faviconit/favicon-195.png">
-            <!-- For iPad with high-resolution Retina Display running iOS ≥ 7 -->
-                <link rel="apple-touch-icon" sizes="152x152" href="img/faviconit/favicon-152.png">
-            <!-- For iPad with high-resolution Retina Display running iOS ≤ 6 -->
-                <link rel="apple-touch-icon" sizes="144x144" href="img/faviconit/favicon-144.png">
-            <!-- For iPhone with high-resolution Retina Display running iOS ≥ 7 -->
-                <link rel="apple-touch-icon" sizes="120x120" href="img/faviconit/favicon-120.png">
-            <!-- For iPhone with high-resolution Retina Display running iOS ≤ 6 -->
-                <link rel="apple-touch-icon" sizes="114x114" href="img/faviconit/favicon-114.png">
-            <!-- For Google TV devices -->
-                <link rel="icon" type="image/png" sizes="96x96" href="img/faviconit/favicon-96.png">
-            <!-- For iPad Mini -->
-                <link rel="apple-touch-icon" sizes="76x76" href="img/faviconit/favicon-76.png">
-            <!-- For first- and second-generation iPad -->
-                <link rel="apple-touch-icon" sizes="72x72" href="img/faviconit/favicon-72.png">
-            <!-- For non-Retina iPhone, iPod Touch and Android 2.1+ devices -->
-                <link rel="apple-touch-icon" href="img/faviconit/favicon-57.png">
-            <!-- Windows 8 Tiles -->
-                <meta name="msapplication-TileColor" content="#FFFFFF">
-                <meta name="msapplication-TileImage" content="img/faviconit/favicon-144.png">
-        <!-- ****** faviconit.com favicons ****** -->
+<?php $page_title = 'Instructions'; require __DIR__ . '/lib/views/head.php'; ?>
+<?php require __DIR__ . '/lib/views/favicon.php'; ?>
 
         <link rel="stylesheet" type="text/css" href="css/master.css">
         <script type="text/javascript" src="scripts/overlay.js"></script>
@@ -95,9 +61,7 @@
     </head>
 
     <body style="font-family: Arial;">
-        <div id="head" align="center">
-            <img src="img/header.jpg" alt="Chandigarh Engineering College" />
-        </div>
+        <?php require __DIR__ . '/lib/views/header.php'; ?>
 
         <div id="main_body" align="center">
             <h2>So, you want to try your luck at the <big>QUIZ</big></h2>
@@ -158,31 +122,6 @@
             </a>
         </div>
 
-        <div id="footer" align="bottom">
-            <table border="0" cellpadding="0" cellspacing="0" style="width:100%;">
-                <tbody>
-                    <tr>
-                        <td align="left" id="copyright">
-                            © Copyright 2014, under
-                            <a href="gnu_gpl.txt" style="color: WHITE; text-decoration: none;" target="_blank">
-                                GNU General Public License
-                            </a>
-                        </td>
-                        <td align="center" id="video_link">
-                            Getting Bored? Watch a
-                            <a href="javascript:open_overlay();" style="color: #c4dcf5">
-                                Video</a>
-                            to pass time!
-                        </td>
-                        <td align="right" id="developer" >
-                            Quiz Designed &amp; Developed by :
-                            <a href="mailto: rahul_jain@live.in" class="flink" style="color: #c4dcf5">
-                                Rahul Jain<div id="dev_info">1139234/CSE/6thSEM</div>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <?php require __DIR__ . '/lib/views/footer.php'; ?>
     </body>
 </html>
