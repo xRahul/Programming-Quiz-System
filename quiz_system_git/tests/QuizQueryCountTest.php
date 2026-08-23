@@ -49,6 +49,7 @@ final class QuizQueryCountTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
+        require_live_db_credentials();
         self::$base = sprintf('http://%s:%d', self::HOST, self::PORT);
         self::$scratchDb = 'debug_test_p7_' . bin2hex(random_bytes(4));
 
@@ -193,7 +194,7 @@ final class QuizQueryCountTest extends TestCase
         $pdo = new PDO(
             'mysql:host=localhost;dbname=' . self::$scratchDb . ';charset=utf8mb4',
             'quiz',
-            'quizpass',
+            (string) getenv('DB_PASS'),
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
         );
         $pdo->prepare('DELETE FROM quiz_takers WHERE username = ?')->execute([self::ROLL]);

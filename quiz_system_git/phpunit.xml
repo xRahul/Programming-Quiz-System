@@ -8,4 +8,11 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+    <!--
+      Test-process credential defaults. Shell exports take precedence over
+      these (no forced override); CI supplies real values via its own
+      environment. Tests needing a live database skip gracefully when DB_PASS
+      is empty. See CONTRIBUTING.md and setup-remove.md.
+    -->
+    <php>    </php>
 </phpunit>

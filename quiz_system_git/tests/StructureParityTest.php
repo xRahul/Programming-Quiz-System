@@ -77,6 +77,7 @@ final class StructureParityTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
+        require_live_db_credentials();
         if (!is_dir(__DIR__ . '/fixtures')) {
             mkdir(__DIR__ . '/fixtures', 0777, true);
         }

@@ -28,6 +28,7 @@ final class ResetTablesReseedTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
+        require_live_db_credentials();
         self::$base = sprintf('http://%s:%d', self::HOST, self::PORT);
         self::$scratchDb = 'debug_test_p8_reset_' . bin2hex(random_bytes(4));
         self::$authJar = tempnam(sys_get_temp_dir(), 'p8reset_jar_');

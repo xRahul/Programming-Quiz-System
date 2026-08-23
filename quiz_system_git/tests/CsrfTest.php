@@ -24,6 +24,7 @@ final class CsrfTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
+        require_live_db_credentials();
         self::$base = sprintf('http://%s:%d', self::HOST, self::PORT);
         self::$authJar = tempnam(sys_get_temp_dir(), 'csrf_auth_');
 

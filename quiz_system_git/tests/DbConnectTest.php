@@ -13,8 +13,13 @@ final class DbConnectTest extends TestCase
 
         $this->assertSame('localhost', DB_HOST);
         $this->assertSame('debug', DB_NAME);
-        $this->assertSame('quiz', DB_USER);
-        $this->assertSame('quizpass', DB_PASS);
+        // Credentials come strictly from the environment; no secret may be
+        // baked into the repo.
+        $this->assertSame((string) getenv('DB_USER'), DB_USER);
+        $this->assertSame((string) getenv('DB_PASS'), DB_PASS);
+        $src = (string) file_get_contents(__DIR__ . '/../lib/config.php');
+        $this->assertStringContainsString("getenv('DB_USER') ?: ''", $src);
+        $this->assertStringContainsString("getenv('DB_PASS') ?: ''", $src);
         $this->assertNotFalse(APP_ENV);
         $this->assertSame('Programming Quiz System', SITE_NAME);
         $this->assertSame('img/header.jpg', SITE_LOGO);
@@ -23,6 +28,8 @@ final class DbConnectTest extends TestCase
 
     public function testDbBootstrapProvidesPdoAndCountsQuizes(): void
     {
+        require_live_db_credentials();
+
         require_once __DIR__ . '/../scripts/db.php';
 
         $this->assertInstanceOf(PDO::class, $pdo);

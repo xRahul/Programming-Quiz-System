@@ -26,6 +26,7 @@ final class AuditLogTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
+        require_live_db_credentials();
         self::$base = sprintf('http://%s:%d', self::HOST, self::PORT);
         self::$authJar = tempnam(sys_get_temp_dir(), 'audit_jar_');
         self::$probeTag = 'audit_probe_' . bin2hex(random_bytes(4));

@@ -22,12 +22,15 @@ mysql debug < quiz_system_git/database/debug.sql   # adjust path if importing in
 mysql debug -e "SELECT COUNT(*) FROM quizes"       # expect 2
 ```
 
-Optional dedicated user instead of root/socket:
+Optional dedicated user instead of root/socket (choose your own strong password — nothing is stored in the repo):
 
 ```bash
-sudo mysql -e "CREATE USER IF NOT EXISTS 'quiz'@'localhost' IDENTIFIED BY 'quizpass'; GRANT ALL ON debug.* TO 'quiz'@'localhost'"
-# then export DB_USER=quiz DB_PASS=quizpass before running tests/server (lib/config.php reads these)
+sudo mysql -e "CREATE USER IF NOT EXISTS 'quiz'@'localhost' IDENTIFIED BY '<choose-a-password>'; GRANT ALL ON debug.* TO 'quiz'@'localhost'"
+# then export DB_USER=quiz and DB_PASS=<the password you chose> in your shell
+# before running tests/server (lib/config.php reads these; see .env.example)
 ```
+
+The app reads `DB_HOST` / `DB_NAME` / `DB_USER` / `DB_PASS` / `APP_ENV` from the environment. Tests that need a live database skip gracefully when `DB_PASS` is unset or empty.
 
 ## 3. Run things daily
 

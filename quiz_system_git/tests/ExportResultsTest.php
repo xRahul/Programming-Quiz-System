@@ -28,6 +28,7 @@ final class ExportResultsTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
+        require_live_db_credentials();
         self::$base = sprintf('http://%s:%d', self::HOST, self::PORT);
         self::$anonJar = tempnam(sys_get_temp_dir(), 'csv_anon_');
         self::$authJar = tempnam(sys_get_temp_dir(), 'csv_auth_');
