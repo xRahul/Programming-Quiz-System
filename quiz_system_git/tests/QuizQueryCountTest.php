@@ -125,17 +125,34 @@ final class QuizQueryCountTest extends TestCase
 
     public static function tearDownAfterClass(): void
     {
-        try {
-            if (self::$controller !== null) {
+        if (self::$controller !== null) {
+            try {
                 self::$controller->exec("SET GLOBAL general_log = 'OFF'");
                 self::$controller->exec('SET GLOBAL log_output = ' . self::$controller->quote(self::$origLogOutput));
                 self::$controller->exec(
                     "SET GLOBAL general_log = '" . (self::$origLogState === '1' ? 'ON' : 'OFF') . "'"
                 );
                 self::$controller->exec('TRUNCATE TABLE mysql.general_log');
+            } catch (PDOException $e) {
+                // fail the suite loudly: a half-restored server would poison
+                // every later run (log left ON or pointed at TABLE)
+                throw new RuntimeException(
+                    '[QuizQueryCountTest] general_log restore failed: ' . $e->getMessage(),
+                    0,
+                    $e
+                );
             }
-        } catch (PDOException $e) {
-            fwrite(STDERR, '[QuizQueryCountTest] general_log restore failed: ' . $e->getMessage() . "\n");
+
+            // prove the restore actually landed, not just that it didn't throw
+            $state = (string) self::$controller->query('SELECT @@general_log')->fetchColumn();
+            $output = (string) self::$controller->query('SELECT @@log_output')->fetchColumn();
+            if ($state !== self::$origLogState || $output !== self::$origLogOutput) {
+                throw new RuntimeException(
+                    '[QuizQueryCountTest] general_log not restored: '
+                    . "general_log={$state} (want " . self::$origLogState . '), '
+                    . "log_output={$output} (want " . self::$origLogOutput . ')'
+                );
+            }
         }
 
         if (self::$controller !== null) {
@@ -162,6 +179,9 @@ final class QuizQueryCountTest extends TestCase
     public function testQuizRenderHitsAnswersTableExactlyOnce(): void
     {
         self::$controller->exec("SET GLOBAL general_log = 'ON'");
+        // start the capture window from an empty table so rows leaked by any
+        // earlier activity can never pollute the assertion
+        self::$controller->exec('TRUNCATE TABLE mysql.general_log');
         try {
             [$status, , $body] = self::request('POST', 'quiz.php', ['rollno' => self::ROLL]);
             self::assertSame(200, $status, 'quiz.php should render against scratch DB (got ' . $status . ')');
@@ -193,7 +213,7 @@ final class QuizQueryCountTest extends TestCase
     {
         $pdo = new PDO(
             'mysql:host=localhost;dbname=' . self::$scratchDb . ';charset=utf8mb4',
-            'quiz',
+            (string) getenv('DB_USER'),
             (string) getenv('DB_PASS'),
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
         );
