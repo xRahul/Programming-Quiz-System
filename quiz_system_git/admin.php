@@ -172,14 +172,18 @@
 		if($resetT=='yes'){
 		//children before parents, FK checks lifted for the wipe window:
 		//InnoDB refuses TRUNCATE on any referenced table (empty or not),
-		//and a half-done wipe must never leave the DB without its admin
+		//and a half-done wipe must never leave the DB without its admin;
+		//the window is closed in a finally so checks can never stay off
 			$pdo->exec("SET FOREIGN_KEY_CHECKS=0");
-			$pdo->exec("TRUNCATE TABLE answers");
-			$pdo->exec("TRUNCATE TABLE quiz_takers");
-			$pdo->exec("TRUNCATE TABLE questions");
-			$pdo->exec("TRUNCATE TABLE quizes");
-			$pdo->exec("TRUNCATE TABLE admins");
-			$pdo->exec("SET FOREIGN_KEY_CHECKS=1");
+			try{
+				$pdo->exec("TRUNCATE TABLE answers");
+				$pdo->exec("TRUNCATE TABLE quiz_takers");
+				$pdo->exec("TRUNCATE TABLE questions");
+				$pdo->exec("TRUNCATE TABLE quizes");
+				$pdo->exec("TRUNCATE TABLE admins");
+			}finally{
+				$pdo->exec("SET FOREIGN_KEY_CHECKS=1");
+			}
 
             // Default password hash for '12345'
             $default_pass_hash = password_hash('12345', PASSWORD_DEFAULT);
@@ -438,8 +442,18 @@
 		$reset = preg_replace('/[^0-9]/', "", $_POST['reset']);
 
 	//resetting the tables (any failure surfaces as a PDOException under ERRMODE_EXCEPTION)
-		$pdo->exec("TRUNCATE TABLE questions");
-		$pdo->exec("TRUNCATE TABLE answers");
+	//children before parents, FK checks lifted for the wipe window:
+	//InnoDB refuses TRUNCATE on any referenced table (empty or not),
+	//so the bare parent-first TRUNCATE aborted mid-handler under the
+	//migration-004 schema and blanked out as a 500; the window is
+	//closed in a finally so checks can never stay off
+		$pdo->exec("SET FOREIGN_KEY_CHECKS=0");
+		try{
+			$pdo->exec("TRUNCATE TABLE answers");
+			$pdo->exec("TRUNCATE TABLE questions");
+		}finally{
+			$pdo->exec("SET FOREIGN_KEY_CHECKS=1");
+		}
 
 	 ///////Updating value of total questions in quizes
 		$pdo->exec("UPDATE quizes SET total_questions=0");
