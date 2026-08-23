@@ -301,6 +301,82 @@ final class CorrectnessFixesTest extends TestCase
         $this->assertSame('</html>', trim((string) end($nonBlank)), 'quiz.php must end with a closed </html> tag');
     }
 
+    /**
+     * @dataProvider messageFlowProvider
+     */
+    public function testUserMessagesCarryNoBackslashArtifacts(string $flow): void
+    {
+        self::login();
+        $token = self::sessionToken();
+        $newPass = 'p2-temp-pass-' . bin2hex(random_bytes(3));
+
+        if ($flow === 'register') {
+            [$status, $redirect] = self::request('POST', 'register.php', [
+                'login' => self::ADMIN_USER,
+                'password' => $newPass,
+                'csrf_token' => $token,
+            ]);
+        } elseif ($flow === 'changePassword') {
+            $stmtHash = self::$pdo->prepare('SELECT password FROM admins WHERE username = :username');
+            $stmtHash->execute(['username' => self::ADMIN_USER]);
+            $originalHash = (string) $stmtHash->fetchColumn();
+            try {
+                [$status, $redirect] = self::request('POST', 'changePassword.php', [
+                    'login' => self::ADMIN_USER,
+                    'password' => $newPass,
+                    'csrf_token' => $token,
+                ]);
+            } finally {
+                self::$pdo->prepare('UPDATE admins SET password = :hash WHERE username = :username')
+                    ->execute(['hash' => $originalHash, 'username' => self::ADMIN_USER]);
+            }
+        } elseif ($flow === 'addNewQuiz') {
+            [$status, $redirect] = self::request('POST', 'addNewQuiz.php', [
+                'quizName' => 'LEVEL1(EASY)',
+                'quizTime' => '30',
+                'numQues' => '22',
+                'csrf_token' => $token,
+            ]);
+        } else { // updateExistingQuiz
+            $stmtRow = self::$pdo->query("SELECT display_questions, time_allotted FROM quizes WHERE quiz_name = 'LEVEL2(HARD)'");
+            $originalRow = $stmtRow->fetch();
+            try {
+                [$status, $redirect] = self::request('POST', 'updateExistingQuiz.php', [
+                    'quizName' => 'LEVEL2(HARD)',
+                    'quizTime' => (string) $originalRow['time_allotted'],
+                    'numQues' => (string) $originalRow['display_questions'],
+                    'csrf_token' => $token,
+                ]);
+            } finally {
+                self::$pdo->prepare(
+                    'UPDATE quizes SET display_questions = :dq, time_allotted = :ta WHERE quiz_name = :name'
+                )->execute([
+                    'dq' => $originalRow['display_questions'],
+                    'ta' => $originalRow['time_allotted'],
+                    'name' => 'LEVEL2(HARD)',
+                ]);
+            }
+        }
+
+        $this->assertSame(302, $status, "$flow must succeed and redirect");
+        $this->assertStringContainsString('admin.php?', (string) $redirect);
+        $this->assertStringNotContainsString('%5C', (string) $redirect, "$flow message must not carry a backslash");
+        parse_str((string) parse_url((string) $redirect, PHP_URL_QUERY), $query);
+        $msg = $query['msg'] ?? $query['user_msg'] ?? '';
+        $this->assertNotSame('', $msg, "$flow must set a message");
+        $this->assertStringNotContainsString('\\ ', $msg, "decoded $flow message must have no '\\ ' artifact");
+    }
+
+    public static function messageFlowProvider(): array
+    {
+        return [
+            ['register'],
+            ['changePassword'],
+            ['addNewQuiz'],
+            ['updateExistingQuiz'],
+        ];
+    }
+
     private function insertFixtureQuiz(): int
     {
         $fixtureQuizId = 987004;

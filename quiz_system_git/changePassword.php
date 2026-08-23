@@ -29,7 +29,7 @@
             $updateStmt = $pdo->prepare("UPDATE admins SET password = :password WHERE username = :username");
             $updateStmt->execute(['password' => $hashed_password, 'username' => $user]);
 
-            $user_msg = 'Password Changed Successfully for \\'.htmlspecialchars($user).'\\';
+            $user_msg = 'Password Changed Successfully for '.htmlspecialchars($user);
             header('location: admin.php?msg='.urlencode($user_msg));
             exit();
         }

@@ -19,7 +19,7 @@
 
         if($stmt->rowCount() > 0)
         {
-		$user_msg = 'Sorry, but \ '.htmlspecialchars($user).' \ is already taken!';
+		$user_msg = 'Sorry, but '.htmlspecialchars($user).' is already taken!';
             header('location: admin.php?msg='.urlencode($user_msg));
             exit();
         }
@@ -29,7 +29,7 @@
             $stmt = $pdo->prepare("INSERT INTO admins (username, password) VALUES (:username, :password)");
             $stmt->execute(['username' => $user, 'password' => $hashed_password]);
 
-		$user_msg = 'Admin account, \ '.htmlspecialchars($user).' \ has been created!';
+		$user_msg = 'Admin account, '.htmlspecialchars($user).' has been created!';
             header('location: admin.php?msg='.urlencode($user_msg));
             exit();
         }
