@@ -736,62 +736,64 @@
 <?php $page_title = 'Admin'; require __DIR__ . '/lib/views/head.php'; ?>
 <?php require __DIR__ . '/lib/views/favicon.php'; ?>
 
-	    <!-- SYNTAX HIGHLIGHTER -->
-			<link rel="stylesheet" type="text/css" href="sh/styles/shCore.css">
-			<link rel="stylesheet" type="text/css" href="sh/styles/shThemeDefault.css">
-			<script type="text/javascript" src="sh/scripts/shCore.js"></script>
-		   <!-- INCLUDING ALL BRUSHES SCRIPTS -->
-			<script type="text/javascript" src="sh/scripts/shBrushAppleScript.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushAS3.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushBash.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushColdFusion.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushCpp.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushCSharp.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushCss.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushDelphi.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushDiff.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushErlang.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushGroovy.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushJava.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushJavaFX.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushJScript.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushPerl.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushPhp.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushPlain.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushPowerShell.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushPython.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushRuby.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushSass.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushScala.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushSql.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushVb.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushXml.js"></script>
-		<!-- SYNTAX HIGHLIGHTER -->
+	    <!-- SYNTAX HIGHLIGHTING (Prism 1.29.0, pinned) -->
+			<link rel="stylesheet" type="text/css" href="assets/vendor/prism-1.29.0/themes/prism.css">
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-core.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-markup.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-markup-templating.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-css.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-clike.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-javascript.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-actionscript.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-applescript.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-bash.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-basic.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-c.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-cpp.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-csharp.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-pascal.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-diff.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-erlang.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-groovy.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-java.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-perl.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-php.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-powershell.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-python.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-ruby.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-sass.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-scala.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-sql.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-vbnet.min.js"></script>
+		<!-- SYNTAX HIGHLIGHTING -->
 
-	<!-- BUGGY CODE INPUT FIELD -->
-		<link rel="stylesheet" href="codemirror/lib/codemirror.css">
-		<script type="text/javascript" src="codemirror/codemirror-compressed.js"></script>
-		<script type="text/javascript" src="codemirror/addon/mode/loadmode.js"></script>
-	<!--
-		<script src="codemirror/lib/codemirror.js"></script>
-
-		<script src="codemirror/mode/clike/clike.js"></script>
-		<script src="codemirror/mode/css/css.js"></script>
-		<script src="codemirror/mode/diff/diff.js"></script>
-		<script src="codemirror/mode/erlang/erlang.js"></script>
-		<script src="codemirror/mode/groovy/groovy.js"></script>
-		<script src="codemirror/mode/javascript/javascript.js"></script>
-		<script src="codemirror/mode/perl/perl.js"></script>
-		<script src="codemirror/mode/php/php.js"></script>
-		<script src="codemirror/mode/python/python.js"></script>
-		<script src="codemirror/mode/ruby/ruby.js"></script>
-		<script src="codemirror/mode/sass/sass.js"></script>
-		<script src="codemirror/mode/scala/scala.js"></script>
-		<script src="codemirror/mode/shell/shell.js"></script>
-		<script src="codemirror/mode/sql/sql.js"></script>
-		<script src="codemirror/mode/vb/vb.js"></script>
-		<script src="codemirror/mode/xml/xml.js"></script>
-	-->
+	<!-- CODE EDITOR (CodeMirror 5.65.16, pinned) -->
+		<link rel="stylesheet" href="assets/vendor/codemirror-5.65.16/lib/codemirror.css">
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/lib/codemirror.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/addon/edit/matchbrackets.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/addon/edit/closebrackets.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/addon/edit/closetag.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/addon/selection/active-line.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/addon/mode/loadmode.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/xml/xml.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/javascript/javascript.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/css/css.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/htmlmixed/htmlmixed.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/clike/clike.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/diff/diff.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/erlang/erlang.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/groovy/groovy.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/perl/perl.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/php/php.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/pascal/pascal.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/python/python.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/ruby/ruby.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/sass/sass.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/shell/shell.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/sql/sql.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/vb/vb.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/powershell/powershell.js"></script>
 
 		<link rel="stylesheet" type="text/css" href="css/admin.css">
 
@@ -1000,6 +1002,7 @@
 	<script id="admin-boot" type="application/json"><?php echo json_encode(array('login_session' => $login_session), JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
 <?php if (!empty($editQops)): ?>	<script id="edit-state" type="application/json"><?php echo json_encode($editQops, JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
 <?php endif; ?>
+	<script src="assets/js/code-highlight.js"></script>
 	<script src="assets/js/admin.js"></script>
 
 

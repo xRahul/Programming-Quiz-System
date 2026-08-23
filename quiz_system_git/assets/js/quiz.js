@@ -3,7 +3,13 @@
  * and right-click guard, extracted from quiz.php (T4.5). The legacy inline
  * timer(...) invocation embedded a PHP value; it now reads #quiz-boot.
  */
-		    SyntaxHighlighter.all()
+	    //legacy SyntaxHighlighter.all() waited for window load; this script
+	    //sits above the question <pre> blocks, so defer to match
+	    if (document.readyState === "complete") {
+		    highlightBrushBlocks();
+	    } else {
+		    window.addEventListener("load", highlightBrushBlocks);
+	    }
 
 	     //function that submits the quiz
 			function quiz_submit(){

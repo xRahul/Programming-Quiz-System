@@ -87,6 +87,10 @@
 
 
 
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -123,62 +127,64 @@
                 <meta name="msapplication-TileImage" content="img/faviconit/favicon-144.png">
         <!-- ****** faviconit.com favicons ****** -->
 
-	    <!-- SYNTAX HIGHLIGHTER -->
-			<link rel="stylesheet" type="text/css" href="sh/styles/shCore.css">
-			<link rel="stylesheet" type="text/css" href="sh/styles/shThemeDefault.css">
-			<script type="text/javascript" src="sh/scripts/shCore.js"></script>
-		   <!-- INCLUDING ALL BRUSHES SCRIPTS -->
-			<script type="text/javascript" src="sh/scripts/shBrushAppleScript.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushAS3.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushBash.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushColdFusion.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushCpp.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushCSharp.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushCss.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushDelphi.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushDiff.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushErlang.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushGroovy.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushJava.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushJavaFX.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushJScript.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushPerl.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushPhp.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushPlain.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushPowerShell.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushPython.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushRuby.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushSass.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushScala.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushSql.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushVb.js"></script>
-			<script type="text/javascript" src="sh/scripts/shBrushXml.js"></script>
-		<!-- SYNTAX HIGHLIGHTER -->
+	    <!-- SYNTAX HIGHLIGHTING (Prism 1.29.0, pinned) -->
+			<link rel="stylesheet" type="text/css" href="assets/vendor/prism-1.29.0/themes/prism.css">
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-core.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-markup.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-markup-templating.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-css.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-clike.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-javascript.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-actionscript.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-applescript.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-bash.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-basic.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-c.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-cpp.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-csharp.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-pascal.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-diff.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-erlang.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-groovy.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-java.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-perl.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-php.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-powershell.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-python.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-ruby.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-sass.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-scala.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-sql.min.js"></script>
+			<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-vbnet.min.js"></script>
+		<!-- SYNTAX HIGHLIGHTING -->
 
-	<!-- BUGGY CODE INPUT FIELD -->
-		<link rel="stylesheet" href="codemirror/lib/codemirror.css">
-		<script type="text/javascript" src="codemirror/codemirror-compressed.js"></script>
-		<script type="text/javascript" src="codemirror/addon/mode/loadmode.js"></script>
-	<!--
-		<script src="codemirror/lib/codemirror.js"></script>
-
-		<script src="codemirror/mode/clike/clike.js"></script>
-		<script src="codemirror/mode/css/css.js"></script>
-		<script src="codemirror/mode/diff/diff.js"></script>
-		<script src="codemirror/mode/erlang/erlang.js"></script>
-		<script src="codemirror/mode/groovy/groovy.js"></script>
-		<script src="codemirror/mode/javascript/javascript.js"></script>
-		<script src="codemirror/mode/perl/perl.js"></script>
-		<script src="codemirror/mode/php/php.js"></script>
-		<script src="codemirror/mode/python/python.js"></script>
-		<script src="codemirror/mode/ruby/ruby.js"></script>
-		<script src="codemirror/mode/sass/sass.js"></script>
-		<script src="codemirror/mode/scala/scala.js"></script>
-		<script src="codemirror/mode/shell/shell.js"></script>
-		<script src="codemirror/mode/sql/sql.js"></script>
-		<script src="codemirror/mode/vb/vb.js"></script>
-		<script src="codemirror/mode/xml/xml.js"></script>
-	-->
+	<!-- CODE EDITOR (CodeMirror 5.65.16, pinned) -->
+		<link rel="stylesheet" href="assets/vendor/codemirror-5.65.16/lib/codemirror.css">
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/lib/codemirror.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/addon/edit/matchbrackets.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/addon/edit/closebrackets.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/addon/edit/closetag.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/addon/selection/active-line.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/addon/mode/loadmode.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/xml/xml.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/javascript/javascript.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/css/css.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/htmlmixed/htmlmixed.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/clike/clike.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/diff/diff.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/erlang/erlang.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/groovy/groovy.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/perl/perl.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/php/php.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/pascal/pascal.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/python/python.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/ruby/ruby.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/sass/sass.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/shell/shell.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/sql/sql.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/vb/vb.js"></script>
+		<script type="text/javascript" src="assets/vendor/codemirror-5.65.16/mode/powershell/powershell.js"></script>
 
 		<link rel="stylesheet" type="text/css" href="css/admin.css">
 
@@ -286,6 +292,12 @@
 											<a href="javascript:clear_result('1')">
 												<li>Clear the Result</li>
 											</a>
+											<a href="export_results.php?quiz=1&amp;scope=top">
+												<li>Export Top 20 (CSV)</li>
+											</a>
+											<a href="export_results.php?quiz=1&amp;scope=all">
+												<li>Export All (CSV)</li>
+											</a>
 										</ul>
 									</li>
 								</ul>
@@ -332,6 +344,12 @@
 											<a href="javascript:clear_result('2')">
 												<li>Clear the Result</li>
 											</a>
+											<a href="export_results.php?quiz=2&amp;scope=top">
+												<li>Export Top 20 (CSV)</li>
+											</a>
+											<a href="export_results.php?quiz=2&amp;scope=all">
+												<li>Export All (CSV)</li>
+											</a>
 										</ul>
 									</li>
 								</ul>
@@ -345,6 +363,9 @@
 					</a>
 					<a href="javascript:change_pass();">
 						<li>Change Password</li>
+					</a>
+					<a href="javascript:open_overlay('regResetPass', 'regNewAdmin');">
+						<li>Reset an Admin Password</li>
 					</a>
 					<a href="javascript:delete_account();">
 						<li>Delete Your Account</li>
@@ -362,6 +383,16 @@
 		    <br /><br />
 
 		    <span id="resetBtnMsg"></span>
+
+		    <div id="audit_panel">
+				<a href="javascript:{}" onclick="toggle_audit_panel();" class="myButton">Recent Activity</a>
+				<div id="audit_wrap" style="display:none;">
+					<div class="table-wrap">
+						<table align="center" id="audit_table" style="width:100%;max-width:780px;">
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
 
 
@@ -369,14 +400,14 @@
 			<h2>True or false</h2>
 
 		<form action="admin.php" name="addQuestion" method="POST">
-			<input type="hidden" name="csrf_token" value="57ec6689b90fc7cc94edd8ce4b586024226d86bd29dc1bfa83731ea6279a5bec">
-			<strong>Select the quiz in which to enter the Question</strong>
+			<input type="hidden" name="csrf_token" value="51eae440874247d302b435d415e40994983c6020cdfe164eeb17c9d86d61ea44">
+			<label for="quizIDtf" style="font-weight: bold;">Select the quiz in which to enter the Question</label>
 			<select class="quizIDselect" name="quizID" id="quizIDtf">
 				 <option value="1">LEVEL1(EASY)</option> <option value="2">LEVEL2(HARD)</option>			</select>
 			<br />
 			<br />
 
-			<strong>Please type your new question here:</strong>
+			<label for="tfDesc" style="font-weight: bold;">Please type your new question here:</label>
 			<br />
 
 			<textarea class="txt_area" id="tfDesc" name="desc"></textarea>
@@ -384,10 +415,10 @@
 			<br />
 
 
-			<strong>If there's a programming code, enter here</strong>
+			<label for="tfcodeDesc" style="font-weight: bold;">If there's a programming code, enter here</label>
 			<br />
 
-			<strong style="font-family: Times;">Select Language of the code: </strong>
+			<label for="prog-lang-tf" style="font-family: Times;">Select Language of the code: </label>
 			<span class='css-select-moz'>
 				<select class="lang_selector" name="prog-lang" onchange="lang_chosen(this);" id="prog-lang-tf">
 					<option value=""> ------ </option>
@@ -419,7 +450,7 @@
 				</select>
 			</span>
 			<br />
-			<textarea class="txt_area" id="tfcodeDesc" name="code_desc" style="width:400px;height:95px;"></textarea>
+			<textarea class="txt_area" id="tfcodeDesc" name="code_desc" style="width:400px;max-width:100%;height:95px;"></textarea>
 			<br />
 
 			<br />
@@ -428,12 +459,14 @@
 			<strong>Select whether true or false is the Correct Answer</strong>
 			<br />
 
+		<label for="answer1"><strong>Answer 1:</strong></label>
 		<input type="text" class="tf_txt_box" id="answer1" name="answer1" value="True" readonly>&nbsp;
 		<label style="cursor:pointer; color:#555;">
 			<input type="radio" id="tfans1" name="iscorrect" value="answer1">Correct Answer?
 		</label>
 			<br />
 				<br />
+		<label for="answer2"><strong>Answer 2:</strong></label>
 		<input type="text" class="tf_txt_box" id="answer2" name="answer2" value="False" readonly>&nbsp;
 		<label style="cursor:pointer; color:#555;">
 			<input type="radio" id="tfans2" name="iscorrect" value="answer2">Correct Answer?
@@ -455,14 +488,14 @@
 			<h2>Multiple Choice</h2>
 
 		<form action="admin.php" name="addMcQuestion" method="POST">
-			<input type="hidden" name="csrf_token" value="57ec6689b90fc7cc94edd8ce4b586024226d86bd29dc1bfa83731ea6279a5bec">
-			<strong>Select the quiz in which to enter the Question</strong>
+			<input type="hidden" name="csrf_token" value="51eae440874247d302b435d415e40994983c6020cdfe164eeb17c9d86d61ea44">
+			<label for="quizIDmc" style="font-weight: bold;">Select the quiz in which to enter the Question</label>
 			<select class="quizIDselect" name="quizID" id="quizIDmc">
 				 <option value="1">LEVEL1(EASY)</option> <option value="2">LEVEL2(HARD)</option>			</select>
 			<br />
 			<br />
 
-			<strong>Please type your new question here:</strong>
+			<label for="mcdesc" style="font-weight: bold;">Please type your new question here:</label>
 			<br />
 
 			<textarea class="txt_area" id="mcdesc" name="desc"></textarea>
@@ -470,10 +503,10 @@
 			<br />
 
 
-			<strong>If there's a programming code, enter here</strong>
+			<label for="mccodeDesc" style="font-weight: bold;">If there's a programming code, enter here</label>
 			<br />
 
-			<strong style="font-family: Times;">Select Language of the code: </strong>
+			<label for="prog-lang-mc" style="font-family: Times;">Select Language of the code: </label>
 			<span class='css-select-moz'>
 				<select class="lang_selector" name="prog-lang" onchange="lang_chosen(this);" id="prog-lang-mc">
 					<option value=""> ------ </option>
@@ -505,14 +538,14 @@
 				</select>
 			</span>
 				<br />
-			<pre><textarea class="txt_area" id="mccodeDesc" name="code_desc" style="width:400px;height:95px;"></textarea>
+			<pre><textarea class="txt_area" id="mccodeDesc" name="code_desc" style="width:400px;max-width:100%;height:95px;"></textarea>
 			</pre>
 
 			<br />
 			<br />
 
 
-			<strong>First Option</strong>
+			<label for="mcanswer1" style="font-weight: bold;">First Option</label>
 			<br />
 			<input type="text" class="mc_txt_box" id="mcanswer1" name="answer1">&nbsp;
 			<label style="cursor:pointer; color:#555;">
@@ -520,7 +553,7 @@
 			</label>
 			<br />
 			<br />
-			<strong>Second Option</strong>
+			<label for="mcanswer2" style="font-weight: bold;">Second Option</label>
 			<br />
 			<input type="text" class="mc_txt_box" id="mcanswer2" name="answer2">&nbsp;
 			<label style="cursor:pointer; color:#555;">
@@ -528,7 +561,7 @@
 			</label>
 			<br />
 			<br />
-			<strong>Third Option</strong>
+			<label for="mcanswer3" style="font-weight: bold;">Third Option</label>
 			<br />
 			<input type="text" class="mc_txt_box" id="mcanswer3" name="answer3">&nbsp;
 			<label style="cursor:pointer; color:#555;">
@@ -536,7 +569,7 @@
 			</label>
 			<br />
 			<br />
-			<strong>Fourth Option</strong>
+			<label for="mcanswer4" style="font-weight: bold;">Fourth Option</label>
 			<br />
 			<input type="text" class="mc_txt_box" id="mcanswer4" name="answer4">&nbsp;
 			<label style="cursor:pointer; color:#555;">
@@ -553,8 +586,10 @@
 
 		<div class="content" id="quesans"  style="margin-bottom: 100px;">
 			<form id="deleteedit" name="deleteedit" action="deleteSomeQues.php" method="POST">
-				<input type="hidden" name="csrf_token" value="57ec6689b90fc7cc94edd8ce4b586024226d86bd29dc1bfa83731ea6279a5bec">				<table width="780px" align="center" id="quesans_table">
-				</table>
+				<input type="hidden" name="csrf_token" value="51eae440874247d302b435d415e40994983c6020cdfe164eeb17c9d86d61ea44">				<div class="table-wrap">
+					<table align="center" id="quesans_table" style="width:100%;max-width:780px;">
+					</table>
+				</div>
 			</form>
 		</div>
 
@@ -562,7 +597,7 @@
 		<div id="register" class="white_content">
 
             <form action="register.php" class="login" method="POST" name="reg_name" id="regNewAdmin">
-			<input type="hidden" name="csrf_token" value="57ec6689b90fc7cc94edd8ce4b586024226d86bd29dc1bfa83731ea6279a5bec">			<p>
+			<input type="hidden" name="csrf_token" value="51eae440874247d302b435d415e40994983c6020cdfe164eeb17c9d86d61ea44">			<p>
 			      <label class="reg_label" for="login">Choose a Username:</label>
 			      <input type="text" name="login" id="login" required="required">
 			    </p>
@@ -577,7 +612,7 @@
 			</form>
 
 			<form action="addNewQuiz.php" class="newQuiz" method="POST" name="newQuiz_name" id="regNewQuiz">
-				<input type="hidden" name="csrf_token" value="57ec6689b90fc7cc94edd8ce4b586024226d86bd29dc1bfa83731ea6279a5bec">				<p>
+				<input type="hidden" name="csrf_token" value="51eae440874247d302b435d415e40994983c6020cdfe164eeb17c9d86d61ea44">				<p>
 			      <label class="reg_label" for="quizName">Quiz Name:</label><br>
 			      <input type="text" name="quizName" id="quizName" required="required">
 			    </p>
@@ -593,6 +628,20 @@
 			      <button  onClick="submit()" id="addQuiz_button" class="addQuiz-button">Add</button>
 			    </p>
 			    <p id="required"></p>
+			</form>
+
+			<form action="reset_password.php" class="login" method="POST" name="reset_pass_name" id="regResetPass" style="display:none;">
+				<input type="hidden" name="csrf_token" value="51eae440874247d302b435d415e40994983c6020cdfe164eeb17c9d86d61ea44">				<p>
+			      <label class="reg_label" for="reset_username">Admin Username:</label><br>
+			      <input type="text" name="username" id="reset_username" required="required">
+			    </p>
+			    <p>
+			      <label class="reg_label" for="new_password">New Password (min 6 chars):</label><br>
+			      <input type="password" name="new_password" id="new_password" required="required">
+			    </p>
+			    <p class="login-submit">
+			      <button type="submit" class="login-button">Reset Password</button>
+			    </p>
 			</form>
 
         </div>
@@ -643,6 +692,7 @@
     <!-- Script for the codeMirror api -->
 	<!-- Page config + per-request state for assets/js/admin.js (CSP-safe JSON islands) -->
 	<script id="admin-boot" type="application/json">{"login_session":"admin"}</script>
+	<script src="assets/js/code-highlight.js"></script>
 	<script src="assets/js/admin.js"></script>
 
 

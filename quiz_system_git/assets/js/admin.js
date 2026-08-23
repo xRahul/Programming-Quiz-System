@@ -20,12 +20,16 @@ if (!ADMIN_BOOT.login_session) {
 				return '&csrf_token=' + encodeURIComponent(document.querySelector('input[name=csrf_token]').value);
 			}
 
-		//displaying different code-blocks on button click
-			function showDiv(el1,el2,el3){
-				document.getElementById(el1).style.display = 'block';
-				document.getElementById(el2).style.display = 'none';
-				document.getElementById(el3).style.display = 'none';
-			}
+ 		 //displaying different code-blocks on button click
+ 			function showDiv(el1,el2,el3){
+ 				document.getElementById(el1).style.display = 'block';
+ 				document.getElementById(el2).style.display = 'none';
+ 				document.getElementById(el3).style.display = 'none';
+ 			//editors initialize inside hidden divs and measure nothing;
+ 			//refresh once visible so lineNumbers/active-line render
+ 				if (typeof tfeditor !== "undefined") { tfeditor.refresh(); }
+ 				if (typeof mceditor !== "undefined") { mceditor.refresh(); }
+ 			}
 
 		 //hide all divs
 			function hideDivs(){
@@ -155,7 +159,7 @@ if (!ADMIN_BOOT.login_session) {
 					if(x.readyState == 4 && x.status == 200) {
 						showDiv('quesans', 'mc', 'tf');
 						document.getElementById("quesans_table").innerHTML = x.responseText;
-						SyntaxHighlighter.highlight();
+						highlightBrushBlocks();
 						document.getElementById("msg").innerHTML = "";
 					}
 				}
@@ -175,7 +179,7 @@ if (!ADMIN_BOOT.login_session) {
 					if(x.readyState == 4 && x.status == 200) {
 						showDiv('quesans', 'mc', 'tf');
 						document.getElementById("quesans_table").innerHTML = x.responseText;
-						SyntaxHighlighter.highlight();
+						highlightBrushBlocks();
 						document.getElementById("msg").innerHTML = "";
 					}
 				}
@@ -200,7 +204,7 @@ if (!ADMIN_BOOT.login_session) {
 					if(x.readyState == 4 && x.status == 200) {
 						showDiv('quesans', 'mc', 'tf');
 						document.getElementById("quesans_table").innerHTML = x.responseText;
-						SyntaxHighlighter.highlight();
+						highlightBrushBlocks();
 						document.getElementById("msg").innerHTML = "";
 					}
 				}
@@ -345,7 +349,7 @@ function quiz_submit(){
 				}
 			}
 
-CodeMirror.modeURL = "codemirror/mode/%N/%N.js";
+CodeMirror.modeURL = "assets/vendor/codemirror-5.65.16/mode/%N/%N.js";
 
 	        var codeMirrorConfig = {
 						lineNumbers: true,
@@ -412,7 +416,13 @@ CodeMirror.modeURL = "codemirror/mode/%N/%N.js";
 					mceditor.setOption("mode", changedMode);
 				}
 
-			SyntaxHighlighter.all()
+			//legacy SyntaxHighlighter.all() highlighted on window load; the
+			//question <pre> blocks may not be parsed yet when admin.js runs
+			if (document.readyState === "complete") {
+				highlightBrushBlocks();
+			} else {
+				window.addEventListener("load", highlightBrushBlocks);
+			}
 
 //Applies the JSON operation list rendered by admin.php when a question was
 //loaded for editing (replaces the legacy generated inline <script> blocks)

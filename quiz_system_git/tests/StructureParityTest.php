@@ -464,6 +464,39 @@ final class StructureParityTest extends TestCase
             "$page: favicon partial wired"
         );
 
+        // T6.1: the vendored SyntaxHighlighter 3 sh/ tree and CodeMirror 3
+        // codemirror/ tree were deleted; pages must reference only the new
+        // pinned vendors under assets/vendor/.
+        if ($page === 'admin' || $page === 'quiz') {
+            self::assertSame(
+                0,
+                preg_match_all('#(?:src|href)="(?:sh|codemirror)/#', $html),
+                "$page: no deleted legacy vendor path may be referenced"
+            );
+            self::assertSame(
+                1,
+                substr_count($html, 'assets/vendor/prism-1.29.0/themes/prism.css'),
+                "$page: prism theme stylesheet expected exactly once"
+            );
+            self::assertSame(
+                1,
+                substr_count($html, 'assets/vendor/prism-1.29.0/components/prism-core.min.js'),
+                "$page: prism core script expected exactly once"
+            );
+            self::assertSame(
+                1,
+                substr_count($html, '<script src="assets/js/code-highlight.js"></script>'),
+                "$page: brush-to-prism adapter expected exactly once"
+            );
+        }
+        if ($page === 'admin') {
+            self::assertSame(
+                1,
+                substr_count($html, 'assets/vendor/codemirror-5.65.16/lib/codemirror.js'),
+                'admin.php: CodeMirror 5 library expected exactly once'
+            );
+        }
+
         if ($page === 'admin' && is_file(dirname(__DIR__) . '/assets/js/admin.js')) {
             self::assertSame(
                 1,

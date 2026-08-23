@@ -229,36 +229,37 @@
         <script type="text/javascript" src="scripts/overlay.js"></script>
 <?php require __DIR__ . '/lib/views/favicon.php'; ?>
 
-     <!-- SYNTAX HIGHLIGHTER LINKS & SCRIPTS -->
-        <link rel="stylesheet" type="text/css" href="sh/styles/shCore.css">
-		<link rel="stylesheet" type="text/css" href="sh/styles/shThemeDefault.css">
-		<script type="text/javascript" src="sh/scripts/shCore.js"></script>
-	 <!-- INCLUDING ALL SCRIPTS FOR BRUSHES -->
-		<script type="text/javascript" src="sh/scripts/shBrushAppleScript.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushAS3.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushBash.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushColdFusion.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushCpp.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushCSharp.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushCss.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushDelphi.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushDiff.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushErlang.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushGroovy.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushJava.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushJavaFX.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushJScript.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushPerl.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushPhp.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushPlain.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushPowerShell.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushPython.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushRuby.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushSass.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushScala.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushSql.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushVb.js"></script>
-		<script type="text/javascript" src="sh/scripts/shBrushXml.js"></script>
+     <!-- SYNTAX HIGHLIGHTING (Prism 1.29.0, pinned) -->
+        <link rel="stylesheet" type="text/css" href="assets/vendor/prism-1.29.0/themes/prism.css">
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-core.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-markup.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-markup-templating.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-css.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-clike.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-javascript.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-actionscript.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-applescript.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-bash.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-basic.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-c.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-cpp.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-csharp.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-pascal.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-diff.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-erlang.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-groovy.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-java.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-perl.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-php.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-powershell.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-python.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-ruby.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-sass.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-scala.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-sql.min.js"></script>
+		<script type="text/javascript" src="assets/vendor/prism-1.29.0/components/prism-vbnet.min.js"></script>
+	<!-- SYNTAX HIGHLIGHTING -->
 
 
 		
@@ -272,6 +273,7 @@
 
         <div id="countdown">
         <script id="quiz-boot" type="application/json"><?php echo json_encode(array('total_time' => (int) $total_time, 'total_ques' => (int) $m_display_ID), JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
+        <script src="assets/js/code-highlight.js"></script>
         <script src="assets/js/quiz.js"></script>
         </div>
         <span id="progress"></span>
