@@ -290,6 +290,17 @@ final class CorrectnessFixesTest extends TestCase
         }
     }
 
+    public function testQuizPageEndsWithClosedHtmlTag(): void
+    {
+        $src = (string) file_get_contents(dirname(__DIR__) . '/quiz.php');
+        $nonBlank = array_values(array_filter(
+            explode("\n", $src),
+            static fn (string $line): bool => trim($line) !== ''
+        ));
+        $this->assertNotEmpty($nonBlank);
+        $this->assertSame('</html>', trim((string) end($nonBlank)), 'quiz.php must end with a closed </html> tag');
+    }
+
     private function insertFixtureQuiz(): int
     {
         $fixtureQuizId = 987004;
