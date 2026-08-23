@@ -36,15 +36,30 @@
         $stmtCheck = $pdo->prepare("SELECT id FROM quiz_takers WHERE username = :username AND quiz_id=:quizID");
         $stmtCheck->execute(['username' => $roll_no, 'quizID' => $final_quiz_ID]);
 
+	 //one friendly message for BOTH duplicate paths: the rowCount loser
+	 //below and the unique-key race loser whose SELECT ran before another
+	 //request's INSERT landed (uq_takers_user_quiz). Legacy wording, byte-
+	 //identical for either path.
+		$already_msg = 'Sorry, but '.$roll_no.', has already attempted the quiz, '.$quzz_name.'!';
+
 	 //if user already did, redirect to index.php with error
 		if($stmtCheck->rowCount() > 0){
-			$user_msg = 'Sorry, but '.$roll_no.', has already attempted the quiz, '.$quzz_name.'!';
-			header('location: index.php?user_msg='.urlencode($user_msg));
+			header('location: index.php?user_msg='.urlencode($already_msg));
 			exit();
 		}else{
-	 //else inserting few columns into the table
-        $stmtInsert = $pdo->prepare("INSERT INTO quiz_takers (username, percentage, date_time, quiz_id, duration) VALUES (:username, '0', now(), :quizID, '0')");
-        $stmtInsert->execute(['username' => $roll_no, 'quizID' => $final_quiz_ID]);
+	 //else inserting few columns into the table; a lost race between the
+	 //SELECT above and this INSERT surfaces as SQLSTATE 23000 -- map it to
+	 //the same friendly already-attempted redirect instead of a 500
+			try{
+				$stmtInsert = $pdo->prepare("INSERT INTO quiz_takers (username, percentage, date_time, quiz_id, duration) VALUES (:username, '0', now(), :quizID, '0')");
+				$stmtInsert->execute(['username' => $roll_no, 'quizID' => $final_quiz_ID]);
+			}catch(PDOException $e){
+				if($e->getCode() !== '23000'){
+					throw $e;
+				}
+				header('location: index.php?user_msg='.urlencode($already_msg));
+				exit();
+			}
 		}
 	}else{
 		$user_msg = 'Hey, This is the start Page, So enter your username here first';
