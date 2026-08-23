@@ -3,6 +3,9 @@
 	require_once __DIR__ . '/lib/auth.php';
 	require_admin();
 
+	require_once __DIR__ . '/lib/csrf.php';
+	csrf_verify();
+
 	require_once("scripts/connect_db.php");
 
 	if(isset($_POST['total_ques']) && $_POST['total_ques'] != ""){

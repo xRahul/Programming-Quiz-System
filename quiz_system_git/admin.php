@@ -6,6 +6,8 @@
     */
 
     require_once("session.php");
+    require_once __DIR__ . '/lib/csrf.php';
+    csrf_verify();
 
     // $pdo is available from session.php -> connect_db.php -> db.php
 
@@ -1244,6 +1246,11 @@
 
 
 		<script type="text/javascript">
+		//CSRF token appended to every XHR body (mirrors the hidden input in each form)
+			function csrfQS(){
+				return '&csrf_token=' + encodeURIComponent(document.querySelector('input[name=csrf_token]').value);
+			}
+
 		//displaying different code-blocks on button click
 			function showDiv(el1,el2,el3){
 				document.getElementById(el1).style.display = 'block';
@@ -1283,7 +1290,7 @@
 							document.getElementById("msg").innerHTML = x.responseText;
 						}
 					}
-					x.send(vars);
+					x.send(vars + csrfQS());
 					document.getElementById("msg").innerHTML = "processing...";
 				}
 			}
@@ -1304,7 +1311,7 @@
 								window.open("login.php?user_msg="+x.responseText, "_self");
 							}
 						}
-						x.send(vars);
+						x.send(vars + csrfQS());
 						document.getElementById("msg").innerHTML = "processing...";
 					}
 				}
@@ -1325,7 +1332,7 @@
 							document.getElementById("msg").innerHTML = x.responseText;
 						}
 					}
-					x.send(vars);
+					x.send(vars + csrfQS());
 					document.getElementById("msg").innerHTML = "processing...";
 				}
 			}
@@ -1345,7 +1352,7 @@
 
 					}
 				}
-				x.send(vars);
+				x.send(vars + csrfQS());
 				document.getElementById("msg").innerHTML = "processing...";
 			}
 
@@ -1364,7 +1371,7 @@
 						document.getElementById("msg").innerHTML = "";
 					}
 				}
-				x.send(vars);
+				x.send(vars + csrfQS());
 				document.getElementById("msg").innerHTML = "processing...";
 			}
 
@@ -1383,7 +1390,7 @@
 						document.getElementById("msg").innerHTML = "";
 					}
 				}
-				x.send(vars);
+				x.send(vars + csrfQS());
 				document.getElementById("msg").innerHTML = "processing...";
 			}
 
@@ -1403,7 +1410,7 @@
 						document.getElementById("msg").innerHTML = "";
 					}
 				}
-				x.send(vars);
+				x.send(vars + csrfQS());
 				document.getElementById("msg").innerHTML = "processing...";
 			}
 
@@ -1428,7 +1435,7 @@
 						document.getElementById("msg").innerHTML = "";
 					}
 				}
-				x.send(vars);
+				x.send(vars + csrfQS());
 				document.getElementById("msg").innerHTML = "processing...";
 			}
 
@@ -1443,7 +1450,7 @@
 						document.getElementById("resetBtnMsg").innerHTML = x.responseText;
 					}
 				}
-				x.send(vars);
+				x.send(vars + csrfQS());
 				document.getElementById("resetBtnMsg").innerHTML = "processing...";
 			}
 
@@ -1461,7 +1468,7 @@
 							document.getElementById("resetBtnMsg").innerHTML = x.responseText;
 						}
 					}
-					x.send(vars);
+					x.send(vars + csrfQS());
 					document.getElementById("resetBtnMsg").innerHTML = "processing...";
 				}
 			}
@@ -1480,7 +1487,7 @@
 							document.getElementById("resetBtnMsg").innerHTML = x.responseText;
 						}
 					}
-					x.send(vars);
+					x.send(vars + csrfQS());
 					document.getElementById("resetBtnMsg").innerHTML = "processing...";
 				}
 			}
@@ -1648,6 +1655,7 @@
 			<h2>True or false</h2>
 
 		<form action="admin.php" name="addQuestion" method="POST">
+			<?php echo csrf_field(); ?>
 
 			<strong>Select the quiz in which to enter the Question</strong>
 			<select class="quizIDselect" name="quizID" id="quizIDtf">
@@ -1735,6 +1743,7 @@
 			<h2>Multiple Choice</h2>
 
 		<form action="admin.php" name="addMcQuestion" method="POST">
+			<?php echo csrf_field(); ?>
 
 			<strong>Select the quiz in which to enter the Question</strong>
 			<select class="quizIDselect" name="quizID" id="quizIDmc">
@@ -1834,6 +1843,7 @@
 
 		<div class="content" id="quesans"  style="margin-bottom: 100px;">
 			<form id="deleteedit" name="deleteedit" action="deleteSomeQues.php" method="POST">
+				<?php echo csrf_field(); ?>
 				<table width="780px" align="center" id="quesans_table">
 				</table>
 			</form>
@@ -1843,6 +1853,7 @@
 		<div id="register" class="white_content">
 
             <form action="register.php" class="login" method="POST" name="reg_name" id="regNewAdmin">
+			<?php echo csrf_field(); ?>
 			<p>
 			      <label class="reg_label" for="login">Choose a Username:</label>
 			      <input type="text" name="login" id="login" required="required">
@@ -1858,6 +1869,7 @@
 			</form>
 
 			<form action="addNewQuiz.php" class="newQuiz" method="POST" name="newQuiz_name" id="regNewQuiz">
+				<?php echo csrf_field(); ?>
 				<p>
 			      <label class="reg_label" for="quizName">Quiz Name:</label><br>
 			      <input type="text" name="quizName" id="quizName" required="required">

@@ -1,4 +1,5 @@
 <?php 
+    // CSRF-exempt (task 1.3): pre-auth bootstrap token flow deferred; rate-limiting out of scope.
     require_once('scripts/connect_db.php');
 
     if(isset($_POST['login']) && $_POST['login'] != "" &&

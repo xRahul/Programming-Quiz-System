@@ -124,6 +124,7 @@ final class AuthGuardTest extends TestCase
         [$status, $redirect] = self::request('POST', 'register.php', [
             'login' => $newUser,
             'password' => 'legit-pass-123',
+            'csrf_token' => self::csrfToken(),
         ], self::$authJar);
 
         try {
@@ -135,6 +136,33 @@ final class AuthGuardTest extends TestCase
             $stmt = self::$pdo->prepare('DELETE FROM admins WHERE username = :username');
             $stmt->execute(['username' => $newUser]);
         }
+    }
+
+    /**
+     * Fetches admin.php as the logged-in admin and extracts the rendered
+     * session token from its hidden csrf_token input.
+     */
+    private static function csrfToken(): string
+    {
+        $args = [
+            'curl', '-s', '-A', 'AuthGuardTest/1.0',
+            '-b', self::$authJar, '-c', self::$authJar,
+            self::$base . '/admin.php',
+        ];
+        $descriptors = [1 => ['pipe', 'w'], 2 => ['file', '/dev/null', 'w']];
+        $proc = proc_open($args, $descriptors, $pipes);
+        self::assertIsResource($proc);
+        $body = (string) stream_get_contents($pipes[1]);
+        fclose($pipes[1]);
+        proc_close($proc);
+
+        self::assertSame(
+            1,
+            preg_match('/name="csrf_token" value="([0-9a-f]+)"/', $body, $m),
+            'admin.php must render a csrf_token hidden input'
+        );
+
+        return (string) $m[1];
     }
 
     /**
