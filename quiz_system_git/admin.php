@@ -12,6 +12,11 @@
     require_once __DIR__ . '/lib/headers.php';
     send_security_headers();
 
+    require_once __DIR__ . '/lib/render.php';
+	use function App\fetch_answers_by_question_ids;
+	use function App\render_questions_table;
+	use function App\render_results_table;
+
     // $pdo is available from session.php -> connect_db.php -> db.php
 
 //inserting the questions into the database
@@ -225,7 +230,6 @@
 		$editQ = $_POST['editaquestion'];
 
         $get_quiz_id = '';
-        $m_quiz_name = '';
 
         if($editQ != 'allthequestions') {
 		$stmt = $pdo->prepare("SELECT id as quiz_id FROM quizes WHERE quiz_name = :quizName");
@@ -234,131 +238,23 @@
 		$get_quiz_id = $row['quiz_id'];
         }
 
-		$m_output='';
+		$isAll = ($editQ == 'allthequestions');
 
-		if($editQ=='allthequestions') {
+		if($isAll) {
 			$stmt = $pdo->query("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.quiz_id");
         } else {
             $stmt = $pdo->prepare("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.quiz_id WHERE questions.quiz_id = :quizID");
             $stmt->execute(['quizID' => $get_quiz_id]);
         }
 
-			$m_display_ID = 1;
-
-            $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            // Collect IDs
-            $questionIDs = [];
-            foreach ($questions as $q) {
-                $questionIDs[] = $q['question_id'];
-            }
-
-            // Batch fetch answers
-            $answersByQuestion = [];
-            if (!empty($questionIDs)) {
-                $chunks = array_chunk($questionIDs, 500);
-                foreach ($chunks as $chunk) {
-                    $placeholders = implode(',', array_fill(0, count($chunk), '?'));
-                    $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id IN ($placeholders)");
-                    $stmtAns->execute($chunk);
-                    while ($row = $stmtAns->fetch(PDO::FETCH_ASSOC)) {
-                        $answersByQuestion[$row['question_id']][] = $row;
-                    }
-                }
-            }
-
-			foreach ($questions as $m_row){
-				$m_answers='';
-			 //id var = id column and so on
-				$m_id = $m_row['id'];
-				$m_thisQuestion = $m_row['question'];
-				$m_type = $m_row['type'];
-				$m_question_id = $m_row['question_id'];
-				$m_code = $m_row['code'];
-				$m_code_type = $m_row['code_type'];
-				$m_quiz_id = $m_row['quiz_id'];
-				$m_quiz_name = $m_row['quiz_name'];
-
-
-				$m_q = '<tr>
-							<td width="40px" rowspan="1" align="center">';
-
-				if($editQ=='allthequestions'){
-					$m_q .=	'<br>
-								<strong>'.$m_display_ID.'.</strong>
-							</td>
-							<td>
-								<input type="radio" name="editAQ" value="'.$m_question_id.'">
-								<small><i>('.$m_quiz_name.')</i></small><br>';
-				}else{
-					$m_q .= '	<strong>'.$m_display_ID.'.</strong>
-							</td>
-							<td>
-								<input type="radio" name="editAQ" value="'.$m_question_id.'">
-							';
+			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			if($isAll){
+				foreach($rows as $idx => $r){
+					$rows[$idx]['_all'] = true;
 				}
-						$m_q .=	'<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">'.$m_thisQuestion.'</div></strong></pre>
-							</td>
-						</tr>';
-
-				if($m_code != "" && $m_code_type != ""){
-					$m_q .='<tr>
-							<td>
-							</td>
-							<td>
-								<pre class="brush: '.$m_code_type.';">'.$m_code.'</pre>
-							</td>
-						</tr>
-						';
-				}
-
-			 //gathering answers of question here
-                $currentAnswers = isset($answersByQuestion[$m_question_id]) ? $answersByQuestion[$m_question_id] : [];
-
-				$m_answers .=  '<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								';
-
-					foreach ($currentAnswers as $m_row2){
-					//putting column values in variables
-						$m_answer = $m_row2['answer'];
-						$m_correct = $m_row2['correct'];
-
-						if($m_correct == 1)
-							$m_answers .= '<u><i>';
-						$m_answers .= '<div style="width: 730px; word-wrap: break-word;"><li>'.$m_answer.'</li></div>';
-						if($m_correct == 1)
-							$m_answers .= '</i></u>';
-					}
-
-				$m_answers .=  '		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								';
-
-			 // the complete div that is sent back to quiz.php
-				$m_output .= ''.$m_q.$m_answers;
-
-				$m_display_ID++;
 			}
 
-			$m_display_ID--;
-
-			$m_output .= '  <tr>
-							<td colspan="2" align="center">
-
-								<input type="hidden" name="total_ques" value="'.$m_display_ID.'">
-
-								<span id="m_btnSpan">
-									<a href="javascript:{}" onclick="editQ_submit()" class="myButton">Submit</a>
-								</span>
-							</td>
-						</tr>';
-
-			echo $m_output;
+			echo render_questions_table($rows, fetch_answers_by_question_ids($pdo, array_column($rows, 'question_id')), 'radio');
 			exit();
 	}
 ?>
@@ -468,112 +364,23 @@
             $get_quiz_id = $row['quiz_id'];
         }
 
-		$m_output='';
+		$isAll = ($deleteSQ == 'allthequestions');
 
-		if($deleteSQ=='allthequestions') {
+		if($isAll) {
 			$stmt = $pdo->query("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.quiz_id");
         } else {
             $stmt = $pdo->prepare("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.quiz_id WHERE questions.quiz_id = :quizID");
             $stmt->execute(['quizID' => $get_quiz_id]);
         }
 
-			$m_display_ID = 1;
-
-			while($m_row = $stmt->fetch()){
-				$m_answers='';
-			 //id var = id column and so on
-				$m_id = $m_row['id'];
-				$m_thisQuestion = $m_row['question'];
-				$m_type = $m_row['type'];
-				$m_question_id = $m_row['question_id'];
-				$m_code = $m_row['code'];
-				$m_code_type = $m_row['code_type'];
-				$m_quiz_id = $m_row['quiz_id'];
-
-				$m_quiz_name = $m_row['quiz_name'];
-
-
-				$m_q = '<tr>
-							<td width="40px" rowspan="1" align="center">';
-
-				if($deleteSQ=='allthequestions'){
-					$m_q .=	'<br>
-								<strong>'.$m_display_ID.'.</strong>
-							</td>
-							<td>
-								<input type="checkbox" name="qu'.$m_display_ID.'" value="'.$m_question_id.'">
-								<small><i>('.$m_quiz_name.')</i></small><br>';
-				}else{
-					$m_q .= '	<strong>'.$m_display_ID.'.</strong>
-							</td>
-							<td>
-								<input type="checkbox" name="qu'.$m_display_ID.'" value="'.$m_question_id.'">
-							';
+			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			if($isAll){
+				foreach($rows as $idx => $r){
+					$rows[$idx]['_all'] = true;
 				}
-						$m_q .=	'<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">'.$m_thisQuestion.'</div></strong></pre>
-							</td>
-						</tr>';
-
-				if($m_code != "" && $m_code_type != ""){
-					$m_q .='<tr>
-							<td>
-							</td>
-							<td>
-								<pre class="brush: '.$m_code_type.';">'.$m_code.'</pre>
-							</td>
-						</tr>
-						';
-				}
-
-			 //gathering answers of question here
-                $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id=:questionID");
-                $stmtAns->execute(['questionID' => $m_question_id]);
-				//running loop on all the answers
-
-				$m_answers .=  '<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								';
-
-					while($m_row2 = $stmtAns->fetch()){
-					//putting column values in variables
-						$m_answer = $m_row2['answer'];
-						$m_correct = $m_row2['correct'];
-
-						if($m_correct == 1)
-							$m_answers .= '<u><i>';
-						$m_answers .= '<div style="width: 730px; word-wrap: break-word;"><li>'.$m_answer.'</li></div>';
-						if($m_correct == 1)
-							$m_answers .= '</i></u>';
-					}
-
-				$m_answers .=  '		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								';
-
-			 // the complete div that is sent back to quiz.php
-				$m_output .= ''.$m_q.$m_answers;
-
-				$m_display_ID++;
 			}
 
-			$m_display_ID--;
-
-			$m_output .= '  <tr>
-							<td colspan="2" align="center">
-
-								<input type="hidden" name="total_ques" value="'.$m_display_ID.'">
-
-								<span id="m_btnSpan">
-									<a href="javascript:{}" onclick="quiz_submit()" class="myButton">Submit</a>
-								</span>
-							</td>
-						</tr>';
-
-			echo $m_output;
+			echo render_questions_table($rows, fetch_answers_by_question_ids($pdo, array_column($rows, 'question_id')), 'checkbox');
 			exit();
 	}
 ?>
@@ -834,49 +641,11 @@
         $row = $stmt->fetch();
 		$get_quiz_id = $row['quiz_id'];
 
-		$m_output=' <tr align="center">
-						<th>Rank</th>
-						<th>Roll No.</th>
-						<th>Marks</th>
-						<th>Percentage</th>
-						<th>Time Taken</th>
-						<th>TimeStamp</th>
-					</tr>
-				 ';
-
-        $stmt = $pdo->prepare("SELECT * FROM quiz_takers WHERE quiz_id = :quizID ORDER BY marks desc, duration asc LIMIT 20");
+        $stmt = $pdo->prepare("SELECT * FROM quiz_takers WHERE quiz_id = :quizID ORDER BY marks desc, duration asc");
         $stmt->execute(['quizID' => $get_quiz_id]);
 
-			$m_display_ID = 1;
-
-			while($m_row = $stmt->fetch()){
-				$m_answers='';
-			 //id var = id column and so on
-				$m_id = $m_row['id'];
-				$m_username = $m_row['username'];
-				$m_marks = $m_row['marks'];
-				$m_percentage = $m_row['percentage'];
-				$m_duration = $m_row['duration'];
-				$m_timestamp = $m_row['date_time'];
-
-
-				$m_row = '<tr align="center">
-							  <td>'.$m_display_ID.'</td>
-							  <td>'.$m_username.'</td>
-							  <td>'.$m_marks.'</td>
-							  <td>'.$m_percentage.'</td>
-							  <td>'.$m_duration.'</td>
-							  <td>'.$m_timestamp.'</td>
-						  </tr>
-						 ';
-
-			 // the complete div that is sent back to quiz.php
-				$m_output .= $m_row;
-
-				$m_display_ID++;
-			}
-			echo $m_output;
-			exit();
+		echo render_results_table($stmt->fetchAll(), 20);
+		exit();
 	}
 ?>
 
@@ -894,49 +663,11 @@
         $row = $stmt->fetch();
 		$get_quiz_id = $row['quiz_id'];
 
-		$m_output=' <tr align="center">
-						<th>Rank</th>
-						<th>Roll No.</th>
-						<th>Marks</th>
-						<th>Percentage</th>
-						<th>Time Taken</th>
-						<th>TimeStamp</th>
-					</tr>
-				 ';
-
         $stmt = $pdo->prepare("SELECT * FROM quiz_takers WHERE quiz_id = :quizID ORDER BY marks desc, duration asc");
         $stmt->execute(['quizID' => $get_quiz_id]);
 
-			$m_display_ID = 1;
-
-			while($m_row = $stmt->fetch()){
-				$m_answers='';
-			 //id var = id column and so on
-				$m_id = $m_row['id'];
-				$m_username = $m_row['username'];
-				$m_marks = $m_row['marks'];
-				$m_percentage = $m_row['percentage'];
-				$m_duration = $m_row['duration'];
-				$m_timestamp = $m_row['date_time'];
-
-
-				$m_row = '<tr align="center">
-							  <td>'.$m_display_ID.'</td>
-							  <td>'.$m_username.'</td>
-							  <td>'.$m_marks.'</td>
-							  <td>'.$m_percentage.'</td>
-							  <td>'.$m_duration.'</td>
-							  <td>'.$m_timestamp.'</td>
-						  </tr>
-						 ';
-
-			 // the complete div that is sent back to quiz.php
-				$m_output .= $m_row;
-
-				$m_display_ID++;
-			}
-			echo $m_output;
-			exit();
+		echo render_results_table($stmt->fetchAll(), null);
+		exit();
 	}
 ?>
 
@@ -951,118 +682,30 @@
 		$questionsQ = $_POST['questionsQuiz'];
 
         $get_quiz_id = '';
-        if($questionsQ != 'allthequestions') {
+		$isAll = ($questionsQ == 'allthequestions');
+
+        if(!$isAll) {
             $stmt = $pdo->prepare("SELECT id as quiz_id FROM quizes WHERE quiz_name = :quizName");
             $stmt->execute(['quizName' => $questionsQ]);
             $row = $stmt->fetch();
             $get_quiz_id = $row['quiz_id'];
         }
 
-		$m_output='';
-
-		if($questionsQ=='allthequestions') {
+		if($isAll) {
 			$stmt = $pdo->query("SELECT questions.*, quizes.quiz_name FROM questions JOIN quizes ON questions.quiz_id = quizes.quiz_id");
         } else {
             $stmt = $pdo->prepare("SELECT questions.*, quizes.quiz_name FROM questions JOIN quizes ON questions.quiz_id = quizes.quiz_id WHERE questions.quiz_id = :quizID");
             $stmt->execute(['quizID' => $get_quiz_id]);
         }
 
-            $all_questions = $stmt->fetchAll();
-
-            // Gather all question IDs
-            $question_ids = [];
-            foreach ($all_questions as $q) {
-                $question_ids[] = $q['question_id'];
-            }
-
-            // Fetch all answers in one go
-            $answers_map = [];
-            if (!empty($question_ids)) {
-                $placeholders = implode(',', array_fill(0, count($question_ids), '?'));
-                $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id IN ($placeholders)");
-                $stmtAns->execute($question_ids);
-                while ($row = $stmtAns->fetch()) {
-                    $answers_map[$row['question_id']][] = $row;
-                }
-            }
-
-			$m_display_ID = 1;
-
-			foreach($all_questions as $m_row){
-				$m_answers='';
-			 //id var = id column and so on
-				$m_id = $m_row['id'];
-				$m_thisQuestion = $m_row['question'];
-				$m_type = $m_row['type'];
-				$m_question_id = $m_row['question_id'];
-				$m_code = $m_row['code'];
-				$m_code_type = $m_row['code_type'];
-				$m_quiz_id = $m_row['quiz_id'];
-				$m_quiz_name = $m_row['quiz_name'];
-
-			 //putting the question in h2 tag
-				$m_q = '<tr>
-							<td width="40px" rowspan="1" align="center">';
-
-				if($questionsQ=='allthequestions'){
-					$m_q .=	'<br>
-								<strong>'.$m_display_ID.'.</strong>
-							</td>
-							<td>
-								<small><i>('.$m_quiz_name.')</i></small><br>';
-				}else{
-					$m_q .= '	<strong>'.$m_display_ID.'.</strong>
-							</td>
-							<td>';
+			$rows = $stmt->fetchAll();
+			if($isAll){
+				foreach($rows as $idx => $r){
+					$rows[$idx]['_all'] = true;
 				}
-						$m_q .=	'<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">'.$m_thisQuestion.'</div></strong></pre>
-							</td>
-						</tr>';
-
-
-				if($m_code != "" && $m_code_type != ""){
-					$m_q .='<tr>
-							<td></td>
-							<td>
-								<pre class="brush: '.$m_code_type.';">'.$m_code.'</pre>
-							</td>
-						</tr>
-						';
-				}
-
-			 //gathering answers of question here
-				$m_answers .=  '<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								';
-
-					if (isset($answers_map[$m_question_id])) {
-						foreach($answers_map[$m_question_id] as $m_row2){
-						//putting column values in variables
-							$m_answer = $m_row2['answer'];
-							$m_correct = $m_row2['correct'];
-
-							if($m_correct == 1)
-								$m_answers .= '<u><i>';
-							$m_answers .= '<div style="width: 730px; word-wrap: break-word;"><li>'.$m_answer.'</li></div>';
-							if($m_correct == 1)
-								$m_answers .= '</i></u>';
-						}
-					}
-
-				$m_answers .=  '		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								';
-
-			 // the complete div that is sent back to quiz.php
-				$m_output .= ''.$m_q.$m_answers;
-
-				$m_display_ID++;
 			}
-			echo $m_output;
+
+			echo render_questions_table($rows, fetch_answers_by_question_ids($pdo, array_column($rows, 'question_id')), 'none');
 			exit();
 	}
 ?>
