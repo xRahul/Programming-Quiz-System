@@ -686,7 +686,7 @@
 <?php
 //if clearResult is clicked, check--
 	if(isset($_POST['clearResult']) && $_POST['clearResult'] != ""){
-		$clearR = preg_replace('/^[a-z]/', "", $_POST['clearResult']);
+		$clearR = preg_replace('/[^0-9]/', "", $_POST['clearResult']);
 
 	//deleting
         $stmt = $pdo->prepare("DELETE FROM quiz_takers WHERE quiz_id=:quizID");
@@ -717,7 +717,7 @@
 <?php
 //if reset is clicked, check--
 	if(isset($_POST['reset']) && $_POST['reset'] != ""){
-		$reset = preg_replace('/^[a-z]/', "", $_POST['reset']);
+		$reset = preg_replace('/[^0-9]/', "", $_POST['reset']);
 
 	//resetting the tables
 		$pdo->exec("TRUNCATE TABLE questions");

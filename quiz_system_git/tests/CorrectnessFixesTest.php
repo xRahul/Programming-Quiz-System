@@ -122,6 +122,53 @@ final class CorrectnessFixesTest extends TestCase
         }
     }
 
+    public function testClearResultStripsAllNonDigitsBeforeResolvingQuizId(): void
+    {
+        self::login();
+        $token = self::sessionToken();
+        $fixtureQuizId = 987002;
+
+        $stmtIns = self::$pdo->prepare(
+            "INSERT INTO quiz_takers (username, percentage, date_time, quiz_id, duration, marks)
+             VALUES (:username, '0', now(), :quizId, 0, 0)"
+        );
+        $usernames = ['p2clear_a', 'p2clear_b'];
+        foreach ($usernames as $username) {
+            $stmtIns->execute(['username' => $username, 'quizId' => $fixtureQuizId]);
+        }
+        $countFixture = static function () use ($fixtureQuizId): int {
+            $stmt = self::$pdo->prepare('SELECT COUNT(*) FROM quiz_takers WHERE quiz_id = :quizId');
+            $stmt->execute(['quizId' => $fixtureQuizId]);
+
+            return (int) $stmt->fetchColumn();
+        };
+        self::assertSame(2, $countFixture(), 'fixture rows must exist before the handler runs');
+
+        try {
+            // Two leading letters + trailing digits: a single-char strip leaves
+            // 'x987002', which MySQL casts to 0 and misses the rows; full
+            // non-digit stripping resolves the real id.
+            [$status, , $body] = self::request('POST', 'admin.php', [
+                'clearResult' => 'qx' . $fixtureQuizId,
+                'csrf_token' => $token,
+            ]);
+
+            $this->assertSame(200, $status);
+            $this->assertStringContainsString('Result has been cleared!', $body);
+            $this->assertSame(0, $countFixture(), 'all fixture rows for the resolved quiz id must be deleted');
+        } finally {
+            self::$pdo->prepare('DELETE FROM quiz_takers WHERE quiz_id = :quizId')
+                ->execute(['quizId' => $fixtureQuizId]);
+        }
+    }
+
+    public function testNoSingleLeadingLetterRegexRemainsInAdminHandlers(): void
+    {
+        $src = file_get_contents(dirname(__DIR__) . '/admin.php');
+        $this->assertNotFalse($src);
+        $this->assertStringNotContainsString("/^[a-z]/", (string) $src, 'reset/clearResult handlers must strip all non-digits');
+    }
+
     private static function login(): void
     {
         @unlink(self::$authJar);
