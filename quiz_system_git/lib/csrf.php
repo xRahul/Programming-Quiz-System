@@ -2,26 +2,18 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/session.php';
+
 /**
  * CSRF token helpers: a per-session token embedded in every admin form and
  * XHR body, verified once on each state-changing (POST) request.
- * The token is minted lazily on first render and never rotated within a
- * session; login re-authentication naturally refreshes it.
+ * The token is minted lazily on first render and rotated on login
+ * re-authentication by login_check.php.
  */
 
 function csrf_token(): string
 {
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-        session_set_cookie_params([
-            'lifetime' => 0,
-            'path' => '/',
-            'domain' => '',
-            'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
-            'httponly' => true,
-            'samesite' => 'Lax',
-        ]);
-        session_start();
-    }
+    secure_session_start();
 
     if (!isset($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));

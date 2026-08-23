@@ -1,8 +1,9 @@
 <?php
 	
     require_once('scripts/connect_db.php');
+    require_once __DIR__ . '/lib/session.php';
 
-	session_start();
+	secure_session_start();
 
     if (!isset($_SESSION['login_username'])) {
         $user_msg = 'Please Login First!';

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/session.php';
+
 /**
  * Hardened admin gate: ensures an active session, a logged-in username,
  * and that the username still exists in the admins table.
@@ -10,17 +12,7 @@ declare(strict_types=1);
  */
 function require_admin(): string
 {
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-        session_set_cookie_params([
-            'lifetime' => 0,
-            'path' => '/',
-            'domain' => '',
-            'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
-            'httponly' => true,
-            'samesite' => 'Lax',
-        ]);
-        session_start();
-    }
+    secure_session_start();
 
     global $pdo;
     if (!$pdo instanceof PDO) {

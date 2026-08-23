@@ -9,7 +9,6 @@
     
     if(isset($_POST['login']) && $_POST['login'] != "" &&
        isset($_POST['password']) && $_POST['password'] != "" ){
-        session_start();
 
         $user = $_POST['login'];
         $pass = $_POST['password'];

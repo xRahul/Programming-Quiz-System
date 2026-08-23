@@ -1,10 +1,15 @@
 <?php
 
-	session_start();
+	require_once __DIR__ . '/lib/session.php';
 
-	if(session_destroy()) {
-		$user_msg = 'You have successfully Logged out!';
-		header('location: login.php?user_msg='.$user_msg.'');
-	}
+	secure_session_start();
+
+	$user_msg = 'You have successfully Logged out!';
+
+	unset($_SESSION);
+	session_destroy();
+	setcookie(session_name(), '', time() - 42000, '/');
+
+	header('location: login.php?user_msg='.$user_msg.'');
 
 ?>
