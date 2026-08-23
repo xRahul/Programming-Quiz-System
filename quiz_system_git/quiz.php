@@ -260,74 +260,8 @@
 		<script type="text/javascript" src="sh/scripts/shBrushSql.js"></script>
 		<script type="text/javascript" src="sh/scripts/shBrushVb.js"></script>
 		<script type="text/javascript" src="sh/scripts/shBrushXml.js"></script>
-		<script type="text/javascript">
-		    SyntaxHighlighter.all()
-		</script>
 
-        <script type="text/javascript">
-	     //function that submits the quiz
-			function quiz_submit(){
-				window.onbeforeunload = null;
-				stop_timer();
-				document.getElementById('quiz_form').submit();
-	        }
 
-	     //function that stops the countdown so it does not keep counting (negative) after submit
-			function stop_timer(){
-				if(time_again !== null){
-					clearInterval(time_again);
-					time_again = null;
-				}
-			}
-
-			var time_again = null;
-			var secs_left = 0;
-
-	     //function that keeps the counter going
-			function timer(secs){
-				secs_left = secs;
-				render_time();
-			 //to animate the timer otherwise it'd just stay at the number entered
-			 //calling render_time() every 1 sec through an interval (no string eval)
-				time_again = setInterval(render_time, 1000);
-			}
-
-	     //renders one tick of the countdown
-			function render_time(){
-				var ele = document.getElementById("countdown");
-				ele.innerHTML = "Your Time Starts Now";
-				var mins_rem = parseInt(secs_left/60);
-				var secs_rem = secs_left%60;
-
-				if(mins_rem<10 && secs_rem>=10)
-					ele.innerHTML = "Time Remaining: "+"0"+mins_rem+":"+secs_rem;
-				else if(secs_rem<10 && mins_rem>=10)
-					ele.innerHTML = "Time Remaining: "+mins_rem+":0"+secs_rem;
-				else if(secs_rem<10 && mins_rem<10)
-					ele.innerHTML = "Time Remaining: "+"0"+mins_rem+":0"+secs_rem;
-				else
-					ele.innerHTML = "Time Remaining: "+mins_rem+":"+secs_rem;
-
-				if(mins_rem=="00" && secs_rem < 1){
-					stop_timer();
-					quiz_submit();
-					return;
-				}
-				secs_left--;
-			}
-
-	 //wwarning confirmation that appears on closing/refreshing the quiz window/tab
-			function closeEditorWarning(){
-    				return "really wanna quit!? You can't take the test again you know!";
-			}
-			window.onbeforeunload = closeEditorWarning;
-        </script>
-
-        <script language="javascript">
-			document.addEventListener("contextmenu", function(e){
-			    e.preventDefault();
-			}, false);
-		</script>
 		
 	</head>
 
@@ -338,9 +272,8 @@
         <br><strong><?php echo $quzz_name; ?></strong>
 
         <div id="countdown">
-        	<script type="text/javascript">
-        		timer(<?php echo $total_time; ?>);
-        	</script>
+        <script id="quiz-boot" type="application/json"><?php echo json_encode(array('total_time' => (int) $total_time), JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
+        <script src="assets/js/quiz.js"></script>
         </div>
 
 

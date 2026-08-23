@@ -40,23 +40,8 @@
         <link rel="stylesheet" type="text/css" href="css/master.css">
         <script type="text/javascript" src="scripts/overlay.js"></script>
 
-        <script type="text/javascript">
-            function submit(){
-                var x=document.forms["onlyForm"]["rollno"].value;
-                if (x==null || x==""){
-                    document.getElementById("enter_rollno").innerHTML = "Please Enter Your Roll No.";
-                    return false;
-                }
-                document.getElementById('myForm').submit();
-                return false;
-            }
-        </script>
+        <script src="assets/js/index.js"></script>
 
-        <script language="javascript">
-            document.addEventListener("contextmenu", function(e){
-                e.preventDefault();
-            }, false);
-        </script>
 
     </head>
 

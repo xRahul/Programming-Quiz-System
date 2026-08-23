@@ -46,11 +46,7 @@
 
           <link rel="stylesheet" href="css/login.css">
 
-        <script language="javascript">
-			document.addEventListener("contextmenu", function(e){
-			    e.preventDefault();
-			}, false);
-		</script>
+        <script src="assets/js/login.js"></script>
 
 		<style type="text/css">
 

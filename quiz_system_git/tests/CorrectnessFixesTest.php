@@ -404,7 +404,9 @@ final class CorrectnessFixesTest extends TestCase
 
     public function testQuizTimerUsesIntervalAndStopsOnSubmit(): void
     {
-        $src = (string) file_get_contents(dirname(__DIR__) . '/quiz.php');
+        // T4.5 follow-up: the countdown lives in assets/js/quiz.js since the
+        // inline scripts were externalized for a strict script-src CSP.
+        $src = (string) file_get_contents(dirname(__DIR__) . '/assets/js/quiz.js');
 
         $this->assertStringNotContainsString('setTimeout(', $src, 'timer must not use the string-eval setTimeout form');
         $this->assertStringContainsString('setInterval(render_time, 1000)', $src, 'countdown must tick via a function-reference interval');
@@ -418,13 +420,16 @@ final class CorrectnessFixesTest extends TestCase
 
     public function testIndexSubmitValidatorReturnsFalseInsteadOfExit(): void
     {
-        $src = (string) file_get_contents(dirname(__DIR__) . '/index.php');
+        // T4.5 follow-up: submit() lives in assets/js/index.js since the
+        // inline scripts were externalized for a strict script-src CSP.
+        $src = (string) file_get_contents(dirname(__DIR__) . '/assets/js/index.js');
+        $page = (string) file_get_contents(dirname(__DIR__) . '/index.php');
         $this->assertSame(
             1,
             preg_match('/function submit\(\)\{(?:(?!function ).)*?return false;.*?\}/s', $src),
             'submit() must bail with return false on invalid rollno'
         );
-        $this->assertStringNotContainsString('exit();', $src, 'browser-side exit() is a no-op and must be gone');
+        $this->assertStringNotContainsString('exit();', $src . $page, 'browser-side exit() is a no-op and must be gone');
     }
 
     private function insertFixtureQuiz(): int

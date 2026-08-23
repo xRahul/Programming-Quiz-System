@@ -128,11 +128,7 @@
         <script type="text/javascript" src="scripts/overlay.js"></script>
 <?php require __DIR__ . '/lib/views/favicon.php'; ?>
 
-        <script language="javascript">
-            document.addEventListener("contextmenu", function(e){
-                e.preventDefault();
-            }, false);
-        </script>
+        <script src="assets/js/result.js"></script>
     </head>
 
     <body  style="font-family: Arial;">
