@@ -68,7 +68,8 @@
                 <table align="center">
                     <tr>
                         <td align="center">
-                            <input type="text" name="rollno" placeholder="Enter Your Roll No." autofocus/>
+                            <label for="rollno">Enter Your Roll No.</label><br />
+                            <input type="text" name="rollno" id="rollno" placeholder="Enter Your Roll No." autofocus/>
                         </td>
                     </tr>
                     <tr>

@@ -237,3 +237,8 @@
                 position:relative;
                 top:1px;
             }
+/* T5.7 keyboard focus visibility */
+:focus-visible {
+	outline: 2px solid #1e90ff;
+	outline-offset: 2px;
+}

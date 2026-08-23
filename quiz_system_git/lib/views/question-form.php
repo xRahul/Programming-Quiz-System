@@ -78,14 +78,14 @@ if ($is_tf) {
 		<form action="admin.php" name="<?php echo $qf_form_name; ?>" method="POST">
 			<?php echo csrf_field(); ?>
 
-			<strong>Select the quiz in which to enter the Question</strong>
+			<label for="<?php echo $qf_quiz_select_id; ?>" style="font-weight: bold;">Select the quiz in which to enter the Question</label>
 			<select class="quizIDselect" name="quizID" id="<?php echo $qf_quiz_select_id; ?>">
 				<?php echo $quizSelect; ?>
 			</select>
 			<br />
 			<br />
 
-			<strong>Please type your new question here:</strong>
+			<label for="<?php echo $qf_desc_id; ?>" style="font-weight: bold;">Please type your new question here:</label>
 			<br />
 
 			<textarea class="txt_area" id="<?php echo $qf_desc_id; ?>" name="desc"></textarea>
@@ -93,10 +93,10 @@ if ($is_tf) {
 			<br />
 
 
-			<strong>If there's a programming code, enter here</strong>
+			<label for="<?php echo $qf_code_id; ?>" style="font-weight: bold;">If there's a programming code, enter here</label>
 			<br />
 
-			<strong style="font-family: Times;">Select Language of the code: </strong>
+			<label for="<?php echo $qf_lang_id; ?>" style="font-family: Times;">Select Language of the code: </label>
 			<span class='css-select-moz'>
 				<select class="lang_selector" name="prog-lang" onchange="lang_chosen(this);" id="<?php echo $qf_lang_id; ?>">
 					<option value=""> ------ </option>
@@ -116,12 +116,14 @@ if ($is_tf) {
 			<strong>Select whether true or false is the Correct Answer</strong>
 			<br />
 
+		<label for="answer1"><strong>Answer 1:</strong></label>
 		<input type="text" class="tf_txt_box" id="answer1" name="answer1" value="True" readonly>&nbsp;
 		<label style="cursor:pointer; color:#555;">
 			<input type="radio" id="tfans1" name="iscorrect" value="answer1">Correct Answer?
 		</label>
 			<br />
 				<br />
+		<label for="answer2"><strong>Answer 2:</strong></label>
 		<input type="text" class="tf_txt_box" id="answer2" name="answer2" value="False" readonly>&nbsp;
 		<label style="cursor:pointer; color:#555;">
 			<input type="radio" id="tfans2" name="iscorrect" value="answer2">Correct Answer?
@@ -144,7 +146,7 @@ if ($is_tf) {
 			<br />
 
 
-			<strong>First Option</strong>
+			<label for="mcanswer1" style="font-weight: bold;">First Option</label>
 			<br />
 			<input type="text" class="mc_txt_box" id="mcanswer1" name="answer1">&nbsp;
 			<label style="cursor:pointer; color:#555;">
@@ -152,7 +154,7 @@ if ($is_tf) {
 			</label>
 			<br />
 			<br />
-			<strong>Second Option</strong>
+			<label for="mcanswer2" style="font-weight: bold;">Second Option</label>
 			<br />
 			<input type="text" class="mc_txt_box" id="mcanswer2" name="answer2">&nbsp;
 			<label style="cursor:pointer; color:#555;">
@@ -160,7 +162,7 @@ if ($is_tf) {
 			</label>
 			<br />
 			<br />
-			<strong>Third Option</strong>
+			<label for="mcanswer3" style="font-weight: bold;">Third Option</label>
 			<br />
 			<input type="text" class="mc_txt_box" id="mcanswer3" name="answer3">&nbsp;
 			<label style="cursor:pointer; color:#555;">
@@ -168,7 +170,7 @@ if ($is_tf) {
 			</label>
 			<br />
 			<br />
-			<strong>Fourth Option</strong>
+			<label for="mcanswer4" style="font-weight: bold;">Fourth Option</label>
 			<br />
 			<input type="text" class="mc_txt_box" id="mcanswer4" name="answer4">&nbsp;
 			<label style="cursor:pointer; color:#555;">
