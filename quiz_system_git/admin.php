@@ -61,29 +61,19 @@
 
 	 //if its a true/false question, do this-
 		if($type == 'tf'){
-		 //if any field is null or empty, say sorry
-			if((!$question) || (!$answer1) || (!$answer2) || (!$isCorrect)){
-				if($answer1=='0' || $answer2=='0')
-				{
-					//do nothing
-				}else{
-					echo "Sorry, All fields must be filled in to add a new question to the quiz. Please press back in your browser and try again.";
-					exit();
-				}
+		 //if any field is null or empty, say sorry ('0' is legitimate content)
+			if($question=='' || $answer1=='' || $answer2=='' || $isCorrect==''){
+				echo "Sorry, All fields must be filled in to add a new question to the quiz. Please press back in your browser and try again.";
+				exit();
 			}
 		}
 
 	 //if its a multiple choice question, do this-
 		if($type == 'mc'){
-		 //if any field is null or empty, say sorry
-			if((!$question) || (!$answer1) || (!$answer2) || (!$answer3) || (!$answer4) || (!$isCorrect)){
-				if($question=='0' || $answer1=='0' || $answer2=='0' || $answer3=='0' || $answer4=='0')
-				{
-					//do nothing
-				}else{
-					echo "Sorry, All fields must be filled in to add a new question to the quiz. Please press back in your browser and try again.";
-					exit();
-				}
+		 //if any field is null or empty, say sorry ('0' is legitimate content)
+			if($question=='' || $answer1=='' || $answer2=='' || $answer3=='' || $answer4=='' || $isCorrect==''){
+				echo "Sorry, All fields must be filled in to add a new question to the quiz. Please press back in your browser and try again.";
+				exit();
 			}
 		}
 

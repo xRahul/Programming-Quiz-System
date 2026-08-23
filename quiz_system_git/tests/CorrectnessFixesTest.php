@@ -169,6 +169,161 @@ final class CorrectnessFixesTest extends TestCase
         $this->assertStringNotContainsString("/^[a-z]/", (string) $src, 'reset/clearResult handlers must strip all non-digits');
     }
 
+    public function testCreateQuestionRejectsEmptyDescButAcceptsLiteralZero(): void
+    {
+        self::login();
+        $token = self::sessionToken();
+        $fixtureQuizId = $this->insertFixtureQuiz();
+
+        try {
+            // (a) empty desc with a '0' answer must be rejected (old guard was bypassed by the '0')
+            [$status, , $body] = self::request('POST', 'admin.php', [
+                'desc' => '',
+                'code_desc' => '',
+                'prog-lang' => '',
+                'type' => 'tf',
+                'quizID' => (string) $fixtureQuizId,
+                'answer1' => 'True',
+                'answer2' => '0',
+                'iscorrect' => 'answer1',
+                'csrf_token' => $token,
+            ]);
+            $this->assertSame(200, $status);
+            $this->assertStringContainsString('All fields must be filled in', $body);
+            $this->assertSame(0, $this->fixtureQuestionCount($fixtureQuizId), 'empty-desc submission must not create rows');
+
+            // (b) literal '0' as question and as an answer option is legitimate content
+            [$status, $redirect] = self::request('POST', 'admin.php', [
+                'desc' => '0',
+                'code_desc' => '',
+                'prog-lang' => '',
+                'type' => 'mc',
+                'quizID' => (string) $fixtureQuizId,
+                'answer1' => 'p2zero-opt',
+                'answer2' => '0',
+                'answer3' => 'p2three',
+                'answer4' => 'p2four',
+                'iscorrect' => 'answer1',
+                'csrf_token' => $token,
+            ]);
+            $this->assertSame(302, $status, "literal-'0' content must pass validation");
+            $this->assertStringContainsString('admin.php?msg=', (string) $redirect);
+
+            $stmt = self::$pdo->prepare(
+                'SELECT COUNT(*) FROM questions WHERE quiz_id = :quizId AND question = :question'
+            );
+            $stmt->execute(['quizId' => $fixtureQuizId, 'question' => '0']);
+            $this->assertSame(1, (int) $stmt->fetchColumn(), "question row with literal '0' must exist");
+
+            $stmt = self::$pdo->prepare(
+                'SELECT COUNT(*) FROM answers a JOIN questions q ON a.question_id = q.question_id
+                 WHERE q.quiz_id = :quizId AND a.answer = :answer'
+            );
+            $stmt->execute(['quizId' => $fixtureQuizId, 'answer' => '0']);
+            $this->assertSame(1, (int) $stmt->fetchColumn(), "answer row with literal '0' must exist");
+        } finally {
+            $this->deleteFixtureQuiz($fixtureQuizId);
+        }
+    }
+
+    public function testEditQuestionRejectsEmptyDescButAcceptsLiteralZero(): void
+    {
+        self::login();
+        $token = self::sessionToken();
+        $fixtureQuizId = $this->insertFixtureQuiz();
+        $fixtureQid = 987005;
+
+        $stmtQ = self::$pdo->prepare(
+            "INSERT INTO questions (quiz_id, question_id, question, code, code_type, type)
+             VALUES (:quizId, :qid, 'P2 fixture original?', '', '', 'mc')"
+        );
+        $stmtQ->execute(['quizId' => $fixtureQuizId, 'qid' => $fixtureQid]);
+        $stmtA = self::$pdo->prepare(
+            "INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES (:quizId, :qid, 'p2old-answer', '1')"
+        );
+        $stmtA->execute(['quizId' => $fixtureQuizId, 'qid' => $fixtureQid]);
+
+        $baseParams = [
+            'code_desc' => '',
+            'prog-lang' => '',
+            'type' => 'mc',
+            'quizID' => (string) $fixtureQuizId,
+            'questionID' => (string) $fixtureQid,
+            'answer1' => 'p2zero-opt',
+            'answer2' => '0',
+            'answer3' => 'p2three',
+            'answer4' => 'p2four',
+            'iscorrect' => 'answer1',
+            'csrf_token' => $token,
+        ];
+
+        try {
+            // (c1) empty desc must be rejected and leave the stored row untouched
+            [$status, , $body] = self::request('POST', 'editaquest.php', ['desc' => ''] + $baseParams);
+            $this->assertSame(200, $status);
+            $this->assertStringContainsString('All fields must be filled in', $body);
+
+            $stmt = self::$pdo->prepare('SELECT question FROM questions WHERE question_id = :qid');
+            $stmt->execute(['qid' => $fixtureQid]);
+            $this->assertSame('P2 fixture original?', (string) $stmt->fetchColumn(), 'rejected update must not mutate the row');
+            $this->assertSame(1, $this->fixtureAnswerCount($fixtureQid), 'rejected update must not touch answers');
+
+            // (c2) literal '0' as question text is legitimate content and must save
+            [$status, $redirect] = self::request('POST', 'editaquest.php', ['desc' => '0'] + $baseParams);
+            $this->assertSame(302, $status, "literal-'0' content must pass validation");
+            $this->assertStringContainsString('admin.php?msg=', (string) $redirect);
+
+            $stmt = self::$pdo->prepare('SELECT question FROM questions WHERE question_id = :qid');
+            $stmt->execute(['qid' => $fixtureQid]);
+            $this->assertSame('0', (string) $stmt->fetchColumn(), "question text '0' must be stored");
+            $this->assertSame(4, $this->fixtureAnswerCount($fixtureQid), 'answers must be rewritten on accepted update');
+
+            $stmt = self::$pdo->prepare(
+                "SELECT COUNT(*) FROM answers WHERE question_id = :qid AND answer = '0'"
+            );
+            $stmt->execute(['qid' => $fixtureQid]);
+            $this->assertSame(1, (int) $stmt->fetchColumn(), "answer row with literal '0' must exist");
+        } finally {
+            self::$pdo->prepare('DELETE FROM answers WHERE question_id = :qid')->execute(['qid' => $fixtureQid]);
+            self::$pdo->prepare('DELETE FROM questions WHERE question_id = :qid')->execute(['qid' => $fixtureQid]);
+            $this->deleteFixtureQuiz($fixtureQuizId);
+        }
+    }
+
+    private function insertFixtureQuiz(): int
+    {
+        $fixtureQuizId = 987004;
+        self::$pdo->prepare(
+            "INSERT INTO quizes (id, quiz_id, quiz_name, total_questions, display_questions, time_allotted, set_default)
+             VALUES (:id, :id, 'P2 fixture quiz', 0, 5, 10, 0)"
+        )->execute(['id' => $fixtureQuizId]);
+
+        return $fixtureQuizId;
+    }
+
+    private function deleteFixtureQuiz(int $fixtureQuizId): void
+    {
+        self::$pdo->prepare('DELETE FROM answers WHERE quiz_id = :quizId')->execute(['quizId' => $fixtureQuizId]);
+        self::$pdo->prepare('DELETE FROM questions WHERE quiz_id = :quizId')->execute(['quizId' => $fixtureQuizId]);
+        self::$pdo->prepare('DELETE FROM quizes WHERE id = :quizId')->execute(['quizId' => $fixtureQuizId]);
+    }
+
+    private function fixtureQuestionCount(int $quizId): int
+    {
+        $stmt = self::$pdo->prepare('SELECT COUNT(*) FROM questions WHERE quiz_id = :quizId');
+        $stmt->execute(['quizId' => $quizId]);
+
+        return (int) $stmt->fetchColumn();
+    }
+
+    private function fixtureAnswerCount(int $questionId): int
+    {
+        $stmt = self::$pdo->prepare('SELECT COUNT(*) FROM answers WHERE question_id = :qid');
+        $stmt->execute(['qid' => $questionId]);
+
+        return (int) $stmt->fetchColumn();
+    }
+
     private static function login(): void
     {
         @unlink(self::$authJar);
