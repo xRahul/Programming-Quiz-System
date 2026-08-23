@@ -13,6 +13,7 @@
     send_security_headers();
 
     require_once __DIR__ . '/lib/render.php';
+    require_once __DIR__ . '/lib/audit.php';
 	use function App\fetch_answers_by_question_ids;
 	use function App\render_questions_table;
 	use function App\render_results_table;
@@ -182,6 +183,8 @@
             $default_pass_hash = password_hash('12345', PASSWORD_DEFAULT);
             $stmt = $pdo->prepare("INSERT INTO admins (username, password) VALUES ('admin', :password)");
             $stmt->execute(['password' => $default_pass_hash]);
+
+            audit_log('reset_tables', 'all tables truncated; default admin restored');
 		}
 
 		echo "Alright then, your database is now reset! Just re-login with new ID.";
@@ -368,6 +371,7 @@
 			echo "Sorry, there was a problem deleting the /".htmlspecialchars($deleteA)."/ admin. Please try again later.";
 			exit();
 		}else{
+			audit_log('delete_admin', $deleteA);
 			echo "Alright! The admin /".htmlspecialchars($deleteA)."/ has now been deleted. You just have to logout now!";
 			exit();
 		}
@@ -414,6 +418,8 @@
         $stmt = $pdo->prepare("DELETE FROM quiz_takers WHERE quiz_id=:quizID");
         $stmt->execute(['quizID' => $clearR]);
 
+        audit_log('clear_result', 'quiz_id=' . $clearR);
+
 		echo "Result has been cleared!";
 		exit();
 	}
@@ -435,6 +441,8 @@
 
 	 ///////Updating value of total questions in quizes
 		$pdo->exec("UPDATE quizes SET total_questions=0");
+
+        audit_log('reset_questions', 'questions and answers truncated; quiz counters zeroed');
 
 		echo "Thanks! The all quizes have now been reset back to 0 questions.";
 		exit();
@@ -480,8 +488,10 @@
 	 //verifying the delete via the DML row count itself
 		if((int) $stmtDel->rowCount() < 1)
 			echo "Sorry, there was a problem deleting the /".htmlspecialchars($deleteQ)."/ quiz. Please try again later.";
-		else
+		else{
+			audit_log('delete_quiz', $deleteQ);
 			echo "Thanks! The quiz /".htmlspecialchars($deleteQ)."/ has now been deleted.";
+		}
 
 		exit();
 	}
@@ -609,6 +619,42 @@
         $stmt->execute(['quizID' => $get_quiz_id]);
 
 		echo render_results_table($stmt->fetchAll(), null);
+		exit();
+	}
+?>
+
+
+
+
+<?php
+//T5.3 audit viewer: recent 50 rows for the collapsible admin panel
+
+	if(isset($_POST['auditRecent']) && $_POST['auditRecent'] != ""){
+		$stmt = $pdo->query("SELECT created_at, actor, action, detail FROM audit_log ORDER BY id DESC LIMIT 50");
+
+		echo ' <tr align="center">
+					<th>Time</th>
+					<th>Actor</th>
+					<th>Action</th>
+					<th>Detail</th>
+				</tr>
+			 ';
+
+		$any = false;
+		while($row = $stmt->fetch()){
+			$any = true;
+			echo '<tr align="center">
+					  <td>' . htmlspecialchars((string) $row['created_at'], ENT_QUOTES) . '</td>
+					  <td>' . htmlspecialchars((string) $row['actor'], ENT_QUOTES) . '</td>
+					  <td>' . htmlspecialchars((string) $row['action'], ENT_QUOTES) . '</td>
+					  <td>' . htmlspecialchars((string) $row['detail'], ENT_QUOTES) . '</td>
+				  </tr>
+				 ';
+		}
+
+		if(!$any){
+			echo '<tr><td colspan="4">No activity recorded yet.</td></tr>';
+		}
 		exit();
 	}
 ?>
@@ -837,6 +883,14 @@
 		    <br /><br />
 
 		    <span id="resetBtnMsg"></span>
+
+		    <div id="audit_panel">
+				<a href="javascript:{}" onclick="toggle_audit_panel();" class="myButton">Recent Activity</a>
+				<div id="audit_wrap" style="display:none;">
+					<table width="780px" align="center" id="audit_table">
+					</table>
+				</div>
+			</div>
 		</div>
 
 

@@ -322,6 +322,29 @@ function quiz_submit(){
 	            document.getElementById('deleteedit').submit();
 	        }
 
+//audit panel (T5.3): collapsible recent-activity viewer
+			var audit_loaded = false;
+			function load_audit(){
+				var x = new XMLHttpRequest();
+				x.open("POST", "admin.php", true);
+				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				x.onreadystatechange = function() {
+					if(x.readyState == 4 && x.status == 200) {
+						document.getElementById("audit_table").innerHTML = x.responseText;
+					}
+				};
+				x.send("auditRecent=1" + csrfQS());
+			}
+			function toggle_audit_panel(){
+				var wrap = document.getElementById("audit_wrap");
+				var show = wrap.style.display === 'none';
+				wrap.style.display = show ? 'block' : 'none';
+				if(show && !audit_loaded){
+					load_audit();
+					audit_loaded = true;
+				}
+			}
+
 CodeMirror.modeURL = "codemirror/mode/%N/%N.js";
 
 	        var codeMirrorConfig = {

@@ -7,6 +7,7 @@
 	csrf_verify();
 
 	require_once("scripts/connect_db.php");
+	require_once __DIR__ . '/lib/audit.php';
 
 	if(isset($_POST['total_ques']) && $_POST['total_ques'] != ""){
 		$total_questions = $_POST["total_ques"];
@@ -73,6 +74,8 @@
 			header('location: admin.php?msg='.urlencode($user_msg));
 			exit();
 		}
+
+        audit_log('delete_questions', 'count=' . count($quizMap) . ' ids=' . implode(',', $requestedIDs));
 
 	 //preserve legacy message semantics: list the indexes whose question existed
 		foreach($requestedIDs as $idx => $phpId){
