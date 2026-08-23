@@ -217,18 +217,27 @@ final class MigrationTest extends TestCase
             );
 
             // -- 005a safe defaults on every NOT NULL column the fatal INSERTs hit
-            $this->assertSame(6, $this->scalar(
+            $this->assertSame(4, $this->scalar(
                 "SELECT COUNT(*) FROM information_schema.COLUMNS
                  WHERE TABLE_SCHEMA = '$db'
                    AND (
-                       (TABLE_NAME = 'questions' AND COLUMN_NAME = 'question_id')
-                       OR (TABLE_NAME = 'quizes' AND COLUMN_NAME IN ('quiz_id', 'total_questions', 'set_default'))
+                       (TABLE_NAME = 'quizes' AND COLUMN_NAME IN ('total_questions', 'set_default'))
                        OR (TABLE_NAME = 'quiz_takers' AND COLUMN_NAME IN ('marks', 'duration'))
                    )
                    AND COLUMN_DEFAULT = '0'",
                 $db
-            ), 'questions.question_id, quizes.quiz_id/total_questions/set_default, '
-                . 'quiz_takers.marks/duration must default to 0');
+            ), 'quizes.total_questions/set_default, quiz_takers.marks/duration must default to 0');
+
+            // -- 006 drop denorm: the mirrored id copies must be gone ---------
+            $this->assertSame(0, $this->scalar(
+                "SELECT COUNT(*) FROM information_schema.COLUMNS
+                 WHERE TABLE_SCHEMA = '$db'
+                   AND (
+                       (TABLE_NAME = 'questions' AND COLUMN_NAME = 'question_id')
+                       OR (TABLE_NAME = 'quizes' AND COLUMN_NAME = 'quiz_id')
+                   )",
+                $db
+            ), 'denormalized quizes.quiz_id / questions.question_id must not survive migration');
 
             // -- entity decode: live decoded, backup kept ----------------------
             $this->assertSame(1, $this->scalar(
@@ -266,7 +275,7 @@ final class MigrationTest extends TestCase
 
             // -- idempotency: second run applies nothing -----------------------
             $before = $this->scalar('SELECT COUNT(*) FROM schema_migrations', $db);
-            $this->assertSame(7, $before, 'seven migrations must be recorded after the first run');
+            $this->assertSame(8, $before, 'eight migrations must be recorded after the first run');
             [$code, $out] = self::runMigrate($db);
             $this->assertSame(0, $code, "second migrate.sh run failed:\n$out");
             $this->assertStringContainsString('applied=0', $out, 'second run must apply nothing');
@@ -333,8 +342,6 @@ final class MigrationTest extends TestCase
         // The migrated main database must carry the 005a defaults.
         $defaults = $this->mainColumnDefaults();
         foreach ([
-            'questions.question_id',
-            'quizes.quiz_id',
             'quizes.total_questions',
             'quizes.set_default',
             'quiz_takers.marks',
@@ -432,8 +439,7 @@ final class MigrationTest extends TestCase
              FROM information_schema.COLUMNS
              WHERE TABLE_SCHEMA = DATABASE()
                AND (
-                   (TABLE_NAME = 'questions' AND COLUMN_NAME = 'question_id')
-                   OR (TABLE_NAME = 'quizes' AND COLUMN_NAME IN ('quiz_id', 'total_questions', 'set_default'))
+                   (TABLE_NAME = 'quizes' AND COLUMN_NAME IN ('total_questions', 'set_default'))
                    OR (TABLE_NAME = 'quiz_takers' AND COLUMN_NAME IN ('marks', 'duration'))
                )"
         );
