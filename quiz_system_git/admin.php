@@ -556,6 +556,12 @@
 											<a href="javascript:clear_result(\''.$m_quizID.'\')">
 												<li>Clear the Result</li>
 											</a>
+											<a href="export_results.php?quiz='.(int) $m_quizID.'&amp;scope=top">
+												<li>Export Top 20 (CSV)</li>
+											</a>
+											<a href="export_results.php?quiz='.(int) $m_quizID.'&amp;scope=all">
+												<li>Export All (CSV)</li>
+											</a>
 										</ul>
 									</li>
 								</ul>
