@@ -1,13 +1,14 @@
 /*M!999999\- enable the sandbox mode */ 
 -- Base schema+seed snapshot for the revitalized app: legacy database/debug.sql
--- imported into a scratch DB and migrated via database/migrate.sh (001..007).
+-- imported into a scratch DB and migrated via database/migrate.sh (001..007;
+-- 006 dropped the denormalized quizes.quiz_id / questions.question_id).
 -- Seeds preserved except mandated transforms: charset utf8mb4, deduped taker
 -- pair (kept id 7), 4 orphan answers purged, stored entities decoded (see
 -- *_entitybak tables in any migrated DB for pre-decode values). Re-importing
 -- this file leaves migrate.sh with nothing to apply.
 -- MariaDB dump 10.19  Distrib 10.11.14-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: debug
+-- Host: localhost    Database: debug_v2regen
 -- ------------------------------------------------------
 -- Server version	10.11.14-MariaDB-0ubuntu0.24.04.1
 
@@ -382,7 +383,6 @@ DROP TABLE IF EXISTS `questions`;
 CREATE TABLE `questions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `quiz_id` int(11) NOT NULL,
-  `question_id` int(11) NOT NULL DEFAULT 0,
   `question` varchar(255) NOT NULL,
   `code` varchar(9999) NOT NULL,
   `code_type` varchar(30) NOT NULL,
@@ -401,37 +401,37 @@ CREATE TABLE `questions` (
 LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` DISABLE KEYS */;
 INSERT INTO `questions` VALUES
-(1,1,1,'If the output of the question is  hai , find the error in the program?','main()\r\n { \r\nprintf(\"\\nab\");\r\nprintf(\"\\bsi\");\r\nprintf(\"\\aha\");\r\n\r\n}\r\n','cpp','mc'),
-(2,1,2,'find the output?','void main()\n{\nint i=1,y;\ny=i---i---i;\ncout<<y<<â€,â€<<i;\ngetch();\n}\n','cpp','mc'),
-(3,1,3,'find the output?','#include<stdio.h>\r\n\r\nint main()\r\n{\r\ncharstr[20], *s;\r\nprintf(\"Enter a string\\n\");\r\nscanf(\"%s\", str);\r\n    s=str;\r\nwhile(*s != \'\\0\')\r\n    {\r\nif(*s >= 97&& *s <= 122)\r\n            *s = *s-32;\r\n        s++;\r\n    }\r\nprintf(\"%s\",str);\r\nreturn0;\r\n}\r\n','cpp','mc'),
-(4,1,4,'find the error','#include<stdio.h>\r\nint main()\r\n{\r\nint P = 10;\r\nswitch(P)\r\n    {\r\ncase10:\r\nprintf(\"Case 1\");\r\n\r\ncase20:\r\nprintf(\"Case 2\");\r\nbreak;\r\n\r\ncase P:\r\nprintf(\"Case 2\");\r\nbreak;\r\n    }\r\nreturn0;\r\n}\r\n\r\n','cpp','mc'),
-(5,1,5,'find the correct valid function call...assuming the function exists','','','mc'),
-(6,1,6,'find the output...','int main()\n{\nint x;\nfor(x=-1; x<=10; x++)\n    {\nif(x < 5)\ncontinue;\nelse\nbreak;\nprintf(\"techfest\");\n    }\n','cpp','mc'),
-(7,1,7,'find the error','#include<stdio.h>\nint main(){\nconst int k=7;\nint *const q=&k;\nprintf(\"%d\", *q);\nreturn0;\n}','cpp','mc'),
-(8,1,8,'What happens when a class with parameterized constructors and having no default constructor is used in a program and we create an object that needs a zero-argument constructor?','','','mc'),
-(9,1,9,'find the output...','	#include <stdio.h>\r\n#define a 10\r\nmain()\r\n{\r\n#define a 50\r\nprintf(\"%d\",a);\r\n}\r\n','cpp','mc'),
-(10,1,10,'find the last value of x','int x;\r\nfor(x=0;x<10;x++)\r\n	{}','cpp','mc'),
-(11,1,11,'find the error','#include<stdio.h>\r\n\r\n int main()\r\n{\r\nint a[] = {10, 20, 30, 40, 50};\r\nint j;\r\nfor(j=0; j<5; j++)\r\n    {\r\nprintf(\"%d\\n\", a);\r\n        a++;\r\n    }\r\nreturn 0;\r\n}\r\n','cpp','mc'),
-(12,1,12,'which is not a protection level provided by classes in c++','','','mc'),
-(13,1,13,'In a call to printf() function the format specifier %b can be used to print binary equivalent of an integer.','','','tf'),
-(14,1,14,'tick the correct','void main ( )\r\n\r\n{\r\n\r\n  char *P = \"ayqm\" ;\r\n\r\n  char c;\r\n\r\n  c = ++*p ;\r\n\r\n  printf (\"%c\", c);\r\n\r\n}\r\n\r\n','cpp','mc'),
-(15,1,15,'which of the following algo requires sorted array?','','','mc'),
-(16,1,16,'the statement prints','printf(\"%c\",100);','cpp','mc'),
-(17,1,17,'all srings end up with a null zero....','','','tf'),
-(18,1,18,'character variable may contain up to seven literals...','','','tf'),
-(19,1,19,'find the error','main(){\nextern int i;\ni=20;\nprintf(\"%d\",i);\n}','cpp','mc'),
-(20,2,20,'find the error','	main()\r\n{\r\nchar string[]=\"Hello World\";\r\n	display(string);\r\n}\r\nvoid display(char *string)\r\n{\r\n	printf(\"%s\",string);\r\n}\r\n','cpp','mc'),
-(21,2,21,'find the error and the  output...','#include<stdio.h>\r\nvoid main() \r\n{ \r\nint a=320; \r\nchar *ptr; \r\nptr=(char *)&a; \r\nprintf(\"%d\",*ptr); \r\ngetch();\r\n}\r\n','cpp','mc'),
-(22,1,22,'find the output','void main()\r\n\r\n{\r\n\r\n  int a = 1, b=2, c=3;\r\n\r\n  char d = 0;\r\n\r\n  if(a,b,c,d)\r\n\r\n  {\r\n\r\n    printf(\"EXAM\");\r\n\r\n  }\r\n','cpp','mc'),
-(23,2,23,'find the  error','#include<stdio.h>\nint main(){\nchar ch;\nint i;\nscanf(\"%c\", &i);\nscanf(\"%d\", &ch);\nprintf(\"%c %d\", ch, i);\nreturn0;\n}','cpp','mc'),
-(25,2,25,'find the error','#include<stdio.h>\r\nchar *str = \"char *str = %c%s%c; main(){ \r\nprintf(str, 34, str, 34);}\";\r\n\r\nint main()\r\n{\r\nprintf(str, 34, str, 34);\r\nreturn 0;\r\n}\r\n','cpp','mc'),
-(26,2,26,'find the output','enum colors {BLACK,BLUE,GREEN}\r\nmain()\r\n{\r\n\r\nprintf(\"%d..%d..%d\",BLACK,BLUE,GREEN);\r\n\r\nreturn(1);\r\n}\r\n','cpp','mc'),
-(27,2,27,'find the error...','typedefstruct\r\n{\r\nint data;\r\n    NODEPTR link;\r\n}*NODEPTR;\r\n','cpp','mc'),
-(29,2,29,'find the error','#include<stdio.h>\r\nint main()\r\n{\r\nvoid fun();\r\ninti = 1;\r\nwhile(i<= 5)\r\n    {\r\nprintf(\"%d\\n\", i);\r\nif(i>2)\r\ngoto here;\r\n    }\r\nreturn0;\r\n}\r\nvoid fun()\r\n{\r\n    here:\r\nprintf(\"It works\");\r\n}\r\n','cpp','mc'),
-(30,1,30,'Which of the following statements is correct? \r\n1.	Once a reference variable has been defined to refer to a particular variable it can refer to any other variable. \r\n2.	A reference is not a constant pointer. \r\n\r\n\r\n','','','mc'),
-(31,2,31,'find the error..','4.	#include<stdio.h>\r\nmain()\r\n{\r\nstruct xx\r\n{\r\nint x=3;\r\nchar name[]=\"hello\";\r\n };\r\nstruct xx *s;\r\nprintf(\"%d\",s->x);\r\nprintf(\"%s\",s->name);\r\n}\r\n','cpp','mc'),
-(32,2,32,'find the error..','main() \r\n{ \r\ninti; \r\nclrscr(); \r\nprintf(\"%d\", &i)+1; \r\nscanf(\"%d\", i)-1; \r\n} \r\n','cpp','mc'),
-(33,1,33,'hahaha','','','tf');
+(1,1,'If the output of the question is  hai , find the error in the program?','main()\r\n { \r\nprintf(\"\\nab\");\r\nprintf(\"\\bsi\");\r\nprintf(\"\\aha\");\r\n\r\n}\r\n','cpp','mc'),
+(2,1,'find the output?','void main()\n{\nint i=1,y;\ny=i---i---i;\ncout<<y<<â€,â€<<i;\ngetch();\n}\n','cpp','mc'),
+(3,1,'find the output?','#include<stdio.h>\r\n\r\nint main()\r\n{\r\ncharstr[20], *s;\r\nprintf(\"Enter a string\\n\");\r\nscanf(\"%s\", str);\r\n    s=str;\r\nwhile(*s != \'\\0\')\r\n    {\r\nif(*s >= 97&& *s <= 122)\r\n            *s = *s-32;\r\n        s++;\r\n    }\r\nprintf(\"%s\",str);\r\nreturn0;\r\n}\r\n','cpp','mc'),
+(4,1,'find the error','#include<stdio.h>\r\nint main()\r\n{\r\nint P = 10;\r\nswitch(P)\r\n    {\r\ncase10:\r\nprintf(\"Case 1\");\r\n\r\ncase20:\r\nprintf(\"Case 2\");\r\nbreak;\r\n\r\ncase P:\r\nprintf(\"Case 2\");\r\nbreak;\r\n    }\r\nreturn0;\r\n}\r\n\r\n','cpp','mc'),
+(5,1,'find the correct valid function call...assuming the function exists','','','mc'),
+(6,1,'find the output...','int main()\n{\nint x;\nfor(x=-1; x<=10; x++)\n    {\nif(x < 5)\ncontinue;\nelse\nbreak;\nprintf(\"techfest\");\n    }\n','cpp','mc'),
+(7,1,'find the error','#include<stdio.h>\nint main(){\nconst int k=7;\nint *const q=&k;\nprintf(\"%d\", *q);\nreturn0;\n}','cpp','mc'),
+(8,1,'What happens when a class with parameterized constructors and having no default constructor is used in a program and we create an object that needs a zero-argument constructor?','','','mc'),
+(9,1,'find the output...','	#include <stdio.h>\r\n#define a 10\r\nmain()\r\n{\r\n#define a 50\r\nprintf(\"%d\",a);\r\n}\r\n','cpp','mc'),
+(10,1,'find the last value of x','int x;\r\nfor(x=0;x<10;x++)\r\n	{}','cpp','mc'),
+(11,1,'find the error','#include<stdio.h>\r\n\r\n int main()\r\n{\r\nint a[] = {10, 20, 30, 40, 50};\r\nint j;\r\nfor(j=0; j<5; j++)\r\n    {\r\nprintf(\"%d\\n\", a);\r\n        a++;\r\n    }\r\nreturn 0;\r\n}\r\n','cpp','mc'),
+(12,1,'which is not a protection level provided by classes in c++','','','mc'),
+(13,1,'In a call to printf() function the format specifier %b can be used to print binary equivalent of an integer.','','','tf'),
+(14,1,'tick the correct','void main ( )\r\n\r\n{\r\n\r\n  char *P = \"ayqm\" ;\r\n\r\n  char c;\r\n\r\n  c = ++*p ;\r\n\r\n  printf (\"%c\", c);\r\n\r\n}\r\n\r\n','cpp','mc'),
+(15,1,'which of the following algo requires sorted array?','','','mc'),
+(16,1,'the statement prints','printf(\"%c\",100);','cpp','mc'),
+(17,1,'all srings end up with a null zero....','','','tf'),
+(18,1,'character variable may contain up to seven literals...','','','tf'),
+(19,1,'find the error','main(){\nextern int i;\ni=20;\nprintf(\"%d\",i);\n}','cpp','mc'),
+(20,2,'find the error','	main()\r\n{\r\nchar string[]=\"Hello World\";\r\n	display(string);\r\n}\r\nvoid display(char *string)\r\n{\r\n	printf(\"%s\",string);\r\n}\r\n','cpp','mc'),
+(21,2,'find the error and the  output...','#include<stdio.h>\r\nvoid main() \r\n{ \r\nint a=320; \r\nchar *ptr; \r\nptr=(char *)&a; \r\nprintf(\"%d\",*ptr); \r\ngetch();\r\n}\r\n','cpp','mc'),
+(22,1,'find the output','void main()\r\n\r\n{\r\n\r\n  int a = 1, b=2, c=3;\r\n\r\n  char d = 0;\r\n\r\n  if(a,b,c,d)\r\n\r\n  {\r\n\r\n    printf(\"EXAM\");\r\n\r\n  }\r\n','cpp','mc'),
+(23,2,'find the  error','#include<stdio.h>\nint main(){\nchar ch;\nint i;\nscanf(\"%c\", &i);\nscanf(\"%d\", &ch);\nprintf(\"%c %d\", ch, i);\nreturn0;\n}','cpp','mc'),
+(25,2,'find the error','#include<stdio.h>\r\nchar *str = \"char *str = %c%s%c; main(){ \r\nprintf(str, 34, str, 34);}\";\r\n\r\nint main()\r\n{\r\nprintf(str, 34, str, 34);\r\nreturn 0;\r\n}\r\n','cpp','mc'),
+(26,2,'find the output','enum colors {BLACK,BLUE,GREEN}\r\nmain()\r\n{\r\n\r\nprintf(\"%d..%d..%d\",BLACK,BLUE,GREEN);\r\n\r\nreturn(1);\r\n}\r\n','cpp','mc'),
+(27,2,'find the error...','typedefstruct\r\n{\r\nint data;\r\n    NODEPTR link;\r\n}*NODEPTR;\r\n','cpp','mc'),
+(29,2,'find the error','#include<stdio.h>\r\nint main()\r\n{\r\nvoid fun();\r\ninti = 1;\r\nwhile(i<= 5)\r\n    {\r\nprintf(\"%d\\n\", i);\r\nif(i>2)\r\ngoto here;\r\n    }\r\nreturn0;\r\n}\r\nvoid fun()\r\n{\r\n    here:\r\nprintf(\"It works\");\r\n}\r\n','cpp','mc'),
+(30,1,'Which of the following statements is correct? \r\n1.	Once a reference variable has been defined to refer to a particular variable it can refer to any other variable. \r\n2.	A reference is not a constant pointer. \r\n\r\n\r\n','','','mc'),
+(31,2,'find the error..','4.	#include<stdio.h>\r\nmain()\r\n{\r\nstruct xx\r\n{\r\nint x=3;\r\nchar name[]=\"hello\";\r\n };\r\nstruct xx *s;\r\nprintf(\"%d\",s->x);\r\nprintf(\"%s\",s->name);\r\n}\r\n','cpp','mc'),
+(32,2,'find the error..','main() \r\n{ \r\ninti; \r\nclrscr(); \r\nprintf(\"%d\", &i)+1; \r\nscanf(\"%d\", i)-1; \r\n} \r\n','cpp','mc'),
+(33,1,'hahaha','','','tf');
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -552,7 +552,6 @@ DROP TABLE IF EXISTS `quizes`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quizes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `quiz_id` int(11) NOT NULL DEFAULT 0,
   `quiz_name` varchar(50) NOT NULL,
   `total_questions` int(11) NOT NULL DEFAULT 0,
   `display_questions` int(11) NOT NULL,
@@ -570,8 +569,8 @@ CREATE TABLE `quizes` (
 LOCK TABLES `quizes` WRITE;
 /*!40000 ALTER TABLE `quizes` DISABLE KEYS */;
 INSERT INTO `quizes` VALUES
-(1,1,'LEVEL1(EASY)',22,20,30,0),
-(2,2,'LEVEL2(HARD)',9,10,20,1);
+(1,'LEVEL1(EASY)',22,20,30,0),
+(2,'LEVEL2(HARD)',9,10,20,1);
 /*!40000 ALTER TABLE `quizes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -629,13 +628,14 @@ CREATE TABLE `schema_migrations` (
 LOCK TABLES `schema_migrations` WRITE;
 /*!40000 ALTER TABLE `schema_migrations` DISABLE KEYS */;
 INSERT INTO `schema_migrations` VALUES
-('001_charset.sql','2026-08-23 11:44:21'),
-('002_constraints.sql','2026-08-23 11:44:21'),
-('003_indexes.sql','2026-08-23 11:44:21'),
-('004_fk.sql','2026-08-23 11:44:22'),
-('005a_defaults_strict.sql','2026-08-23 11:44:22'),
-('005b_decode_entities.sql','2026-08-23 11:44:22'),
-('007_audit_log.sql','2026-08-23 11:44:23');
+('001_charset.sql','2026-08-23 18:20:21'),
+('002_constraints.sql','2026-08-23 18:20:21'),
+('003_indexes.sql','2026-08-23 18:20:21'),
+('004_fk.sql','2026-08-23 18:20:21'),
+('005a_defaults_strict.sql','2026-08-23 18:20:22'),
+('005b_decode_entities.sql','2026-08-23 18:20:22'),
+('006_drop_denorm.sql','2026-08-23 18:20:22'),
+('007_audit_log.sql','2026-08-23 18:20:22');
 /*!40000 ALTER TABLE `schema_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -648,4 +648,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed
+-- Dump completed on 2026-08-23 18:20:23
