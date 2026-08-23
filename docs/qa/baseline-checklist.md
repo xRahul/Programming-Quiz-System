@@ -90,6 +90,8 @@ Server log:
 PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1364 Field 'question_id' doesn't have a default value in .../admin.php:87
 ```
 
+> **Fixed in Phase 3:** `questions.question_id` now defaults to 0 — see `quiz_system_git/database/migrations/005a_defaults_strict.sql` (applies to the MC flow below too).
+
 Cause note: the `INSERT INTO questions (...)` omits the NOT-NULL `question_id`
 column (the app sets it afterwards via `UPDATE questions SET question_id=lastInsertId`).
 Under this host's strict sql_mode the insert aborts before the UPDATE can run;
@@ -136,6 +138,8 @@ Unauthenticated AJAX POST → `302` → `login.php?user_msg=Please+Login+First%2
 | `GET /quiz.php` (no rollno) | `302` → `location: index.php?user_msg=Hey%2C+This+is+the+start+Page%2C+So+enter+your+username+here+first` |
 | `GET /quiz.php?rollno=GETTEST` | Identical redirect — rollno is accepted **only** via POST |
 | `POST rollno=<fresh>` | `HTTP/1.0 500`, empty body, **no taker row created**. Log: `PDOException: ... 1364 Field 'marks' doesn't have a default value in .../quiz.php:43` (`INSERT INTO quiz_takers` omits `marks`; same strict-mode cause as above) |
+
+> **Fixed in Phase 3:** `quiz_takers.marks` (and `duration`) now default to 0 — see `quiz_system_git/database/migrations/005a_defaults_strict.sql`.
 
 Because taker creation always fatals, the question page is currently unreachable
 through the UI, and the duplicate-attempt check never gets a chance to fire.
@@ -194,6 +198,8 @@ Security baseline: anyone can mint an admin account with one unauthenticated POS
 |---|---|
 | `GET` (no fields, no session) | `302` → `admin.php?msg=Sorry%2C+but+Something+went+wrong` |
 | `POST quizName=BaselineQuizX&quizTime=10&numQues=5` (no session) | `HTTP/1.0 500`, empty body, **no quiz row created**. Log: `PDOException: ... 1364 Field 'quiz_id' doesn't have a default value in .../addNewQuiz.php:26` (`INSERT INTO quizes` omits its `quiz_id` column) |
+
+> **Fixed in Phase 3:** `quizes.quiz_id`, `total_questions` and `set_default` now default to 0 — see `quiz_system_git/database/migrations/005a_defaults_strict.sql`.
 | Duplicate-name path *(source, never reached live)* | `Sorry, but \ <name> \ already exists!` |
 | Success path *(source, never reached live)* | `Quiz, \ <name> \ has been created!` |
 
