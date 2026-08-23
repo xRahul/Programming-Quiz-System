@@ -102,8 +102,8 @@ final class ExportResultsTest extends TestCase
         self::$pdo->exec('DELETE FROM quizes WHERE id = ' . self::SEED_QUIZ_ID);
 
         self::$pdo->prepare(
-            'INSERT INTO quizes (id, quiz_id, quiz_name, total_questions, display_questions, time_allotted, set_default)
-             VALUES (:id, :id, :name, 4, 4, 30, 0)'
+            'INSERT INTO quizes (id, quiz_name, total_questions, display_questions, time_allotted, set_default)
+             VALUES (:id, :name, 4, 4, 30, 0)'
         )->execute(['id' => self::SEED_QUIZ_ID, 'name' => self::SEED_QUIZ_NAME]);
 
         // taker i: marks = 4 - (i % 5)  => marks pattern 4,3,2,1,0,4,...

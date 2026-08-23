@@ -73,7 +73,7 @@ function render_questions_table(array $rows, array $answers_by_qid, string $mode
 
     foreach ($rows as $row) {
         $isAll = !empty($row['_all']);
-        $qid = $row['question_id'];
+        $qid = $row['id'];
 
         $control = '';
         if ($mode === 'radio') {

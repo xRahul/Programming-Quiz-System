@@ -38,10 +38,10 @@
 			$countsPerQuiz = array();
 			foreach(array_chunk($idList, 500) as $chunk){
 				$placeholders = implode(',', array_fill(0, count($chunk), '?'));
-				$stmtLookup = $pdo->prepare("SELECT question_id, quiz_id FROM questions WHERE question_id IN ($placeholders)");
+				$stmtLookup = $pdo->prepare("SELECT id, quiz_id FROM questions WHERE id IN ($placeholders)");
 				$stmtLookup->execute($chunk);
 				while($row = $stmtLookup->fetch()){
-					$quizMap[(string) $row['question_id']] = $row['quiz_id'];
+					$quizMap[(string) $row['id']] = $row['quiz_id'];
 					$countsPerQuiz[$row['quiz_id']] = ($countsPerQuiz[$row['quiz_id']] ?? 0) + 1;
 				}
 			}
@@ -51,7 +51,7 @@
 				foreach(array_chunk($idList, 500) as $chunk){
 					$placeholders = implode(',', array_fill(0, count($chunk), '?'));
 
-					$stmtDelQ = $pdo->prepare("DELETE FROM questions WHERE question_id IN ($placeholders)");
+					$stmtDelQ = $pdo->prepare("DELETE FROM questions WHERE id IN ($placeholders)");
 					$stmtDelQ->execute($chunk);
 
 					$stmtDelA = $pdo->prepare("DELETE FROM answers WHERE question_id IN ($placeholders)");

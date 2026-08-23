@@ -106,13 +106,13 @@ final class ImportExportQuestionsTest extends TestCase
     private static function seed(): void
     {
         self::$pdo->prepare(
-            'INSERT INTO quizes (id, quiz_id, quiz_name, total_questions, display_questions, time_allotted, set_default)
-             VALUES (:id, :id, :name, 2, 2, 45, 0)'
+            'INSERT INTO quizes (id, quiz_name, total_questions, display_questions, time_allotted, set_default)
+             VALUES (:id, :name, 2, 2, 45, 0)'
         )->execute(['id' => self::SEED_QUIZ_ID, 'name' => self::SEED_QUIZ_NAME]);
 
         $stmtQ = self::$pdo->prepare(
-            'INSERT INTO questions (id, quiz_id, question_id, question, code, code_type, type)
-             VALUES (:id, :quizId, :id, :question, :code, :codeType, :type)'
+            'INSERT INTO questions (id, quiz_id, question, code, code_type, type)
+             VALUES (:id, :quizId, :question, :code, :codeType, :type)'
         );
         $stmtQ->execute([
             'id' => self::TF_QID,
@@ -236,11 +236,6 @@ final class ImportExportQuestionsTest extends TestCase
         $this->assertSame(2, $result['imported']);
         $this->assertGreaterThan(0, (int) $result['quizId']);
         $importedQuizId = (int) $result['quizId'];
-
-        // legacy column write-back happened too
-        $stmt = self::$pdo->prepare('SELECT quiz_id FROM quizes WHERE id = :id');
-        $stmt->execute(['id' => $importedQuizId]);
-        $this->assertSame($importedQuizId, (int) $stmt->fetchColumn(), 'quizes.quiz_id must equal id after import');
 
         // imported quiz carries the -imported suffix
         $stmt = self::$pdo->prepare('SELECT quiz_name FROM quizes WHERE id = :id');

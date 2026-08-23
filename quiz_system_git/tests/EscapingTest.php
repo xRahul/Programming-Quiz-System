@@ -108,13 +108,6 @@ final class EscapingTest extends TestCase
         self::assertNotNull($quizId, 'hostile quiz must be stored under its exact raw name');
         self::$escQuizId = $quizId;
 
-        // Legacy gap (pre-existing, reported): addNewQuiz leaves quizes.quiz_id
-        // at 0 while the question listings JOIN on questions.quiz_id =
-        // quizes.quiz_id, so freshly created quizzes would list no questions.
-        // Normalize here; the suite only exercises escaping, not that bug.
-        self::$pdo->prepare('UPDATE quizes SET quiz_id = id WHERE id = :id')
-            ->execute(['id' => $quizId]);
-
         // create a hostile question + answers through the real handler
         [$qStatus] = self::request('POST', 'admin.php', [
             'desc' => self::PROBE,

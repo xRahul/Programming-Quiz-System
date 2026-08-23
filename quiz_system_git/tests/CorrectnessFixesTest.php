@@ -82,12 +82,11 @@ final class CorrectnessFixesTest extends TestCase
         self::login();
         $token = self::sessionToken();
 
-        // Explicit id mirrors the legacy denormalized convention
-        // (question_id copies the PK) and keeps answers.question_id a valid
-        // FK reference to questions.id.
+        // Explicit id keeps answers.question_id a valid FK reference to
+        // questions.id.
         $stmtQ = self::$pdo->prepare(
-            "INSERT INTO questions (id, quiz_id, question_id, question, code, code_type, type)
-             VALUES (:qid, 1, :qid, 'P2 fixture MC question?', '', '', 'mc')"
+            "INSERT INTO questions (id, quiz_id, question, code, code_type, type)
+             VALUES (:qid, 1, 'P2 fixture MC question?', '', '', 'mc')"
         );
         $stmtQ->execute(['qid' => self::FIXTURE_QID]);
         $stmtA = self::$pdo->prepare(
@@ -129,7 +128,7 @@ final class CorrectnessFixesTest extends TestCase
         } finally {
             self::$pdo->prepare('DELETE FROM answers WHERE question_id = :qid')
                 ->execute(['qid' => self::FIXTURE_QID]);
-            self::$pdo->prepare('DELETE FROM questions WHERE question_id = :qid')
+            self::$pdo->prepare('DELETE FROM questions WHERE id = :qid')
                 ->execute(['qid' => self::FIXTURE_QID]);
         }
     }
@@ -142,8 +141,8 @@ final class CorrectnessFixesTest extends TestCase
 
         // FK quiz_takers.quiz_id -> quizes.id needs a real parent row.
         self::$pdo->prepare(
-            "INSERT INTO quizes (id, quiz_id, quiz_name, total_questions, display_questions, time_allotted, set_default)
-             VALUES (:id, :id, 'P2 clear-result fixture', 0, 1, 1, 0)"
+            "INSERT INTO quizes (id, quiz_name, total_questions, display_questions, time_allotted, set_default)
+             VALUES (:id, 'P2 clear-result fixture', 0, 1, 1, 0)"
         )->execute(['id' => $fixtureQuizId]);
 
         $stmtIns = self::$pdo->prepare(
@@ -236,7 +235,7 @@ final class CorrectnessFixesTest extends TestCase
             $this->assertSame(1, (int) $stmt->fetchColumn(), "question row with literal '0' must exist");
 
             $stmt = self::$pdo->prepare(
-                'SELECT COUNT(*) FROM answers a JOIN questions q ON a.question_id = q.question_id
+                'SELECT COUNT(*) FROM answers a JOIN questions q ON a.question_id = q.id
                  WHERE q.quiz_id = :quizId AND a.answer = :answer'
             );
             $stmt->execute(['quizId' => $fixtureQuizId, 'answer' => '0']);
@@ -253,11 +252,10 @@ final class CorrectnessFixesTest extends TestCase
         $fixtureQuizId = $this->insertFixtureQuiz();
         $fixtureQid = 987005;
 
-        // Explicit id mirrors the denormalized convention (question_id copies
-        // the PK) and keeps answers.question_id a valid FK reference.
+        // Explicit id keeps answers.question_id a valid FK reference.
         $stmtQ = self::$pdo->prepare(
-            "INSERT INTO questions (id, quiz_id, question_id, question, code, code_type, type)
-             VALUES (:qid, :quizId, :qid, 'P2 fixture original?', '', '', 'mc')"
+            "INSERT INTO questions (id, quiz_id, question, code, code_type, type)
+             VALUES (:qid, :quizId, 'P2 fixture original?', '', '', 'mc')"
         );
         $stmtQ->execute(['quizId' => $fixtureQuizId, 'qid' => $fixtureQid]);
         $stmtA = self::$pdo->prepare(
@@ -285,7 +283,7 @@ final class CorrectnessFixesTest extends TestCase
             $this->assertSame(200, $status);
             $this->assertStringContainsString('All fields must be filled in', $body);
 
-            $stmt = self::$pdo->prepare('SELECT question FROM questions WHERE question_id = :qid');
+            $stmt = self::$pdo->prepare('SELECT question FROM questions WHERE id = :qid');
             $stmt->execute(['qid' => $fixtureQid]);
             $this->assertSame('P2 fixture original?', (string) $stmt->fetchColumn(), 'rejected update must not mutate the row');
             $this->assertSame(1, $this->fixtureAnswerCount($fixtureQid), 'rejected update must not touch answers');
@@ -295,7 +293,7 @@ final class CorrectnessFixesTest extends TestCase
             $this->assertSame(302, $status, "literal-'0' content must pass validation");
             $this->assertStringContainsString('admin.php?msg=', (string) $redirect);
 
-            $stmt = self::$pdo->prepare('SELECT question FROM questions WHERE question_id = :qid');
+            $stmt = self::$pdo->prepare('SELECT question FROM questions WHERE id = :qid');
             $stmt->execute(['qid' => $fixtureQid]);
             $this->assertSame('0', (string) $stmt->fetchColumn(), "question text '0' must be stored");
             $this->assertSame(4, $this->fixtureAnswerCount($fixtureQid), 'answers must be rewritten on accepted update');
@@ -307,7 +305,7 @@ final class CorrectnessFixesTest extends TestCase
             $this->assertSame(1, (int) $stmt->fetchColumn(), "answer row with literal '0' must exist");
         } finally {
             self::$pdo->prepare('DELETE FROM answers WHERE question_id = :qid')->execute(['qid' => $fixtureQid]);
-            self::$pdo->prepare('DELETE FROM questions WHERE question_id = :qid')->execute(['qid' => $fixtureQid]);
+            self::$pdo->prepare('DELETE FROM questions WHERE id = :qid')->execute(['qid' => $fixtureQid]);
             $this->deleteFixtureQuiz($fixtureQuizId);
         }
     }
@@ -436,8 +434,8 @@ final class CorrectnessFixesTest extends TestCase
     {
         $fixtureQuizId = 987004;
         self::$pdo->prepare(
-            "INSERT INTO quizes (id, quiz_id, quiz_name, total_questions, display_questions, time_allotted, set_default)
-             VALUES (:id, :id, 'P2 fixture quiz', 0, 5, 10, 0)"
+            "INSERT INTO quizes (id, quiz_name, total_questions, display_questions, time_allotted, set_default)
+             VALUES (:id, 'P2 fixture quiz', 0, 5, 10, 0)"
         )->execute(['id' => $fixtureQuizId]);
 
         return $fixtureQuizId;

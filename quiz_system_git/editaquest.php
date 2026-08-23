@@ -90,7 +90,7 @@
 			$pdo->beginTransaction();
 
 		 //updating the question and type into table question
-			$stmt = $pdo->prepare("UPDATE questions SET quiz_id=:quizID, question=:question, code=:program, code_type=:programType, type=:type WHERE question_id=:q_id");
+			$stmt = $pdo->prepare("UPDATE questions SET quiz_id=:quizID, question=:question, code=:program, code_type=:programType, type=:type WHERE id=:q_id");
 			$stmt->execute([
 				'quizID' => $quizID,
 				'question' => $question,

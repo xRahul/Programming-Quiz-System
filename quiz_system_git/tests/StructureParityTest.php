@@ -249,13 +249,13 @@ final class StructureParityTest extends TestCase
         }
 
         self::$pdo->prepare(
-            'INSERT INTO quizes (id, quiz_id, quiz_name, total_questions, display_questions, time_allotted, set_default)
-             VALUES (:id, :id, :name, 2, 2, 60, 0)'
+            'INSERT INTO quizes (id, quiz_name, total_questions, display_questions, time_allotted, set_default)
+             VALUES (:id, :name, 2, 2, 60, 0)'
         )->execute(['id' => self::AJAX_SEED_QUIZ_ID, 'name' => self::AJAX_SEED_QUIZ]);
 
         $stmtQ = self::$pdo->prepare(
-            'INSERT INTO questions (id, quiz_id, question_id, question, code, code_type, type)
-             VALUES (:id, :quizId, :id, :question, :code, :codeType, :type)'
+            'INSERT INTO questions (id, quiz_id, question, code, code_type, type)
+             VALUES (:id, :quizId, :question, :code, :codeType, :type)'
         );
         $stmtQ->execute([
             'id' => self::AJAX_Q_TF_ID,

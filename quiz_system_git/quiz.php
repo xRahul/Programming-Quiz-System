@@ -118,7 +118,7 @@
 			$m_id = $m_row['id'];
 			$m_thisQuestion = $m_row['question'];
 			$m_type = $m_row['type'];
-			$m_question_id = $m_row['question_id'];
+			$m_question_id = $m_row['id'];
 			$m_code = $m_row['code'];
 			$m_code_type = $m_row['code_type'];
 

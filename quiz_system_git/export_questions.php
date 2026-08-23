@@ -40,12 +40,12 @@ declare(strict_types=1);
     $stmtQ->execute(['id' => $quizId]);
     $questionRows = $stmtQ->fetchAll(PDO::FETCH_ASSOC);
 
-    $answersByQid = \App\fetch_answers_by_question_ids($pdo, array_column($questionRows, 'question_id'));
+    $answersByQid = \App\fetch_answers_by_question_ids($pdo, array_column($questionRows, 'id'));
 
     $questions = array();
     foreach ($questionRows as $row) {
         $answers = array();
-        foreach ($answersByQid[(int) $row['question_id']] ?? array() as $answerRow) {
+        foreach ($answersByQid[(int) $row['id']] ?? array() as $answerRow) {
             $answers[] = array(
                 'text' => (string) $answerRow['answer'],
                 'correct' => ((int) $answerRow['correct']) === 1,

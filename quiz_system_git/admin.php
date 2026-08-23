@@ -94,7 +94,7 @@
 			}
 		}
 
-	 //transactional write: question -> denormalized question_id -> quiz counter -> answers
+	 //transactional write: question -> quiz counter -> answers
 		try{
 			$pdo->beginTransaction();
 
@@ -108,10 +108,7 @@
 				'type' => $type
 			]);
 
-			//lastId is there, so we can insert the id, question_id in our table
-				$lastId = $pdo->lastInsertId();
-				$stmt = $pdo->prepare("UPDATE questions SET question_id=:lastId WHERE id=:lastId LIMIT 1");
-				$stmt->execute(['lastId' => $lastId]);
+			$lastId = $pdo->lastInsertId();
 
 		 ///////Updating value of total questions in quizes
 			$stmt = $pdo->prepare("UPDATE quizes SET total_questions=total_questions+1 WHERE id=:quizID LIMIT 1");
@@ -213,9 +210,9 @@
 		$isAll = ($editQ == 'allthequestions');
 
 		if($isAll) {
-			$stmt = $pdo->query("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.quiz_id");
+			$stmt = $pdo->query("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.id ORDER BY questions.id");
         } else {
-            $stmt = $pdo->prepare("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.quiz_id WHERE questions.quiz_id = :quizID");
+            $stmt = $pdo->prepare("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.id WHERE questions.quiz_id = :quizID ORDER BY questions.id");
             $stmt->execute(['quizID' => $get_quiz_id]);
         }
 
@@ -226,7 +223,7 @@
 				}
 			}
 
-			echo render_questions_table($rows, fetch_answers_by_question_ids($pdo, array_column($rows, 'question_id')), 'radio');
+			echo render_questions_table($rows, fetch_answers_by_question_ids($pdo, array_column($rows, 'id')), 'radio');
 			exit();
 	}
 ?>
@@ -243,13 +240,13 @@
 		$editAQ = preg_replace('/[^0-9]/', "", $editAQ);
 
 	 //getting everything about the question
-        $stmt = $pdo->prepare("SELECT * FROM questions WHERE question_id=:questionID");
+        $stmt = $pdo->prepare("SELECT * FROM questions WHERE id=:questionID");
         $stmt->execute(['questionID' => $editAQ]);
 		$getaquestion_row = $stmt->fetch();
 
 		$gaq_id = $getaquestion_row['id'];
 		$gaq_quiz_id = $getaquestion_row['quiz_id'];
-		$gaq_question_id = $getaquestion_row['question_id'];
+		$gaq_question_id = $getaquestion_row['id'];
 		$gaq_question = $getaquestion_row['question'];
 		$gaq_code_editor = $getaquestion_row['code'];
 		$gaq_code_type = $getaquestion_row['code_type'];
@@ -338,9 +335,9 @@
 		$isAll = ($deleteSQ == 'allthequestions');
 
 		if($isAll) {
-			$stmt = $pdo->query("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.quiz_id");
+			$stmt = $pdo->query("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.id ORDER BY questions.id");
         } else {
-            $stmt = $pdo->prepare("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.quiz_id WHERE questions.quiz_id = :quizID");
+            $stmt = $pdo->prepare("SELECT questions.*, quizes.quiz_name FROM questions LEFT JOIN quizes ON questions.quiz_id = quizes.id WHERE questions.quiz_id = :quizID ORDER BY questions.id");
             $stmt->execute(['quizID' => $get_quiz_id]);
         }
 
@@ -351,7 +348,7 @@
 				}
 			}
 
-			echo render_questions_table($rows, fetch_answers_by_question_ids($pdo, array_column($rows, 'question_id')), 'checkbox');
+			echo render_questions_table($rows, fetch_answers_by_question_ids($pdo, array_column($rows, 'id')), 'checkbox');
 			exit();
 	}
 ?>
@@ -680,9 +677,9 @@
         }
 
 		if($isAll) {
-			$stmt = $pdo->query("SELECT questions.*, quizes.quiz_name FROM questions JOIN quizes ON questions.quiz_id = quizes.quiz_id");
+			$stmt = $pdo->query("SELECT questions.*, quizes.quiz_name FROM questions JOIN quizes ON questions.quiz_id = quizes.id ORDER BY questions.id");
         } else {
-            $stmt = $pdo->prepare("SELECT questions.*, quizes.quiz_name FROM questions JOIN quizes ON questions.quiz_id = quizes.quiz_id WHERE questions.quiz_id = :quizID");
+            $stmt = $pdo->prepare("SELECT questions.*, quizes.quiz_name FROM questions JOIN quizes ON questions.quiz_id = quizes.id WHERE questions.quiz_id = :quizID ORDER BY questions.id");
             $stmt->execute(['quizID' => $get_quiz_id]);
         }
 
@@ -693,7 +690,7 @@
 				}
 			}
 
-			echo render_questions_table($rows, fetch_answers_by_question_ids($pdo, array_column($rows, 'question_id')), 'none');
+			echo render_questions_table($rows, fetch_answers_by_question_ids($pdo, array_column($rows, 'id')), 'none');
 			exit();
 	}
 ?>

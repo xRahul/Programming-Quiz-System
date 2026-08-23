@@ -89,7 +89,7 @@ final class TransactionTest extends TestCase
         if (self::$pdo !== null) {
             foreach ([self::QID_A1, self::QID_A2, self::QID_A3, self::QID_B1, self::QID_B2] as $qid) {
                 self::$pdo->prepare('DELETE FROM answers WHERE question_id = :q')->execute(['q' => $qid]);
-                self::$pdo->prepare('DELETE FROM questions WHERE question_id = :q')->execute(['q' => $qid]);
+                self::$pdo->prepare('DELETE FROM questions WHERE id = :q')->execute(['q' => $qid]);
             }
             self::$pdo->prepare('DELETE FROM questions WHERE question LIKE :marker')
                 ->execute(['marker' => '%' . self::MARKER . '%']);
@@ -306,18 +306,18 @@ final class TransactionTest extends TestCase
         self::$pdo->prepare('DELETE FROM questions WHERE quiz_id = :id')->execute(['id' => $id]);
         self::$pdo->prepare('DELETE FROM quizes WHERE id = :id')->execute(['id' => $id]);
         self::$pdo->prepare(
-            'INSERT INTO quizes (id, quiz_id, quiz_name, total_questions, display_questions, time_allotted, set_default)
-             VALUES (:id, :id, :name, :total, 2, 60, 0)'
+            'INSERT INTO quizes (id, quiz_name, total_questions, display_questions, time_allotted, set_default)
+             VALUES (:id, :name, :total, 2, 60, 0)'
         )->execute(['id' => $id, 'name' => $name, 'total' => $totalQuestions]);
     }
 
     private static function seedTfQuestion(int $qid, int $quizId, string $text): void
     {
         self::$pdo->prepare('DELETE FROM answers WHERE question_id = :q')->execute(['q' => $qid]);
-        self::$pdo->prepare('DELETE FROM questions WHERE question_id = :q')->execute(['q' => $qid]);
+        self::$pdo->prepare('DELETE FROM questions WHERE id = :q')->execute(['q' => $qid]);
         self::$pdo->prepare(
-            "INSERT INTO questions (id, quiz_id, question_id, question, code, code_type, type)
-             VALUES (:qid, :quizId, :qid, :text, '', '', 'tf')"
+            "INSERT INTO questions (id, quiz_id, question, code, code_type, type)
+             VALUES (:qid, :quizId, :text, '', '', 'tf')"
         )->execute(['qid' => $qid, 'quizId' => $quizId, 'text' => $text]);
         $stmtA = self::$pdo->prepare(
             'INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES (:quizId, :qid, :answer, :correct)'
@@ -329,10 +329,10 @@ final class TransactionTest extends TestCase
     private static function seedMcQuestion(int $qid, int $quizId): void
     {
         self::$pdo->prepare('DELETE FROM answers WHERE question_id = :q')->execute(['q' => $qid]);
-        self::$pdo->prepare('DELETE FROM questions WHERE question_id = :q')->execute(['q' => $qid]);
+        self::$pdo->prepare('DELETE FROM questions WHERE id = :q')->execute(['q' => $qid]);
         self::$pdo->prepare(
-            "INSERT INTO questions (id, quiz_id, question_id, question, code, code_type, type)
-             VALUES (:qid, :quizId, :qid, :text, '', '', 'mc')"
+            "INSERT INTO questions (id, quiz_id, question, code, code_type, type)
+             VALUES (:qid, :quizId, :text, '', '', 'mc')"
         )->execute(['qid' => $qid, 'quizId' => $quizId, 'text' => 'tx mc question ' . $qid]);
         $stmtA = self::$pdo->prepare(
             'INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES (:quizId, :qid, :answer, :correct)'
@@ -358,7 +358,7 @@ final class TransactionTest extends TestCase
 
     private static function questionCount(int $qid): int
     {
-        $stmt = self::$pdo->prepare('SELECT COUNT(*) FROM questions WHERE question_id = :q');
+        $stmt = self::$pdo->prepare('SELECT COUNT(*) FROM questions WHERE id = :q');
         $stmt->execute(['q' => $qid]);
 
         return (int) $stmt->fetchColumn();
@@ -374,7 +374,7 @@ final class TransactionTest extends TestCase
 
     private static function questionText(int $qid): string
     {
-        $stmt = self::$pdo->prepare('SELECT question FROM questions WHERE question_id = :q LIMIT 1');
+        $stmt = self::$pdo->prepare('SELECT question FROM questions WHERE id = :q LIMIT 1');
         $stmt->execute(['q' => $qid]);
         $row = $stmt->fetch();
 

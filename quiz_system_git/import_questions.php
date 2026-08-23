@@ -163,10 +163,6 @@ declare(strict_types=1);
 
         $newQuizId = (int) $pdo->lastInsertId();
 
-     //legacy column write-back: quizes.quiz_id mirrors the auto id until T6.2
-        $stmtWriteBack = $pdo->prepare("UPDATE quizes SET quiz_id=:id WHERE id=:id LIMIT 1");
-        $stmtWriteBack->execute(['id' => $newQuizId]);
-
         foreach ($questions as $question) {
             $stmtQ = $pdo->prepare(
                 "INSERT INTO questions (quiz_id, question, code, code_type, type)
@@ -180,10 +176,7 @@ declare(strict_types=1);
                 'type' => $question['type'],
             ]);
 
-         //legacy column write-back: questions.question_id mirrors the auto id
-            $lastQuestionId = $pdo->lastInsertId();
-            $stmtQWB = $pdo->prepare("UPDATE questions SET question_id=:id WHERE id=:id LIMIT 1");
-            $stmtQWB->execute(['id' => $lastQuestionId]);
+            $lastQuestionId = (int) $pdo->lastInsertId();
 
             $stmtA = $pdo->prepare(
                 "INSERT INTO answers (quiz_id, question_id, answer, correct)

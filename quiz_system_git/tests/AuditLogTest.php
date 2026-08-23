@@ -68,8 +68,8 @@ final class AuditLogTest extends TestCase
         self::cleanupSeed();
 
         self::$pdo->prepare(
-            'INSERT INTO quizes (id, quiz_id, quiz_name, total_questions, display_questions, time_allotted, set_default)
-             VALUES (:id, :id, :name, 1, 1, 30, 0)'
+            'INSERT INTO quizes (id, quiz_name, total_questions, display_questions, time_allotted, set_default)
+             VALUES (:id, :name, 1, 1, 30, 0)'
         )->execute(['id' => self::SEED_QUIZ_ID, 'name' => 'Audit Log Fixture Quiz']);
         self::$pdo->prepare(
             "INSERT INTO quiz_takers (username, percentage, date_time, quiz_id, duration, marks)
