@@ -69,6 +69,7 @@ body {
   position: relative;
   margin: 80px auto;
   width: 400px;
+  max-width: calc(100vw - 16px);
   padding-right: 32px;
   font-weight: 300;
   color: #a8a7a8;
@@ -234,4 +235,17 @@ label {
 :focus-visible {
 	outline: 2px solid #1e90ff;
 	outline-offset: 2px;
+}
+
+/* narrow-viewport containment */
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+img, video {
+	max-width: 100%;
+	height: auto;
+}
+.table-wrap {
+	overflow-x: auto;
+	max-width: 100%;
 }

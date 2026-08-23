@@ -45,6 +45,7 @@
 
             #main_body{
                 width: 800px;
+                max-width: 100%;
                 margin: auto;
                 padding: 10px;
                 border-radius: 20px;
@@ -77,6 +78,7 @@
 /*quiz.php*/
             #countdown{
                 width: 800px;
+                max-width: 100%;
                 margin: auto;
                 margin-top: 40px;
                 padding: 10px;
@@ -241,4 +243,17 @@
 :focus-visible {
 	outline: 2px solid #1e90ff;
 	outline-offset: 2px;
+}
+
+/* narrow-viewport containment */
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+img, video {
+	max-width: 100%;
+	height: auto;
+}
+.table-wrap {
+	overflow-x: auto;
+	max-width: 100%;
 }

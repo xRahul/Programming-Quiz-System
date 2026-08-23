@@ -890,8 +890,10 @@
 		    <div id="audit_panel">
 				<a href="javascript:{}" onclick="toggle_audit_panel();" class="myButton">Recent Activity</a>
 				<div id="audit_wrap" style="display:none;">
-					<table width="780px" align="center" id="audit_table">
-					</table>
+					<div class="table-wrap">
+						<table align="center" id="audit_table" style="width:100%;max-width:780px;">
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -906,8 +908,10 @@
 		<div class="content" id="quesans"  style="margin-bottom: 100px;">
 			<form id="deleteedit" name="deleteedit" action="deleteSomeQues.php" method="POST">
 				<?php echo csrf_field(); ?>
-				<table width="780px" align="center" id="quesans_table">
-				</table>
+				<div class="table-wrap">
+					<table align="center" id="quesans_table" style="width:100%;max-width:780px;">
+					</table>
+				</div>
 			</form>
 		</div>
 

@@ -107,7 +107,7 @@ if ($is_tf) {
 			</span>
 <?php if ($is_tf): ?>
 			<br />
-			<textarea class="txt_area" id="<?php echo $qf_code_id; ?>" name="code_desc" style="width:400px;height:95px;"></textarea>
+			<textarea class="txt_area" id="<?php echo $qf_code_id; ?>" name="code_desc" style="width:400px;max-width:100%;height:95px;"></textarea>
 			<br />
 
 			<br />
@@ -139,7 +139,7 @@ if ($is_tf) {
 				<input type="submit" class="add_to_quiz" id="addToQuizTF" value="Add To Quiz">
 <?php else: ?>
 				<br />
-			<pre><textarea class="txt_area" id="<?php echo $qf_code_id; ?>" name="code_desc" style="width:400px;height:95px;"></textarea>
+			<pre><textarea class="txt_area" id="<?php echo $qf_code_id; ?>" name="code_desc" style="width:400px;max-width:100%;height:95px;"></textarea>
 			</pre>
 
 			<br />

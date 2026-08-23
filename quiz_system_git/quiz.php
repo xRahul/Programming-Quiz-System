@@ -280,9 +280,11 @@
 		<div id="main_body" align="center" style="margin-bottom: 100px;">
 			<form id="quiz_form" name="quiz_form_name" action="result.php" method="POST">
 			<br /><BR /><BR />
-				<table width="780px" align="center">
-					<?php echo $m_output ?>
-				</table>
+				<div class="table-wrap">
+					<table align="center" style="width:100%;max-width:780px;">
+						<?php echo $m_output ?>
+					</table>
+				</div>
 			</form>
 		</div>
 
