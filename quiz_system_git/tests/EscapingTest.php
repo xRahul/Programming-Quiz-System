@@ -175,6 +175,42 @@ final class EscapingTest extends TestCase
         self::assertStringNotContainsString('<script>alert', $loginBody);
     }
 
+    /**
+     * Declared LAST on purpose: it swaps the shared auth jar to a hostile
+     * username, so every earlier escaping probe must already have run.
+     */
+    public function testAdminGreetingEscapesHostileLoginSession(): void
+    {
+        $hostile = '<script>alert(9)</script>';
+
+        [$status] = self::request('POST', 'register.php', [
+            'login' => $hostile,
+            'password' => 'escape-pass-123',
+            'csrf_token' => self::token(),
+        ], self::$authJar);
+        self::assertSame(302, $status, 'register with valid token should create the hostile admin');
+
+        try {
+            [$status] = self::request('POST', 'login_check.php', [
+                'login' => $hostile,
+                'password' => 'escape-pass-123',
+            ], self::$authJar);
+            self::assertSame(302, $status, 'hostile admin login should redirect');
+
+            [, , $body] = self::request('GET', 'admin.php', [], self::$authJar);
+            // admin.php:820 renders $login_session into span#usr.
+            self::assertStringContainsString(
+                '<span id="usr">&lt;script&gt;alert(9)&lt;/script&gt;!</span>',
+                $body,
+                'greeting must emit the escaped login_session'
+            );
+            self::assertStringNotContainsString('<script>alert(9)', $body, 'raw login_session must never render');
+        } finally {
+            self::$pdo?->prepare('DELETE FROM admins WHERE username = :username')
+                ->execute(['username' => $hostile]);
+        }
+    }
+
     // ---------- helpers ----------
 
     private static function token(): string
