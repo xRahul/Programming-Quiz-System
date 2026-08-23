@@ -1,0 +1,229 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: addNewQuiz.php
+
+		-
+			message: '#^Variable \$login_session might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: admin.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 51
+			path: admin.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: changePassword.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 8
+			path: deleteSomeQues.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 7
+			path: editaquest.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: export_questions.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: export_results.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 9
+			path: import_questions.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: index.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$pdo with type App\\PDO is not subtype of native type PDO\.$#'
+			identifier: parameter.phpDocType
+			count: 1
+			path: lib/render.php
+
+		-
+			message: '#^Parameter \$pdo of function App\\fetch_answers_by_question_ids\(\) has invalid type App\\PDO\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/render.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between non\-empty\-string and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: lib/render.php
+
+		-
+			message: '#^Variable \$gaq_question_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/views/question-form.php
+
+		-
+			message: '#^Variable \$quizSelect might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/views/question-form.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: login_check.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 6
+			path: quiz.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: register.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: reset_password.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: result.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: session.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: tests/AdminTopTwentyOrderTest.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: tests/AuthGuardTest.php
+
+		-
+			message: '#^PHPDoc tag @var for constant AuthGuardTest\:\:ENDPOINTS with type array\<string, list\<string\>\> is incompatible with value array\{''register\.php''\: array\{login\: ''guardtest_intruder'', password\: ''intruder\-pass''\}, ''addNewQuiz\.php''\: array\{quizName\: ''guardtest_hack_quiz'', quizTime\: ''5'', numQues\: ''1''\}, ''updateExistingQuiz\.php''\: array\{quizName\: ''guardtest_renamed'', quizTime\: ''5'', numQues\: ''1''\}, ''deleteSomeQues\.php''\: array\{total_ques\: ''1''\}, ''editaquest\.php''\: array\{desc\: ''hacked question'', iscorrect\: ''1''\}, ''changePassword\.php''\: array\{login\: ''admin'', password\: ''hijacked\-pass''\}\}\.$#'
+			identifier: classConstant.phpDocType
+			count: 1
+			path: tests/AuthGuardTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with true will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/BaselineTest.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: tests/CorrectnessFixesTest.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: tests/CsrfEnforcementCoverageTest.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: tests/CsrfTest.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: tests/DbConnectTest.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: tests/DefaultQuizSwitchTest.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: tests/DeleteAdminSelfDeleteTest.php
+
+		-
+			message: '#^Constant EscapingTest\:\:ESC_QID is unused\.$#'
+			identifier: classConstant.unused
+			count: 1
+			path: tests/EscapingTest.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: tests/MigrationTest.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: tests/OncePerQuizGuardTest.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: tests/ResetTablesReseedTest.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: tests/SessionHardeningTest.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: tests/UiCreatedQuizListableTest.php
+
+		-
+			message: '#^Variable \$pdo might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: updateExistingQuiz.php
