@@ -108,15 +108,24 @@ final class CorrectnessFixesTest extends TestCase
                 'csrf_token' => $token,
             ]);
 
+            // T4.5: the prefill ships as a JSON op list in #edit-state and is
+            // applied by assets/js/admin.js instead of generated inline scripts.
+            $this->assertSame(
+                1,
+                preg_match('/<script id="edit-state" type="application\/json">(.*?)<\/script>/s', $body, $island),
+                'MC edit prefill must ship as the #edit-state JSON island'
+            );
+            $ops = json_decode((string) $island[1], true);
+            $this->assertIsArray($ops, '#edit-state must decode to an op list');
             foreach ($answers as $i => $text) {
-                $this->assertStringContainsString(
-                    'mcanswer' . ($i + 1) . '\').value = "' . $text . '"',
-                    $body,
+                $this->assertContains(
+                    ['setValue', 'mcanswer' . ($i + 1), $text],
+                    $ops,
                     'MC edit prefill must embed the real answer text'
                 );
             }
             $this->assertStringNotContainsString('= null;', $body, '$gaq_answer undefined-variable artifact must be gone');
-            $this->assertStringContainsString('mcans1\').checked=true;', $body, 'correct option must be pre-checked');
+            $this->assertContains(['setChecked', 'mcans1'], $ops, 'correct option must be pre-checked');
         } finally {
             self::$pdo->prepare('DELETE FROM answers WHERE question_id = :qid')
                 ->execute(['qid' => self::FIXTURE_QID]);

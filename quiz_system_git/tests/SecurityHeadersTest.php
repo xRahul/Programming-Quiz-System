@@ -20,7 +20,7 @@ final class SecurityHeadersTest extends TestCase
         'x-content-type-options' => 'nosniff',
         'x-frame-options' => 'DENY',
         'referrer-policy' => 'strict-origin-when-cross-origin',
-        'content-security-policy' => "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:",
+        'content-security-policy' => "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:",
     ];
 
     /** @var array<string, string> endpoint => cookie jar to fetch it with */

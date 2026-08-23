@@ -367,7 +367,7 @@
 
 <?php
 //When editAQ is clicked
-	$editQoutput='';
+	$editQops = array();
 	$gaq_question_id='';
 
 	if(isset($_POST['editAQ']) && $_POST['editAQ'] != ""){
@@ -395,20 +395,14 @@
 
 	 //if question is true/false type
 		if($gaq_type=='tf'){
-			$editQoutput .= '<script>
-								showDiv(\'tf\', \'mc\', \'quesans\');
-								document.getElementById(\'quizIDtf\').value = '.json_encode($gaq_quiz_id).';
-								document.getElementById(\'tfDesc\').value = '.json_encode($gaq_question).';
-							 </script>
-							';
+			$editQops[] = array('showDiv', 'tf', 'mc', 'quesans');
+			$editQops[] = array('setValue', 'quizIDtf', $gaq_quiz_id);
+			$editQops[] = array('setValue', 'tfDesc', $gaq_question);
 		 //if there's programming code attached to the question, add this
 			if($gaq_code_type!=""){
-				$editQoutput .=	'<script>
-									document.getElementById(\'prog-lang-tf\').value = '.json_encode($gaq_code_type).';
-									change_editor('.json_encode($gaq_code_type).');
-									tfeditor.setValue('.json_encode($gaq_code_editor).');
-								</script>
-								';
+				$editQops[] = array('setValue', 'prog-lang-tf', $gaq_code_type);
+				$editQops[] = array('changeEditor', $gaq_code_type);
+				$editQops[] = array('editorValue', 'tfeditor', $gaq_code_editor);
 			}
 		 //getting answers of T/F questions
 			$ga_index=1;
@@ -417,44 +411,29 @@
 				$ga_correct = $getanswers_row['correct'];
 
 				if($ga_correct==1 && $ga_answer=="True"){
-					$editQoutput .= '<script>
-										document.getElementById(\'tfans1\').checked=true;
-									 </script>
-									';
+					$editQops[] = array('setChecked', 'tfans1');
 				}
 				else if($ga_correct==1 && $ga_answer=="False"){
-					$editQoutput .= '<script>
-										document.getElementById(\'tfans2\').checked=true;
-									 </script>
-									';
+					$editQops[] = array('setChecked', 'tfans2');
 				}
 				$ga_index++;
 			}
 
 		 //changing the submit button and action
-			$editQoutput .= '<script>
-								document.addQuestion.action = "editaquest.php";
-								document.getElementById(\'addToQuizTF\').value = "Save";
-							 </script>
-							';
+			$editQops[] = array('setAction', 'addQuestion', 'editaquest.php');
+			$editQops[] = array('setLabel', 'addToQuizTF', 'Save');
 
 		}
 
 	 //if the question is multiple choice!
 		else if($gaq_type=='mc'){
-			$editQoutput .= '<script>
-								showDiv(\'mc\', \'tf\', \'quesans\');
-								document.getElementById(\'quizIDmc\').value = '.json_encode($gaq_quiz_id).';
-								document.getElementById(\'mcdesc\').value = '.json_encode($gaq_question).';
-							 </script>
-							';
+			$editQops[] = array('showDiv', 'mc', 'tf', 'quesans');
+			$editQops[] = array('setValue', 'quizIDmc', $gaq_quiz_id);
+			$editQops[] = array('setValue', 'mcdesc', $gaq_question);
 			if($gaq_code_type!=""){
-				$editQoutput .=	'<script>
-									document.getElementById(\'prog-lang-mc\').value = '.json_encode($gaq_code_type).';
-									change_editor('.json_encode($gaq_code_type).');
-									mceditor.setValue('.json_encode($gaq_code_editor).');
-								 </script>
-								';
+				$editQops[] = array('setValue', 'prog-lang-mc', $gaq_code_type);
+				$editQops[] = array('changeEditor', $gaq_code_type);
+				$editQops[] = array('editorValue', 'mceditor', $gaq_code_editor);
 			}
 
 			$ga_index=1;
@@ -463,34 +442,20 @@
 				$ga_correct = $getanswers_row['correct'];
 
 				if($ga_correct==1){
-					$editQoutput .= '<script>
-										document.getElementById(\'mcans'.$ga_index.'\').checked=true;
-									 </script>
-									';
+					$editQops[] = array('setChecked', 'mcans'.$ga_index);
 				}
 
-				$editQoutput .= '<script>
-									document.getElementById(\'mcanswer'.$ga_index.'\').value = '.json_encode($ga_answer).';
-								 </script>
-								';
+				$editQops[] = array('setValue', 'mcanswer'.$ga_index, $ga_answer);
 
 				$ga_index++;
 			}
 
-			$editQoutput .= '<script>
-								document.addMcQuestion.action = "editaquest.php";
-								document.getElementById(\'addToQuizMC\').value = "Save";
-							 </script>
-							';
+			$editQops[] = array('setAction', 'addMcQuestion', 'editaquest.php');
+			$editQops[] = array('setLabel', 'addToQuizMC', 'Save');
 
 		}
 	}
-?>
 
-
-
-
-<?php
 //When deleteSomeQuestions is clicked
 	if(isset($_POST['deleteSomeQuestions']) && $_POST['deleteSomeQuestions'] != ""){
 		$deleteSQ = $_POST['deleteSomeQuestions'];
@@ -1170,9 +1135,6 @@
 			<script type="text/javascript" src="sh/scripts/shBrushSql.js"></script>
 			<script type="text/javascript" src="sh/scripts/shBrushVb.js"></script>
 			<script type="text/javascript" src="sh/scripts/shBrushXml.js"></script>
-			<script type="text/javascript">
-			    SyntaxHighlighter.all()
-			</script>
 		<!-- SYNTAX HIGHLIGHTER -->
 
 	<!-- BUGGY CODE INPUT FIELD -->
@@ -1204,328 +1166,13 @@
 
 
 
-		<script type="text/javascript">
-		//CSRF token appended to every XHR body (mirrors the hidden input in each form)
-			function csrfQS(){
-				return '&csrf_token=' + encodeURIComponent(document.querySelector('input[name=csrf_token]').value);
-			}
-
-		//displaying different code-blocks on button click
-			function showDiv(el1,el2,el3){
-				document.getElementById(el1).style.display = 'block';
-				document.getElementById(el2).style.display = 'none';
-				document.getElementById(el3).style.display = 'none';
-			}
-
-		 //hide all divs
-			function hideDivs(){
-				document.getElementById('tf').style.display = 'none';
-				document.getElementById('mc').style.display = 'none';
-				document.getElementById('quesans').style.display = 'none';
-			}
 
 
-
-/*SETTING TIMELOCKS
-			function set_timelock(quizz){
-
-			}
-
-			function remove_timelock(quizzz){
-
-			}
-*/
-
-
-			function clear_result(qquizID){
-				if(confirm("Really wanna clear the result of all users of this quiz?!")) {
-					var x = new XMLHttpRequest();
-					var url = "admin.php";
-					var vars = 'clearResult='+qquizID;
-					x.open("POST", url, true);
-					x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-					x.onreadystatechange = function() {
-						if(x.readyState == 4 && x.status == 200) {
-							document.getElementById("msg").innerHTML = x.responseText;
-						}
-					}
-					x.send(vars + csrfQS());
-					document.getElementById("msg").innerHTML = "processing...";
-				}
-			}
-
-
-
-
-			function reset_tables(){
-				if(confirm("Really wanna reset all the tables?!")) {
-					if(confirm("Your admin ID will be \'admin\' and password \'12345\'")){
-						var x = new XMLHttpRequest();
-						var url = "admin.php";
-						var vars = 'resetTables='+'yes';
-						x.open("POST", url, true);
-						x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-						x.onreadystatechange = function() {
-							if(x.readyState == 4 && x.status == 200) {
-								window.open("login.php?user_msg="+x.responseText, "_self");
-							}
-						}
-						x.send(vars + csrfQS());
-						document.getElementById("msg").innerHTML = "processing...";
-					}
-				}
-			}
-
-
-
-
-			function delete_account(){
-				if(confirm("Really wanna delete this admin Account?!")) {
-					var x = new XMLHttpRequest();
-					var url = "admin.php";
-					var vars = 'deleteAdmin='+'<?php echo $login_session; ?>';
-					x.open("POST", url, true);
-					x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-					x.onreadystatechange = function() {
-						if(x.readyState == 4 && x.status == 200) {
-							document.getElementById("msg").innerHTML = x.responseText;
-						}
-					}
-					x.send(vars + csrfQS());
-					document.getElementById("msg").innerHTML = "processing...";
-				}
-			}
-
-
-			function top_users(qiiizName){
-				var x = new XMLHttpRequest();
-				var url = "admin.php";
-				var vars = 'usersQuiz='+qiiizName;
-				x.open("POST", url, true);
-				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				x.onreadystatechange = function() {
-					if(x.readyState == 4 && x.status == 200) {
-						showDiv('quesans', 'mc', 'tf');
-						document.getElementById("quesans_table").innerHTML = x.responseText;
-						document.getElementById("msg").innerHTML = "";
-
-					}
-				}
-				x.send(vars + csrfQS());
-				document.getElementById("msg").innerHTML = "processing...";
-			}
-
-
-
-			function all_users(qqizName){
-				var x = new XMLHttpRequest();
-				var url = "admin.php";
-				var vars = 'usersAll='+qqizName;
-				x.open("POST", url, true);
-				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				x.onreadystatechange = function() {
-					if(x.readyState == 4 && x.status == 200) {
-						showDiv('quesans', 'mc', 'tf');
-						document.getElementById("quesans_table").innerHTML = x.responseText;
-						document.getElementById("msg").innerHTML = "";
-					}
-				}
-				x.send(vars + csrfQS());
-				document.getElementById("msg").innerHTML = "processing...";
-			}
-
-
-			function delete_some_questions(quizzName){
-				var x = new XMLHttpRequest();
-				var url = "admin.php";
-				var vars = 'deleteSomeQuestions='+quizzName;
-				x.open("POST", url, true);
-				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				x.onreadystatechange = function() {
-					if(x.readyState == 4 && x.status == 200) {
-						showDiv('quesans', 'mc', 'tf');
-						document.getElementById("quesans_table").innerHTML = x.responseText;
-						SyntaxHighlighter.highlight();
-						document.getElementById("msg").innerHTML = "";
-					}
-				}
-				x.send(vars + csrfQS());
-				document.getElementById("msg").innerHTML = "processing...";
-			}
-
-
-
-			function edit_question(qzname){
-				var x = new XMLHttpRequest();
-				var url = "admin.php";
-				var vars = 'editaquestion='+qzname;
-				x.open("POST", url, true);
-				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				x.onreadystatechange = function() {
-					if(x.readyState == 4 && x.status == 200) {
-						showDiv('quesans', 'mc', 'tf');
-						document.getElementById("quesans_table").innerHTML = x.responseText;
-						SyntaxHighlighter.highlight();
-						document.getElementById("msg").innerHTML = "";
-					}
-				}
-				x.send(vars + csrfQS());
-				document.getElementById("msg").innerHTML = "processing...";
-			}
-
-
-			function editQ_submit(){
-				document.deleteedit.action = "admin.php";
-	            document.getElementById('deleteedit').submit();
-	        }
-
-
-			function view_questions(qiizName){
-				var x = new XMLHttpRequest();
-				var url = "admin.php";
-				var vars = 'questionsQuiz='+qiizName;
-				x.open("POST", url, true);
-				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				x.onreadystatechange = function() {
-					if(x.readyState == 4 && x.status == 200) {
-						showDiv('quesans', 'mc', 'tf');
-						document.getElementById("quesans_table").innerHTML = x.responseText;
-						SyntaxHighlighter.highlight();
-						document.getElementById("msg").innerHTML = "";
-					}
-				}
-				x.send(vars + csrfQS());
-				document.getElementById("msg").innerHTML = "processing...";
-			}
-
-			function default_quiz(qizName){
-				var x = new XMLHttpRequest();
-				var url = "admin.php";
-				var vars = 'defaultQuiz='+qizName;
-				x.open("POST", url, true);
-				x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				x.onreadystatechange = function() {
-					if(x.readyState == 4 && x.status == 200) {
-						document.getElementById("resetBtnMsg").innerHTML = x.responseText;
-					}
-				}
-				x.send(vars + csrfQS());
-				document.getElementById("resetBtnMsg").innerHTML = "processing...";
-			}
-
-
-		//truncating the tables and resetting the quiz
-			function delete_quiz(qzName){
-				if(confirm("Really wanna delete this Quiz and all its Questions?!")) {
-					var x = new XMLHttpRequest();
-					var url = "admin.php";
-					var vars = 'deleteQuiz='+qzName;
-					x.open("POST", url, true);
-					x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-					x.onreadystatechange = function() {
-						if(x.readyState == 4 && x.status == 200) {
-							document.getElementById("resetBtnMsg").innerHTML = x.responseText;
-						}
-					}
-					x.send(vars + csrfQS());
-					document.getElementById("resetBtnMsg").innerHTML = "processing...";
-				}
-			}
-
-
-		 //truncating the tables and resetting the quiz
-			function resetQuiz(){
-				if(confirm("Really wanna delete all the Questions from all the quizes?!")) {
-					var x = new XMLHttpRequest();
-					var url = "admin.php";
-					var vars = 'reset=yes';
-					x.open("POST", url, true);
-					x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-					x.onreadystatechange = function() {
-						if(x.readyState == 4 && x.status == 200) {
-							document.getElementById("resetBtnMsg").innerHTML = x.responseText;
-						}
-					}
-					x.send(vars + csrfQS());
-					document.getElementById("resetBtnMsg").innerHTML = "processing...";
-				}
-			}
-		</script>
-
-		<script type="text/javascript">
-	 //updating metadata for a quiz
-		function update_quiz(qname){
-			open_overlay('regNewQuiz', 'regNewAdmin');
-			document.newQuiz_name.action = "updateExistingQuiz.php";
-			document.getElementById('quizName').value = qname;
-			document.getElementById('quizName').readOnly = true;
-			document.getElementById('quizTime').focus();
-		}
-
-
-		function change_pass(){
-			open_overlay('regNewAdmin', 'regNewQuiz');
-			document.reg_name.action = "changePassword.php";
-			document.getElementById('login').value = '<?php echo $login_session; ?>';
-			document.getElementById('login').readOnly = true;
-			document.getElementById("password").focus();
-		}
-
-		</script>
-
-		<script type="text/javascript">
-		//overlays
-			//hiding the overlay
-			    function close_overlay(){
-			        document.getElementById('register').style.display='none';
-			        document.getElementById('fade').style.display='none';
-			    }
-
-			//showing the overlay
-			    function open_overlay(ele1, ele2){
-
-				document.getElementById(ele1).style.display = 'block';
-					document.getElementById(ele2).style.display = 'none';
-
-			        document.getElementById('register').style.display='block';
-			        document.getElementById('fade').style.display='block';
-
-				if(ele1=='regNewAdmin'){
-					document.getElementById("register").style.height = '200px';
-					document.getElementById("login").focus();
-				}
-				else{
-					document.getElementById("register").style.height = '300px';
-					document.getElementById("quizName").focus();
-				}
-			    }
-		</script>
 
 		<link rel="stylesheet" type="text/css" href="css/register.css">
 		<link rel="stylesheet" type="text/css" href="css/addNewQuiz.css">
 
-		<script type="text/javascript">
 
-		function submit_admin(){
-			var x=document.forms["reg_name"]["login"].value;
-			var y=document.forms["reg_name"]["password"].value;
-            if (x==null || x=="" || y==null || y==""){
-                document.getElementById("required").innerHTML = "Enter Both Values";
-                exit();
-            }
-			close_overlay();
-            document.getElementById('reg_name').submit();
-            return false;
-		}
-
-		</script>
-
-		<script type="text/javascript">
-			function quiz_submit(){
-				document.deleteedit.action = "deleteSomeQues.php";
-	            document.getElementById('deleteedit').submit();
-	        }
-		</script>
 
 	</head>
 
@@ -1872,87 +1519,12 @@
 
 
     <!-- Script for the codeMirror api -->
-        <script type="text/javascript">
-            CodeMirror.modeURL = "codemirror/mode/%N/%N.js";
+	<!-- Page config + per-request state for assets/js/admin.js (CSP-safe JSON islands) -->
+	<script id="admin-boot" type="application/json"><?php echo json_encode(array('login_session' => $login_session), JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
+<?php if (!empty($editQops)): ?>	<script id="edit-state" type="application/json"><?php echo json_encode($editQops, JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
+<?php endif; ?>
+	<script src="assets/js/admin.js"></script>
 
-	        var tfeditor = CodeMirror.fromTextArea(document.getElementById("tfcodeDesc"), {
-										lineNumbers: true,
-								        matchBrackets: true,
-								        indentUnit: 4,
-								        indentWithTabs: true,
-								        smartIndent: true,
-								        styleActiveLine: true,
-								        autoCloseBrackets: true,
-								        autoCloseTags: true,
-								        viewportMargin: Infinity,
-								        fixedGutter: true
-							});
-			 var mceditor = CodeMirror.fromTextArea(document.getElementById("mccodeDesc"), {
-										lineNumbers: true,
-								        matchBrackets: true,
-								        indentUnit: 4,
-								        indentWithTabs: true,
-								        smartIndent: true,
-								        styleActiveLine: true,
-								        autoCloseBrackets: true,
-								        autoCloseTags: true,
-								        viewportMargin: Infinity,
-								        fixedGutter: true
-							});
-
-
-
-			 //JS for changing the textarea
-				function lang_chosen(selectObj){
-				 // get the index of the selected option
-					var idx = selectObj.selectedIndex;
-				 // get the value of the selected option
-					var which = selectObj.options[idx].value;
-
-					change_editor(which);
-				}
-
-				function change_editor(which){
-                    var changedMode = "text/plain";
-                    var modeName = "";
-
-					if(which=="cpp") { changedMode = "text/x-c++src"; modeName = "clike"; }
-					else if(which=="css") { changedMode = "text/css"; modeName = "css"; }
-					else if(which=="diff") { changedMode = "text/x-diff"; modeName = "diff"; }
-					else if(which=="erlang") { changedMode = "text/x-erlang"; modeName = "erlang"; }
-					else if(which=="groovy") { changedMode = "text/x-groovy"; modeName = "groovy"; }
-					else if(which=="java" || which=="javafx") { changedMode = "text/x-java"; modeName = "clike"; }
-					else if(which=="js") { changedMode = "text/javascript"; modeName = "javascript"; }
-					else if(which=="perl") { changedMode = "text/x-perl"; modeName = "perl"; }
-					else if(which=="php") { changedMode = "text/x-httpd-php"; modeName = "php"; }
-					else if(which=="python") { changedMode = "text/x-python"; modeName = "python"; }
-					else if(which=="ruby") { changedMode = "text/x-ruby"; modeName = "ruby"; }
-					else if(which=="sass") { changedMode = "text/x-sass"; modeName = "sass"; }
-					else if(which=="scala") { changedMode = "text/x-scala"; modeName = "clike"; }
-					else if(which=="shell") { changedMode = "text/x-sh"; modeName = "shell"; }
-					else if(which=="sql") { changedMode = "text/x-sql"; modeName = "sql"; }
-					else if(which=="vbnet") { changedMode = "text/x-vb"; modeName = "vb"; }
-					else if(which=="html") { changedMode = "text/x-html"; modeName = "xml"; }
-					else if(which=="csharp") { changedMode = "text/x-csharp"; modeName = "clike"; }
-                    else if(which=="applescript") { modeName = "applescript"; }
-                    else if(which=="actionscript3") { modeName = "clike"; }
-                    else if(which=="coldfusion") { modeName = "coldfusion"; }
-                    else if(which=="delphi") { changedMode = "text/x-pascal"; modeName = "pascal"; }
-                    else if(which=="powershell") { modeName = "powershell"; }
-
-                    if (modeName) {
-					CodeMirror.autoLoadMode(tfeditor, modeName);
-					CodeMirror.autoLoadMode(mceditor, modeName);
-                    }
-
-					tfeditor.setOption("mode", changedMode);
-					mceditor.setOption("mode", changedMode);
-				}
-
-
-        </script>
-
-        <?php echo $editQoutput; ?>
 
 	</body>
 </html>
