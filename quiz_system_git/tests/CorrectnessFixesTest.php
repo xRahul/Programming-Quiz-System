@@ -82,9 +82,12 @@ final class CorrectnessFixesTest extends TestCase
         self::login();
         $token = self::sessionToken();
 
+        // Explicit id mirrors the legacy denormalized convention
+        // (question_id copies the PK) and keeps answers.question_id a valid
+        // FK reference to questions.id.
         $stmtQ = self::$pdo->prepare(
-            "INSERT INTO questions (quiz_id, question_id, question, code, code_type, type)
-             VALUES (1, :qid, 'P2 fixture MC question?', '', '', 'mc')"
+            "INSERT INTO questions (id, quiz_id, question_id, question, code, code_type, type)
+             VALUES (:qid, 1, :qid, 'P2 fixture MC question?', '', '', 'mc')"
         );
         $stmtQ->execute(['qid' => self::FIXTURE_QID]);
         $stmtA = self::$pdo->prepare(
@@ -128,6 +131,12 @@ final class CorrectnessFixesTest extends TestCase
         $token = self::sessionToken();
         $fixtureQuizId = 987002;
 
+        // FK quiz_takers.quiz_id -> quizes.id needs a real parent row.
+        self::$pdo->prepare(
+            "INSERT INTO quizes (id, quiz_id, quiz_name, total_questions, display_questions, time_allotted, set_default)
+             VALUES (:id, :id, 'P2 clear-result fixture', 0, 1, 1, 0)"
+        )->execute(['id' => $fixtureQuizId]);
+
         $stmtIns = self::$pdo->prepare(
             "INSERT INTO quiz_takers (username, percentage, date_time, quiz_id, duration, marks)
              VALUES (:username, '0', now(), :quizId, 0, 0)"
@@ -158,6 +167,8 @@ final class CorrectnessFixesTest extends TestCase
             $this->assertSame(0, $countFixture(), 'all fixture rows for the resolved quiz id must be deleted');
         } finally {
             self::$pdo->prepare('DELETE FROM quiz_takers WHERE quiz_id = :quizId')
+                ->execute(['quizId' => $fixtureQuizId]);
+            self::$pdo->prepare('DELETE FROM quizes WHERE id = :quizId')
                 ->execute(['quizId' => $fixtureQuizId]);
         }
     }
@@ -233,9 +244,11 @@ final class CorrectnessFixesTest extends TestCase
         $fixtureQuizId = $this->insertFixtureQuiz();
         $fixtureQid = 987005;
 
+        // Explicit id mirrors the denormalized convention (question_id copies
+        // the PK) and keeps answers.question_id a valid FK reference.
         $stmtQ = self::$pdo->prepare(
-            "INSERT INTO questions (quiz_id, question_id, question, code, code_type, type)
-             VALUES (:quizId, :qid, 'P2 fixture original?', '', '', 'mc')"
+            "INSERT INTO questions (id, quiz_id, question_id, question, code, code_type, type)
+             VALUES (:qid, :quizId, :qid, 'P2 fixture original?', '', '', 'mc')"
         );
         $stmtQ->execute(['quizId' => $fixtureQuizId, 'qid' => $fixtureQid]);
         $stmtA = self::$pdo->prepare(
