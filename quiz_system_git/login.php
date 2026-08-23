@@ -41,7 +41,7 @@
 
 ?>
 
-<?php $page_title = 'Admin-Login'; require __DIR__ . '/lib/views/head.php'; ?>
+<?php require_once __DIR__ . '/lib/config.php'; $page_title = SITE_NAME . ' - Admin Login'; require __DIR__ . '/lib/views/head.php'; ?>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <?php require __DIR__ . '/lib/views/favicon.php'; ?>
 

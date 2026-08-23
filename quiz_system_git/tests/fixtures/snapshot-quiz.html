@@ -102,7 +102,7 @@
 	<body style="font-family: Arial;">
 
 		<div id="head" align="center">
-	<img src="img/header.jpg" alt="Chandigarh Engineering College" />
+	<img src="img/header.jpg" alt="Programming Quiz System" />
 </div>
 
         <br><strong>LEVEL2(HARD)</strong>
@@ -122,37 +122,36 @@
 							<strong>1.</strong>
 						</td>
 						<td>
-							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the  error</div></strong></pre>
 						</td>
 					</tr><tr>
 						<td></td>
 						<td>
-							<pre class="brush: cpp;">	main()
-{
-char string[]="Hello World";
-	display(string);
-}
-void display(char *string)
-{
-	printf("%s",string);
-}
-</pre>
+							<pre class="brush: cpp;">#include&lt;stdio.h&gt;
+int main(){
+char ch;
+int i;
+scanf(&quot;%c&quot;, &amp;i);
+scanf(&quot;%d&quot;, &amp;ch);
+printf(&quot;%c %d&quot;, ch, i);
+return0;
+}</pre>
 						</td>
 					</tr>
 					<tr>
 									<td></td>
 									<td>
 								 <label style="cursor:pointer;">
-									   		<input type="radio" name="rads1" value="74">Error: Rvalue required</label>
+									   		<input type="radio" name="rads1" value="83">Error: we may not get input for second scanf() statement</label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads1" value="73">Error: LValue required</label>
+									   		<input type="radio" name="rads1" value="86">None of above</label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads1" value="71">type mismatch in redeclaration</label>
+									   		<input type="radio" name="rads1" value="85">No error </label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads1" value="72">Error: Expression syntax</label>
+									   		<input type="radio" name="rads1" value="84">Error: suspicious char to in conversion in scanf()  </label>
 										<br /><br />
 									  </td>
 								</tr>
@@ -163,19 +162,28 @@ void display(char *string)
 							<strong>2.</strong>
 						</td>
 						<td>
-							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error and the  output...</div></strong></pre>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
 						</td>
 					</tr><tr>
 						<td></td>
 						<td>
-							<pre class="brush: cpp;">#include<stdio.h>
-void main() 
-{ 
-int a=320; 
-char *ptr; 
-ptr=(char *)&a; 
-printf("%d",*ptr); 
-getch();
+							<pre class="brush: cpp;">#include&lt;stdio.h&gt;
+int main()
+{
+void fun();
+inti = 1;
+while(i&lt;= 5)
+    {
+printf(&quot;%d\n&quot;, i);
+if(i&gt;2)
+goto here;
+    }
+return0;
+}
+void fun()
+{
+    here:
+printf(&quot;It works&quot;);
 }
 </pre>
 						</td>
@@ -184,16 +192,16 @@ getch();
 									<td></td>
 									<td>
 								 <label style="cursor:pointer;">
-									   		<input type="radio" name="rads2" value="76">compilation error</label>
+									   		<input type="radio" name="rads2" value="108">No Error: prints &quot;It works&quot;</label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads2" value="78">a cannot be converted from char to char*</label>
+									   		<input type="radio" name="rads2" value="109"> Error: fun() cannot be accessed </label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads2" value="77">syntax error</label>
+									   		<input type="radio" name="rads2" value="110">No error</label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads2" value="75">64</label>
+									   		<input type="radio" name="rads2" value="107">Error: goto cannot takeover control to other function </label>
 										<br /><br />
 									  </td>
 								</tr>
@@ -209,17 +217,17 @@ getch();
 					</tr><tr>
 						<td></td>
 						<td>
-							<pre class="brush: cpp;">4.	#include<stdio.h>
+							<pre class="brush: cpp;">4.	#include&lt;stdio.h&gt;
 main()
 {
 struct xx
 {
 int x=3;
-char name[]="hello";
+char name[]=&quot;hello&quot;;
  };
 struct xx *s;
-printf("%d",s->x);
-printf("%s",s->name);
+printf(&quot;%d&quot;,s-&gt;x);
+printf(&quot;%s&quot;,s-&gt;name);
 }
 </pre>
 						</td>
@@ -228,16 +236,16 @@ printf("%s",s->name);
 									<td></td>
 									<td>
 								 <label style="cursor:pointer;">
-									   		<input type="radio" name="rads3" value="116">syntax error</label>
+									   		<input type="radio" name="rads3" value="118">lvalue required here</label>
 										<br /><br />
 									   <label style="cursor:pointer;">
 									   		<input type="radio" name="rads3" value="115">you should not initialize variable in declaration</label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads3" value="117">no error</label>
+									   		<input type="radio" name="rads3" value="116">syntax error</label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads3" value="118">lvalue required here</label>
+									   		<input type="radio" name="rads3" value="117">no error</label>
 										<br /><br />
 									  </td>
 								</tr>
@@ -248,28 +256,18 @@ printf("%s",s->name);
 							<strong>4.</strong>
 						</td>
 						<td>
-							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output</div></strong></pre>
 						</td>
 					</tr><tr>
 						<td></td>
 						<td>
-							<pre class="brush: cpp;">#include<stdio.h>
-int main()
+							<pre class="brush: cpp;">enum colors {BLACK,BLUE,GREEN}
+main()
 {
-void fun();
-inti = 1;
-while(i<= 5)
-    {
-printf("%d\n", i);
-if(i>2)
-goto here;
-    }
-return0;
-}
-void fun()
-{
-    here:
-printf("It works");
+
+printf(&quot;%d..%d..%d&quot;,BLACK,BLUE,GREEN);
+
+return(1);
 }
 </pre>
 						</td>
@@ -278,16 +276,16 @@ printf("It works");
 									<td></td>
 									<td>
 								 <label style="cursor:pointer;">
-									   		<input type="radio" name="rads4" value="110">No error</label>
+									   		<input type="radio" name="rads4" value="95">0..1..2</label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads4" value="107">Error: goto cannot takeover control to other function </label>
+									   		<input type="radio" name="rads4" value="96">compiler error</label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads4" value="109"> Error: fun() cannot be accessed </label>
+									   		<input type="radio" name="rads4" value="97">0..0..0</label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads4" value="108">No Error: prints "It works"</label>
+									   		<input type="radio" name="rads4" value="98">2..1..0</label>
 										<br /><br />
 									  </td>
 								</tr>
@@ -296,6 +294,168 @@ printf("It works");
 								   <tr>
 						<td width="40px" rowspan="1" align="center">
 							<strong>5.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error..</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">main() 
+{ 
+inti; 
+clrscr(); 
+printf(&quot;%d&quot;, &amp;i)+1; 
+scanf(&quot;%d&quot;, i)-1; 
+} 
+</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads5" value="122">none of the above</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads5" value="121">syntax error</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads5" value="119">compiler error</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads5" value="120">access violation</label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								   <tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>6.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error and the  output...</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include&lt;stdio.h&gt;
+void main() 
+{ 
+int a=320; 
+char *ptr; 
+ptr=(char *)&amp;a; 
+printf(&quot;%d&quot;,*ptr); 
+getch();
+}
+</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads6" value="77">syntax error</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads6" value="76">compilation error</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads6" value="75">64</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads6" value="78">a cannot be converted from char to char*</label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								   <tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>7.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include&lt;stdio.h&gt;
+char *str = &quot;char *str = %c%s%c; main(){ 
+printf(str, 34, str, 34);}&quot;;
+
+int main()
+{
+printf(str, 34, str, 34);
+return 0;
+}
+</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads7" value="91">char *str = &quot;char *str = %c%s%c; main(){ printf(str, 34, str, 34);}&quot;;</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads7" value="93">No output </label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads7" value="94">Error in program</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads7" value="92">char *str = %c%s%c; main(){ printf(str, 34, str, 34);} </label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								   <tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>8.</strong>
+						</td>
+						<td>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+						</td>
+					</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">	main()
+{
+char string[]=&quot;Hello World&quot;;
+	display(string);
+}
+void display(char *string)
+{
+	printf(&quot;%s&quot;,string);
+}
+</pre>
+						</td>
+					</tr>
+					<tr>
+									<td></td>
+									<td>
+								 <label style="cursor:pointer;">
+									   		<input type="radio" name="rads8" value="73">Error: LValue required</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads8" value="72">Error: Expression syntax</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads8" value="74">Error: Rvalue required</label>
+										<br /><br />
+									   <label style="cursor:pointer;">
+									   		<input type="radio" name="rads8" value="71">type mismatch in redeclaration</label>
+										<br /><br />
+									  </td>
+								</tr>
+								<tr height="20px">
+								</tr>
+								   <tr>
+						<td width="40px" rowspan="1" align="center">
+							<strong>9.</strong>
 						</td>
 						<td>
 							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error...</div></strong></pre>
@@ -315,176 +475,16 @@ int data;
 									<td></td>
 									<td>
 								 <label style="cursor:pointer;">
-									   		<input type="radio" name="rads5" value="100">Error: in *NODEPTR</label>
+									   		<input type="radio" name="rads9" value="101">No error </label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads5" value="102">None of above</label>
+									   		<input type="radio" name="rads9" value="99"> Error: typedef cannot be used until it is defined </label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads5" value="99"> Error: typedef cannot be used until it is defined </label>
+									   		<input type="radio" name="rads9" value="102">None of above</label>
 										<br /><br />
 									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads5" value="101">No error </label>
-										<br /><br />
-									  </td>
-								</tr>
-								<tr height="20px">
-								</tr>
-								   <tr>
-						<td width="40px" rowspan="1" align="center">
-							<strong>6.</strong>
-						</td>
-						<td>
-							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
-						</td>
-					</tr><tr>
-						<td></td>
-						<td>
-							<pre class="brush: cpp;">#include<stdio.h>
-char *str = "char *str = %c%s%c; main(){ 
-printf(str, 34, str, 34);}";
-
-int main()
-{
-printf(str, 34, str, 34);
-return 0;
-}
-</pre>
-						</td>
-					</tr>
-					<tr>
-									<td></td>
-									<td>
-								 <label style="cursor:pointer;">
-									   		<input type="radio" name="rads6" value="93">No output </label>
-										<br /><br />
-									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads6" value="92">char *str = %c%s%c; main(){ printf(str, 34, str, 34);} </label>
-										<br /><br />
-									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads6" value="94">Error in program</label>
-										<br /><br />
-									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads6" value="91">char *str = "char *str = %c%s%c; main(){ printf(str, 34, str, 34);}";</label>
-										<br /><br />
-									  </td>
-								</tr>
-								<tr height="20px">
-								</tr>
-								   <tr>
-						<td width="40px" rowspan="1" align="center">
-							<strong>7.</strong>
-						</td>
-						<td>
-							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the  error</div></strong></pre>
-						</td>
-					</tr><tr>
-						<td></td>
-						<td>
-							<pre class="brush: cpp;">#include<stdio.h>
-int main(){
-char ch;
-int i;
-scanf("%c", &i);
-scanf("%d", &ch);
-printf("%c %d", ch, i);
-return0;
-}</pre>
-						</td>
-					</tr>
-					<tr>
-									<td></td>
-									<td>
-								 <label style="cursor:pointer;">
-									   		<input type="radio" name="rads7" value="83">Error: we may not get input for second scanf() statement</label>
-										<br /><br />
-									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads7" value="86">None of above</label>
-										<br /><br />
-									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads7" value="84">Error: suspicious char to in conversion in scanf()  </label>
-										<br /><br />
-									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads7" value="85">No error </label>
-										<br /><br />
-									  </td>
-								</tr>
-								<tr height="20px">
-								</tr>
-								   <tr>
-						<td width="40px" rowspan="1" align="center">
-							<strong>8.</strong>
-						</td>
-						<td>
-							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output</div></strong></pre>
-						</td>
-					</tr><tr>
-						<td></td>
-						<td>
-							<pre class="brush: cpp;">enum colors {BLACK,BLUE,GREEN}
-main()
-{
-
-printf("%d..%d..%d",BLACK,BLUE,GREEN);
-
-return(1);
-}
-</pre>
-						</td>
-					</tr>
-					<tr>
-									<td></td>
-									<td>
-								 <label style="cursor:pointer;">
-									   		<input type="radio" name="rads8" value="98">2..1..0</label>
-										<br /><br />
-									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads8" value="95">0..1..2</label>
-										<br /><br />
-									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads8" value="97">0..0..0</label>
-										<br /><br />
-									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads8" value="96">compiler error</label>
-										<br /><br />
-									  </td>
-								</tr>
-								<tr height="20px">
-								</tr>
-								   <tr>
-						<td width="40px" rowspan="1" align="center">
-							<strong>9.</strong>
-						</td>
-						<td>
-							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error..</div></strong></pre>
-						</td>
-					</tr><tr>
-						<td></td>
-						<td>
-							<pre class="brush: cpp;">main() 
-{ 
-inti; 
-clrscr(); 
-printf("%d", &i)+1; 
-scanf("%d", i)-1; 
-} 
-</pre>
-						</td>
-					</tr>
-					<tr>
-									<td></td>
-									<td>
-								 <label style="cursor:pointer;">
-									   		<input type="radio" name="rads9" value="119">compiler error</label>
-										<br /><br />
-									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads9" value="121">syntax error</label>
-										<br /><br />
-									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads9" value="120">access violation</label>
-										<br /><br />
-									   <label style="cursor:pointer;">
-									   		<input type="radio" name="rads9" value="122">none of the above</label>
+									   		<input type="radio" name="rads9" value="100">Error: in *NODEPTR</label>
 										<br /><br />
 									  </td>
 								</tr>
@@ -534,7 +534,7 @@ scanf("%d", i)-1;
 					<a href="gnu_gpl.txt" style="color: WHITE; text-decoration: none;" target="_blank">
 						GNU General Public License
 					</a>
-				</td>
+									</td>
 				<td align="center" id="video_link">
 					Getting Bored? Watch a
 					<a href="javascript:open_overlay();" style="color: #c4dcf5">

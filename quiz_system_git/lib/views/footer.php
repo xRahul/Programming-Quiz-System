@@ -8,6 +8,7 @@
 					<a href="gnu_gpl.txt" style="color: WHITE; text-decoration: none;" target="_blank">
 						GNU General Public License
 					</a>
+					<?php echo FOOTER_HTML; ?>
 				</td>
 <?php if ($footer_video_link): ?>				<td align="center" id="video_link">
 					Getting Bored? Watch a
