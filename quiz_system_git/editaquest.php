@@ -45,12 +45,7 @@
 		$isCorrect = preg_replace('/[^0-9a-z]/', "", $_POST['iscorrect']);
 
 	 //getting and converting strings as they are
-		$question = htmlspecialchars($question);
-		$program = htmlspecialchars($program);
-		$answer1 = htmlspecialchars($answer1);
-		$answer2 = htmlspecialchars($answer2);
-		$answer3 = htmlspecialchars($answer3);
-		$answer4 = htmlspecialchars($answer4);
+     // Values are stored RAW and escaped at output time (T4.4).
 
 	 //if its a true/false question, do this-
 		if($type == 'tf'){

@@ -24,14 +24,14 @@
 
             if($stmt->rowCount() > 0)
             {
-		$user_msg = 'Sorry, but '.htmlspecialchars($qName).' already exists!';
+		$user_msg = 'Sorry, but '.$qName.' already exists!';
                 header('location: admin.php?msg='.urlencode($user_msg));
                 exit();
             }else{
                 $stmtInsert = $pdo->prepare("INSERT INTO quizes (quiz_name, display_questions, time_allotted) VALUES (:quizName, :nQues, :qTime)");
                 $stmtInsert->execute(['quizName' => $qName, 'nQues' => $nQues, 'qTime' => $qTime]);
                 
-		$user_msg = 'Quiz, '.htmlspecialchars($qName).' has been created!';
+		$user_msg = 'Quiz, '.$qName.' has been created!';
                 header('location: admin.php?msg='.urlencode($user_msg));
                 exit();
             }

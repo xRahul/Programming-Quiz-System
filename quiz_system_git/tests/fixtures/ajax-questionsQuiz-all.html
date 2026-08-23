@@ -52,481 +52,501 @@
 
 
 <tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>1.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">If the output of the question is  hai , find the error in the program?</div></strong></pre>
-							</td>
-						</tr><tr>
-							<td></td>
-							<td>
-								<pre class="brush: cpp;">main()
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>1.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">If the output of the question is  hai , find the error in the program?</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">main()
  { 
-printf("\nab");
-printf("\bsi");
-printf("\aha");
+printf(&quot;\nab&quot;);
+printf(&quot;\bsi&quot;);
+printf(&quot;\aha&quot;);
 
 }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>wrong escape sequence \r instead of \a</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>line 4 should be printed after line 5</li></div><div style="width: 730px; word-wrap: break-word;"><li>no error</li></div><div style="width: 730px; word-wrap: break-word;"><li>wrong escape sequence \v instead of \a</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>2.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output?</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">void main()
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>wrong escape sequence \r instead of \a</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>line 4 should be printed after line 5</li></div><div style="width: 730px; word-wrap: break-word;"><li>no error</li></div><div style="width: 730px; word-wrap: break-word;"><li>wrong escape sequence \v instead of \a</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>2.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output?</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">void main()
 {
 int i=1,y;
 y=i---i---i;
-cout<<y<<â€,â€<<i;
+cout&lt;&lt;y&lt;&lt;â€,â€&lt;&lt;i;
 getch();
 }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>-1,-1</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>0,-1</li></div><div style="width: 730px; word-wrap: break-word;"><li>-1,-3</li></div><div style="width: 730px; word-wrap: break-word;"><li>0,1</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>3.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output?</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">#include<stdio.h>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>-1,-1</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>0,-1</li></div><div style="width: 730px; word-wrap: break-word;"><li>-1,-3</li></div><div style="width: 730px; word-wrap: break-word;"><li>0,1</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>3.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output?</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include&lt;stdio.h&gt;
 
 int main()
 {
 charstr[20], *s;
-printf("Enter a string\n");
-scanf("%s", str);
+printf(&quot;Enter a string\n&quot;);
+scanf(&quot;%s&quot;, str);
     s=str;
-while(*s != '\0')
+while(*s != &#039;\0&#039;)
     {
-if(*s >= 97&& *s <= 122)
+if(*s &gt;= 97&amp;&amp; *s &lt;= 122)
             *s = *s-32;
         s++;
     }
-printf("%s",str);
+printf(&quot;%s&quot;,str);
 return0;
 }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>The code converts upper case character to lower case</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>The code converts a string in to an integer</li></div><div style="width: 730px; word-wrap: break-word;"><li>The code converts lower case character to upper case</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error in code</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>4.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">#include<stdio.h>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>The code converts upper case character to lower case</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>The code converts a string in to an integer</li></div><div style="width: 730px; word-wrap: break-word;"><li>The code converts lower case character to upper case</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error in code</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>4.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include&lt;stdio.h&gt;
 int main()
 {
 int P = 10;
 switch(P)
     {
 case10:
-printf("Case 1");
+printf(&quot;Case 1&quot;);
 
 case20:
-printf("Case 2");
+printf(&quot;Case 2&quot;);
 break;
 
 case P:
-printf("Case 2");
+printf(&quot;Case 2&quot;);
 break;
     }
 return0;
 }
 
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>Error: Constant expression required at line case P: </li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Error: No default value is specified</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: There is no break statement in each case.</li></div><div style="width: 730px; word-wrap: break-word;"><li>No error will be reported</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>5.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the correct valid function call...assuming the function exists</div></strong></pre>
-							</td>
-						</tr><tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>funct();</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>funct;</li></div><div style="width: 730px; word-wrap: break-word;"><li>funct x,y;</li></div><div style="width: 730px; word-wrap: break-word;"><li>int funct();</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>6.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output...</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">int main()
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>Error: Constant expression required at line case P: </li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Error: No default value is specified</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: There is no break statement in each case.</li></div><div style="width: 730px; word-wrap: break-word;"><li>No error will be reported</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>5.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the correct valid function call...assuming the function exists</div></strong></pre>
+					</td>
+				</tr><tr>
+							<td></td>
+							<td>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>funct();</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>funct;</li></div><div style="width: 730px; word-wrap: break-word;"><li>funct x,y;</li></div><div style="width: 730px; word-wrap: break-word;"><li>int funct();</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>6.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output...</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">int main()
 {
 int x;
-for(x=-1; x<=10; x++)
+for(x=-1; x&lt;=10; x++)
     {
-if(x < 5)
+if(x &lt; 5)
 continue;
 else
 break;
-printf("techfest");
+printf(&quot;techfest&quot;);
     }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>0 times</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>infinite times</li></div><div style="width: 730px; word-wrap: break-word;"><li>10 times</li></div><div style="width: 730px; word-wrap: break-word;"><li>11 times</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>7.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">#include<stdio.h>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>0 times</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>infinite times</li></div><div style="width: 730px; word-wrap: break-word;"><li>10 times</li></div><div style="width: 730px; word-wrap: break-word;"><li>11 times</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>7.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include&lt;stdio.h&gt;
 int main(){
 const int k=7;
-int *const q=&k;
-printf("%d", *q);
+int *const q=&amp;k;
+printf(&quot;%d&quot;, *q);
 return0;
 }</pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>no error</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Error: RValue required</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: Lvalue required</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: cannot convert from 'const int *' to 'int *const'</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>8.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">What happens when a class with parameterized constructors and having no default constructor is used in a program and we create an object that needs a zero-argument constructor?</div></strong></pre>
-							</td>
-						</tr><tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>compile time error</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Preprocessing error</li></div><div style="width: 730px; word-wrap: break-word;"><li>Runtime error.</li></div><div style="width: 730px; word-wrap: break-word;"><li>Runtime exception.</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>9.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output...</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">	#include <stdio.h>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>no error</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Error: RValue required</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: Lvalue required</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: cannot convert from &#039;const int *&#039; to &#039;int *const&#039;</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>8.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">What happens when a class with parameterized constructors and having no default constructor is used in a program and we create an object that needs a zero-argument constructor?</div></strong></pre>
+					</td>
+				</tr><tr>
+							<td></td>
+							<td>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>compile time error</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Preprocessing error</li></div><div style="width: 730px; word-wrap: break-word;"><li>Runtime error.</li></div><div style="width: 730px; word-wrap: break-word;"><li>Runtime exception.</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>9.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output...</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">	#include &lt;stdio.h&gt;
 #define a 10
 main()
 {
 #define a 50
-printf("%d",a);
+printf(&quot;%d&quot;,a);
 }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>50</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>10</li></div><div style="width: 730px; word-wrap: break-word;"><li>error</li></div><div style="width: 730px; word-wrap: break-word;"><li>no output</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>10.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the last value of x</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">int x;
-for(x=0;x<10;x++)
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>50</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>10</li></div><div style="width: 730px; word-wrap: break-word;"><li>error</li></div><div style="width: 730px; word-wrap: break-word;"><li>no output</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>10.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the last value of x</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">int x;
+for(x=0;x&lt;10;x++)
 	{}</pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>10</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>9</li></div><div style="width: 730px; word-wrap: break-word;"><li>5</li></div><div style="width: 730px; word-wrap: break-word;"><li>1</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>11.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">#include<stdio.h>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>10</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>9</li></div><div style="width: 730px; word-wrap: break-word;"><li>5</li></div><div style="width: 730px; word-wrap: break-word;"><li>1</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>11.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include&lt;stdio.h&gt;
 
  int main()
 {
 int a[] = {10, 20, 30, 40, 50};
 int j;
-for(j=0; j<5; j++)
+for(j=0; j&lt;5; j++)
     {
-printf("%d\n", a);
+printf(&quot;%d\n&quot;, a);
         a++;
     }
 return 0;
 }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>Error: LValue required</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Error: Declaration syntax</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: Expression syntax</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: Rvalue required</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>12.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">which is not a protection level provided by classes in c++</div></strong></pre>
-							</td>
-						</tr><tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>hidden</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>protected</li></div><div style="width: 730px; word-wrap: break-word;"><li>private</li></div><div style="width: 730px; word-wrap: break-word;"><li>public</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>13.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">In a call to printf() function the format specifier %b can be used to print binary equivalent of an integer.</div></strong></pre>
-							</td>
-						</tr><tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>False</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>True</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>14.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">tick the correct</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">void main ( )
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>Error: LValue required</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Error: Declaration syntax</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: Expression syntax</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: Rvalue required</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>12.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">which is not a protection level provided by classes in c++</div></strong></pre>
+					</td>
+				</tr><tr>
+							<td></td>
+							<td>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>hidden</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>protected</li></div><div style="width: 730px; word-wrap: break-word;"><li>private</li></div><div style="width: 730px; word-wrap: break-word;"><li>public</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>13.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">In a call to printf() function the format specifier %b can be used to print binary equivalent of an integer.</div></strong></pre>
+					</td>
+				</tr><tr>
+							<td></td>
+							<td>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>False</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>True</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>14.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">tick the correct</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">void main ( )
 
 {
 
-  char *P = "ayqm" ;
+  char *P = &quot;ayqm&quot; ;
 
   char c;
 
   c = ++*p ;
 
-  printf ("%c", c);
+  printf (&quot;%c&quot;, c);
 
 }
 
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>a</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>ayqm</li></div><div style="width: 730px; word-wrap: break-word;"><li>syntax error</li></div><div style="width: 730px; word-wrap: break-word;"><li>compilation error</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>15.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">which of the following algo requires sorted array?</div></strong></pre>
-							</td>
-						</tr><tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>binary search</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>linear search</li></div><div style="width: 730px; word-wrap: break-word;"><li>hash search</li></div><div style="width: 730px; word-wrap: break-word;"><li>all of the above</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>16.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">the statement prints</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">printf("%c",100);</pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>prints ascii value for 100</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>100</li></div><div style="width: 730px; word-wrap: break-word;"><li>prints garbage value</li></div><div style="width: 730px; word-wrap: break-word;"><li>none of these</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>17.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">all srings end up with a null zero....</div></strong></pre>
-							</td>
-						</tr><tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>True</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>False</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>18.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">character variable may contain up to seven literals...</div></strong></pre>
-							</td>
-						</tr><tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>True</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>False</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>19.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
-							</td>
-						</tr><tr>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>a</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>ayqm</li></div><div style="width: 730px; word-wrap: break-word;"><li>syntax error</li></div><div style="width: 730px; word-wrap: break-word;"><li>compilation error</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>15.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">which of the following algo requires sorted array?</div></strong></pre>
+					</td>
+				</tr><tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">main(){
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>binary search</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>linear search</li></div><div style="width: 730px; word-wrap: break-word;"><li>hash search</li></div><div style="width: 730px; word-wrap: break-word;"><li>all of the above</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>16.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">the statement prints</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">printf(&quot;%c&quot;,100);</pre>
+						</td>
+					</tr>
+					<tr>
+							<td></td>
+							<td>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>prints ascii value for 100</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>100</li></div><div style="width: 730px; word-wrap: break-word;"><li>prints garbage value</li></div><div style="width: 730px; word-wrap: break-word;"><li>none of these</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>17.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">all srings end up with a null zero....</div></strong></pre>
+					</td>
+				</tr><tr>
+							<td></td>
+							<td>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>True</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>False</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>18.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">character variable may contain up to seven literals...</div></strong></pre>
+					</td>
+				</tr><tr>
+							<td></td>
+							<td>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>True</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>False</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>19.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">main(){
 extern int i;
 i=20;
-printf("%d",i);
+printf(&quot;%d&quot;,i);
 }</pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>linker error</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>compiler error</li></div><div style="width: 730px; word-wrap: break-word;"><li>syntax error</li></div><div style="width: 730px; word-wrap: break-word;"><li>no output,no error</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>20.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">void main()
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>linker error</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>compiler error</li></div><div style="width: 730px; word-wrap: break-word;"><li>syntax error</li></div><div style="width: 730px; word-wrap: break-word;"><li>no output,no error</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>20.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">void main()
 
 {
 
@@ -538,157 +558,163 @@ printf("%d",i);
 
   {
 
-    printf("EXAM");
+    printf(&quot;EXAM&quot;);
 
   }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>no output,no error</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>EXAM</li></div><div style="width: 730px; word-wrap: break-word;"><li>EXAM4</li></div><div style="width: 730px; word-wrap: break-word;"><li>syntax error</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>21.</strong>
-							</td>
+						</td>
+					</tr>
+					<tr>
+							<td></td>
 							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">Which of the following statements is correct? 
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>no output,no error</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>EXAM</li></div><div style="width: 730px; word-wrap: break-word;"><li>EXAM4</li></div><div style="width: 730px; word-wrap: break-word;"><li>syntax error</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>21.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">Which of the following statements is correct? 
 1.	Once a reference variable has been defined to refer to a particular variable it can refer to any other variable. 
 2.	A reference is not a constant pointer. 
 
 
 </div></strong></pre>
-							</td>
-						</tr><tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>Both 1 and 2 are incorrect.</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Only 1 is correct.</li></div><div style="width: 730px; word-wrap: break-word;"><li> Only 2 is correct.</li></div><div style="width: 730px; word-wrap: break-word;"><li>Both 1 and 2 are correct.</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>22.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">hahaha</div></strong></pre>
-							</td>
-						</tr><tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>True</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>False</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>23.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
-							</td>
-						</tr><tr>
+					</td>
+				</tr><tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">	main()
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>Both 1 and 2 are incorrect.</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Only 1 is correct.</li></div><div style="width: 730px; word-wrap: break-word;"><li> Only 2 is correct.</li></div><div style="width: 730px; word-wrap: break-word;"><li>Both 1 and 2 are correct.</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>22.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL1(EASY))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">hahaha</div></strong></pre>
+					</td>
+				</tr><tr>
+							<td></td>
+							<td>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>True</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>False</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>23.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">	main()
 {
-char string[]="Hello World";
+char string[]=&quot;Hello World&quot;;
 	display(string);
 }
 void display(char *string)
 {
-	printf("%s",string);
+	printf(&quot;%s&quot;,string);
 }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>type mismatch in redeclaration</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Error: Expression syntax</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: LValue required</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: Rvalue required</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>24.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error and the  output...</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">#include<stdio.h>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>type mismatch in redeclaration</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Error: Expression syntax</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: LValue required</li></div><div style="width: 730px; word-wrap: break-word;"><li>Error: Rvalue required</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>24.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error and the  output...</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include&lt;stdio.h&gt;
 void main() 
 { 
 int a=320; 
 char *ptr; 
-ptr=(char *)&a; 
-printf("%d",*ptr); 
+ptr=(char *)&amp;a; 
+printf(&quot;%d&quot;,*ptr); 
 getch();
 }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>64</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>compilation error</li></div><div style="width: 730px; word-wrap: break-word;"><li>syntax error</li></div><div style="width: 730px; word-wrap: break-word;"><li>a cannot be converted from char to char*</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>25.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the  error</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">#include<stdio.h>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>64</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>compilation error</li></div><div style="width: 730px; word-wrap: break-word;"><li>syntax error</li></div><div style="width: 730px; word-wrap: break-word;"><li>a cannot be converted from char to char*</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>25.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the  error</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include&lt;stdio.h&gt;
 int main(){
 char ch;
 int i;
-scanf("%c", &i);
-scanf("%d", &ch);
-printf("%c %d", ch, i);
+scanf(&quot;%c&quot;, &amp;i);
+scanf(&quot;%d&quot;, &amp;ch);
+printf(&quot;%c %d&quot;, ch, i);
 return0;
 }</pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>Error: we may not get input for second scanf() statement</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Error: suspicious char to in conversion in scanf()  </li></div><div style="width: 730px; word-wrap: break-word;"><li>No error </li></div><div style="width: 730px; word-wrap: break-word;"><li>None of above</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>26.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">#include<stdio.h>
-char *str = "char *str = %c%s%c; main(){ 
-printf(str, 34, str, 34);}";
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>Error: we may not get input for second scanf() statement</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Error: suspicious char to in conversion in scanf()  </li></div><div style="width: 730px; word-wrap: break-word;"><li>No error </li></div><div style="width: 730px; word-wrap: break-word;"><li>None of above</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>26.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include&lt;stdio.h&gt;
+char *str = &quot;char *str = %c%s%c; main(){ 
+printf(str, 34, str, 34);}&quot;;
 
 int main()
 {
@@ -696,90 +722,93 @@ printf(str, 34, str, 34);
 return 0;
 }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>char *str = "char *str = %c%s%c; main(){ printf(str, 34, str, 34);}";</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>char *str = %c%s%c; main(){ printf(str, 34, str, 34);} </li></div><div style="width: 730px; word-wrap: break-word;"><li>No output </li></div><div style="width: 730px; word-wrap: break-word;"><li>Error in program</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>27.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">enum colors {BLACK,BLUE,GREEN}
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>char *str = &quot;char *str = %c%s%c; main(){ printf(str, 34, str, 34);}&quot;;</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>char *str = %c%s%c; main(){ printf(str, 34, str, 34);} </li></div><div style="width: 730px; word-wrap: break-word;"><li>No output </li></div><div style="width: 730px; word-wrap: break-word;"><li>Error in program</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>27.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the output</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">enum colors {BLACK,BLUE,GREEN}
 main()
 {
 
-printf("%d..%d..%d",BLACK,BLUE,GREEN);
+printf(&quot;%d..%d..%d&quot;,BLACK,BLUE,GREEN);
 
 return(1);
 }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>0..1..2</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>compiler error</li></div><div style="width: 730px; word-wrap: break-word;"><li>0..0..0</li></div><div style="width: 730px; word-wrap: break-word;"><li>2..1..0</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>28.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error...</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">typedefstruct
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>0..1..2</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>compiler error</li></div><div style="width: 730px; word-wrap: break-word;"><li>0..0..0</li></div><div style="width: 730px; word-wrap: break-word;"><li>2..1..0</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>28.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error...</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">typedefstruct
 {
 int data;
     NODEPTR link;
 }*NODEPTR;
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li> Error: typedef cannot be used until it is defined </li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Error: in *NODEPTR</li></div><div style="width: 730px; word-wrap: break-word;"><li>No error </li></div><div style="width: 730px; word-wrap: break-word;"><li>None of above</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>29.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">#include<stdio.h>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li> Error: typedef cannot be used until it is defined </li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>Error: in *NODEPTR</li></div><div style="width: 730px; word-wrap: break-word;"><li>No error </li></div><div style="width: 730px; word-wrap: break-word;"><li>None of above</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>29.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">#include&lt;stdio.h&gt;
 int main()
 {
 void fun();
 inti = 1;
-while(i<= 5)
+while(i&lt;= 5)
     {
-printf("%d\n", i);
-if(i>2)
+printf(&quot;%d\n&quot;, i);
+if(i&gt;2)
 goto here;
     }
 return0;
@@ -787,114 +816,118 @@ return0;
 void fun()
 {
     here:
-printf("It works");
+printf(&quot;It works&quot;);
 }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>Error: goto cannot takeover control to other function </li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>No Error: prints "It works"</li></div><div style="width: 730px; word-wrap: break-word;"><li> Error: fun() cannot be accessed </li></div><div style="width: 730px; word-wrap: break-word;"><li>No error</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>30.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error..</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">4.	#include<stdio.h>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>Error: goto cannot takeover control to other function </li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>No Error: prints &quot;It works&quot;</li></div><div style="width: 730px; word-wrap: break-word;"><li> Error: fun() cannot be accessed </li></div><div style="width: 730px; word-wrap: break-word;"><li>No error</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>30.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error..</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">4.	#include&lt;stdio.h&gt;
 main()
 {
 struct xx
 {
 int x=3;
-char name[]="hello";
+char name[]=&quot;hello&quot;;
  };
 struct xx *s;
-printf("%d",s->x);
-printf("%s",s->name);
+printf(&quot;%d&quot;,s-&gt;x);
+printf(&quot;%s&quot;,s-&gt;name);
 }
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>you should not initialize variable in declaration</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>syntax error</li></div><div style="width: 730px; word-wrap: break-word;"><li>no error</li></div><div style="width: 730px; word-wrap: break-word;"><li>lvalue required here</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>31.</strong>
-							</td>
-							<td>
-								<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error..</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: cpp;">main() 
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>you should not initialize variable in declaration</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>syntax error</li></div><div style="width: 730px; word-wrap: break-word;"><li>no error</li></div><div style="width: 730px; word-wrap: break-word;"><li>lvalue required here</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>31.</strong>
+						</td>
+						<td>
+							
+							<small><i>(LEVEL2(HARD))</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">find the error..</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: cpp;">main() 
 { 
 inti; 
 clrscr(); 
-printf("%d", &i)+1; 
-scanf("%d", i)-1; 
+printf(&quot;%d&quot;, &amp;i)+1; 
+scanf(&quot;%d&quot;, i)-1; 
 } 
 </pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>compiler error</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>access violation</li></div><div style="width: 730px; word-wrap: break-word;"><li>syntax error</li></div><div style="width: 730px; word-wrap: break-word;"><li>none of the above</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>32.</strong>
-							</td>
-							<td>
-								<small><i>(Parity Ajax Fixture Quiz)</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">Parity fixture: what is 2+2?</div></strong></pre>
-							</td>
-						</tr><tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>True</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>False</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								<tr>
-							<td width="40px" rowspan="1" align="center"><br>
-								<strong>33.</strong>
-							</td>
-							<td>
-								<small><i>(Parity Ajax Fixture Quiz)</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">Parity fixture: which one is O'Brien's?</div></strong></pre>
-							</td>
-						</tr><tr>
+						</td>
+					</tr>
+					<tr>
 							<td></td>
 							<td>
-								<pre class="brush: php;"><?php echo "parity"; ?></pre>
-							</td>
-						</tr>
-						<tr>
-									<td></td>
-									<td>
-										<ol type="a">
-								<u><i><div style="width: 730px; word-wrap: break-word;"><li>parityA O'Brien</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>parityB</li></div><div style="width: 730px; word-wrap: break-word;"><li>parityC</li></div><div style="width: 730px; word-wrap: break-word;"><li>parityD</li></div>		</ol>
-									</td>
-								</tr>
-								<tr height="20px"></tr>
-								
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>compiler error</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>access violation</li></div><div style="width: 730px; word-wrap: break-word;"><li>syntax error</li></div><div style="width: 730px; word-wrap: break-word;"><li>none of the above</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>32.</strong>
+						</td>
+						<td>
+							
+							<small><i>(Parity Ajax Fixture Quiz)</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">Parity fixture: what is 2+2?</div></strong></pre>
+					</td>
+				</tr><tr>
+							<td></td>
+							<td>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>True</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>False</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							<tr>
+						<td width="40px" rowspan="1" align="center"><br>
+							<strong>33.</strong>
+						</td>
+						<td>
+							
+							<small><i>(Parity Ajax Fixture Quiz)</i></small><br><pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">Parity fixture: which one is O&#039;Brien&#039;s?</div></strong></pre>
+					</td>
+				</tr><tr>
+						<td></td>
+						<td>
+							<pre class="brush: php;">&lt;?php echo &quot;parity&quot;; ?&gt;</pre>
+						</td>
+					</tr>
+					<tr>
+							<td></td>
+							<td>
+								<ol type="a">
+						<u><i><div style="width: 730px; word-wrap: break-word;"><li>parityA O&#039;Brien</li></div></i></u><div style="width: 730px; word-wrap: break-word;"><li>parityB</li></div><div style="width: 730px; word-wrap: break-word;"><li>parityC</li></div><div style="width: 730px; word-wrap: break-word;"><li>parityD</li></div>				</ol>
+								</td>
+							</tr>
+							<tr height="20px"></tr>
+							

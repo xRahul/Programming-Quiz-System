@@ -21,8 +21,6 @@
             $roll_no = $_POST["rollno"];
             $quiz_ID = $_POST["quizID"];
 
-            $roll_no = htmlspecialchars($roll_no);
-
             if($total_questions>0){
 
                 // calculating %age
@@ -136,8 +134,8 @@
         <?php require __DIR__ . '/lib/views/header.php'; ?>
 
         <div id="score" align="center">
-            <?php echo $roll_no; ?>, You scored 
-            <?php echo $marks; ?>/<?php echo $total_questions; ?>
+            <?php echo htmlspecialchars($roll_no, ENT_QUOTES); ?>, You scored 
+            <?php echo (int) $marks; ?>/<?php echo (int) $total_questions; ?>
         </div>
 
         <div id="video" class="white_content" onclick="javascript:close_overlay();">

@@ -81,7 +81,7 @@
 			}
 		}
 
-		$user_msg = 'Questions, '.htmlspecialchars($questIDs).' have been deleted!';
+		$user_msg = 'Questions, '.$questIDs.' have been deleted!';
 	    header('location: admin.php?msg='.urlencode($user_msg));
         exit();
 	}else{

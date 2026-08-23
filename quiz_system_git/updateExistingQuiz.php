@@ -24,7 +24,7 @@
 
             if($stmt->rowCount() == 0)
             {
-		$user_msg = 'Sorry, but '.htmlspecialchars($qName).' doesn\'t exist!';
+		$user_msg = 'Sorry, but '.$qName.' doesn\'t exist!';
                 header('location: admin.php?msg='.urlencode($user_msg));
                 exit();
             }else{
@@ -35,7 +35,7 @@
                 $stmtUpdate = $pdo->prepare("UPDATE quizes SET display_questions=:nQues, time_allotted= :qTime WHERE quiz_name = :quizName");
                 $stmtUpdate->execute(['nQues' => $nQues, 'qTime' => $qTime, 'quizName' => $qName]);
 
-		$user_msg = 'Quiz, '.htmlspecialchars($qName).' has been updated!';
+		$user_msg = 'Quiz, '.$qName.' has been updated!';
                 if($t_ques < $nQues)
                     $user_msg .= ' But, display Questions are more than the total no. of questions in the quiz('.$nQues.'/'.$t_ques.').';
 

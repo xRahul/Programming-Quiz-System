@@ -405,7 +405,7 @@ final class TransactionTest extends TestCase
     private static function request(string $method, string $path, array $post = [], ?string $jar = null): array
     {
         $args = [
-            'curl', '-s', '-A', 'TransactionTest/1.0',
+            'curl', '-s', '--max-time', '10', '-A', 'TransactionTest/1.0',
             '-b', $jar ?? self::$authJar, '-c', $jar ?? self::$authJar,
             '-D', '-', '-w', "\n%{http_code}",
             '-X', $method,

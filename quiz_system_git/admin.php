@@ -53,16 +53,7 @@
 		$isCorrect = preg_replace('/[^0-9a-z]/', "", $_POST['iscorrect']);
 
 	 //getting and converting strings as they are
-     // NOTE: We don't use mysql_real_escape_string with PDO prepared statements.
-     // We DO use htmlspecialchars to prevent XSS when displaying, but usually we store raw and escape on output.
-     // However, the original code called htmlspecialchars BEFORE storing. I will keep that behavior to minimize breakage,
-     // although ideally we store raw.
-		$question = htmlspecialchars($question);
-		$program = htmlspecialchars($program);
-		$answer1 = htmlspecialchars($answer1);
-		$answer2 = htmlspecialchars($answer2);
-		$answer3 = htmlspecialchars($answer3);
-		$answer4 = htmlspecialchars($answer4);
+     // Values are stored RAW and escaped at output time (T4.4).
 
 	 //if its a true/false question, do this-
 		if($type == 'tf'){
@@ -159,13 +150,14 @@
 
 <?php
 //showing the message back to the user after a transaction is completed
+//stored raw; escaped once at the echo site
 	$msg = "";
 	if(isset($_GET['msg'])){
-		$msg = htmlspecialchars($_GET['msg']);
+		$msg = $_GET['msg'];
 	}
 
 	if(isset($_POST['msg'])){
-		$msg = htmlspecialchars($_POST['msg']);
+		$msg = $_POST['msg'];
 	}
 ?>
 
@@ -259,8 +251,7 @@
 		$gaq_code_editor = $getaquestion_row['code'];
 		$gaq_code_type = $getaquestion_row['code_type'];
 		$gaq_type = $getaquestion_row['type'];
-	 //converting program into what it ought to be
-		$gaq_code_editor = htmlspecialchars_decode($gaq_code_editor);
+	 //storage is raw since migration 005b + T4.4: no decode needed
 
         $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id=:questionID");
         $stmtAns->execute(['questionID' => $editAQ]);
@@ -509,25 +500,30 @@
 	$stmt = $pdo->query("SELECT id as quiz_id, quiz_name, display_questions, time_allotted FROM quizes");
 
 	 //getting individual quiz's info!
-		while($quizID_row = $stmt->fetch()){
+	 	while($quizID_row = $stmt->fetch()){
 			$m_quizID = $quizID_row['quiz_id'];
 			$m_quiz_name = $quizID_row['quiz_name'];
 			$m_disp_ques = $quizID_row['display_questions'];
 			$m_time_alot = $quizID_row['time_allotted'];
+		 //quiz names travel into single/double-quoted JS onclick args inside
+		 //a double-quoted HTML attribute: JSON hex-encodes quotes/tags for the
+		 //JS layer, then ENT_QUOTES encodes the result for the attribute layer
+			$m_quiz_name_js = htmlspecialchars(json_encode($m_quiz_name, JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP), ENT_QUOTES);
+			$m_quiz_name_html = htmlspecialchars($m_quiz_name, ENT_QUOTES);
 		 //getting options for the selecting quiz part of create/edit question
-			$quizSelect .= ' <option value="'.$m_quizID.'">'.$m_quiz_name.'</option>';
+			$quizSelect .= ' <option value="'.$m_quizID.'">'.$m_quiz_name_html.'</option>';
 		 //getting the quiz menu!
-			$quizesMenu .= '<li>'.$m_quiz_name.' (Q='.$m_disp_ques.', T='.$m_time_alot.')
+			$quizesMenu .= '<li>'.$m_quiz_name_html.' (Q='.$m_disp_ques.', T='.$m_time_alot.')
 								<ul>
 									<li>Quiz Settings
 										<ul>
-											<a href="javascript:default_quiz(\''.$m_quiz_name.'\')">
+											<a href="javascript:default_quiz('.$m_quiz_name_js.')">
 												<li>Set Default</li>
 											</a>
-											<a href="javascript:update_quiz(\''.$m_quiz_name.'\')">
+											<a href="javascript:update_quiz('.$m_quiz_name_js.')">
 												<li>Update Metadata</li>
 											</a>
-											<a href="javascript:delete_quiz(\''.$m_quiz_name.'\')">
+											<a href="javascript:delete_quiz('.$m_quiz_name_js.')">
 												<li>Delete this Quiz</li>
 											</a>
 										</ul>
@@ -535,13 +531,13 @@
 
 									<li>Manage Questions
 										<ul>
-											<a href="javascript:view_questions(\''.$m_quiz_name.'\')">
+											<a href="javascript:view_questions('.$m_quiz_name_js.')">
 												<li>View all Questions</li>
 											</a>
-											<a href="javascript:edit_question(\''.$m_quiz_name.'\')">
+											<a href="javascript:edit_question('.$m_quiz_name_js.')">
 												<li>Edit a Question</li>
 											</a>
-											<a href="javascript:delete_some_questions(\''.$m_quiz_name.'\')">
+											<a href="javascript:delete_some_questions('.$m_quiz_name_js.')">
 												<li>Delete Some Questions</li>
 											</a>
 										</ul>
@@ -551,10 +547,10 @@
 
 									<li>Results
 										<ul>
-											<a href="javascript:top_users(\''.$m_quiz_name.'\')">
+											<a href="javascript:top_users('.$m_quiz_name_js.')">
 												<li>Result(Top 20)</li>
 											</a>
-											<a href="javascript:all_users(\''.$m_quiz_name.'\')">
+											<a href="javascript:all_users('.$m_quiz_name_js.')">
 												<li>Result(All)</li>
 											</a>
 											<a href="javascript:clear_result(\''.$m_quizID.'\')">
@@ -765,12 +761,12 @@
 
 
 		<div id="admin_menu">
-			<p style="color:#06F;" id="msg">
-				<?php echo $msg; ?>
-			</p>
+		<p style="color:#06F;" id="msg">
+			<?php echo htmlspecialchars($msg, ENT_QUOTES); ?>
+		</p>
 			<br><br>
 			<ul>
-				<span id="Hello">Hello, <a href="admin.php"><span id="usr"><?php echo $login_session; ?>!</span></a></span>
+				<span id="Hello">Hello, <a href="admin.php"><span id="usr"><?php echo htmlspecialchars($login_session, ENT_QUOTES); ?>!</span></a></span>
 
 				<a href="index.php" target="_blank">
 					<li>Quiz Homepage</li>

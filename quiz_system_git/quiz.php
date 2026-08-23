@@ -19,7 +19,6 @@
 		
 	 //getting values in variables
 		$roll_no = $_POST['rollno'];
-		$roll_no = htmlspecialchars($roll_no);
 
 		$total_questions = preg_replace('/[^0-9]/', "", $selecting_quiz_row['display_questions']);
 
@@ -28,7 +27,7 @@
 
 		$final_quiz_ID = preg_replace('/[^0-9]/', "", $selecting_quiz_row['quiz_id']);
 
-		$quzz_name = htmlspecialchars($selecting_quiz_row['quiz_name']);
+		$quzz_name = $selecting_quiz_row['quiz_name'];
 
 	 //checking if user has already taken this quiz
         $stmtCheck = $pdo->prepare("SELECT id FROM quiz_takers WHERE username = :username AND quiz_id=:quizID");
@@ -129,7 +128,7 @@
 							<strong>'.$m_display_ID.'.</strong>
 						</td>
 						<td>
-							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">'.$m_thisQuestion.'</div></strong></pre>
+							<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">'.htmlspecialchars($m_thisQuestion, ENT_QUOTES).'</div></strong></pre>
 						</td>
 					</tr>';
 		 //if programming code is inserted, its html for the code
@@ -137,7 +136,7 @@
 				$m_q .='<tr>
 						<td></td>
 						<td>
-							<pre class="brush: '.$m_code_type.';">'.$m_code.'</pre>
+							<pre class="brush: '.htmlspecialchars($m_code_type, ENT_QUOTES).';">'.htmlspecialchars($m_code, ENT_QUOTES).'</pre>
 						</td>
 					</tr>
 					';
@@ -159,7 +158,7 @@
 
 						
 						$m_answers .= ' <label style="cursor:pointer;">
-									   		<input type="radio" name="rads'.$m_display_ID.'" value="'.$m_answer_ID.'">'.$m_answer.'</label>
+									   		<input type="radio" name="rads'.$m_display_ID.'" value="'.$m_answer_ID.'">'.htmlspecialchars($m_answer, ENT_QUOTES).'</label>
 										<br /><br />
 									  ';
 					}
@@ -191,7 +190,7 @@
 						</tr>';
 
 	 //adding html for hidden values to be sent to result.php
-		$m_output .= '<input type="hidden" name="rollno" value="'.$roll_no.'">
+		$m_output .= '<input type="hidden" name="rollno" value="'.htmlspecialchars($roll_no, ENT_QUOTES).'">
 					  <input type="hidden" name="total_ques" value="'.$m_display_ID.'">
 					  <input type="hidden" name="total_time" value="'.$total_time.'">
 					  <input type="hidden" name="quizID" value="'.$final_quiz_ID.'">
@@ -269,7 +268,7 @@
 
 		<?php require __DIR__ . '/lib/views/header.php'; ?>
 
-        <br><strong><?php echo $quzz_name; ?></strong>
+        <br><strong><?php echo htmlspecialchars($quzz_name, ENT_QUOTES); ?></strong>
 
         <div id="countdown">
         <script id="quiz-boot" type="application/json"><?php echo json_encode(array('total_time' => (int) $total_time), JSON_HEX_TAG | JSON_HEX_AMP); ?></script>

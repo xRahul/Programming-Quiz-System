@@ -133,7 +133,7 @@ if ($is_tf) {
 
 
 			<input type="hidden" value="tf" name="type">
-			<input type="hidden" value="<?php echo $gaq_question_id; ?>" name="questionID">
+			<input type="hidden" value="<?php echo htmlspecialchars($gaq_question_id, ENT_QUOTES); ?>" name="questionID">
 				<input type="submit" class="add_to_quiz" id="addToQuizTF" value="Add To Quiz">
 <?php else: ?>
 				<br />
@@ -177,7 +177,7 @@ if ($is_tf) {
 			<br />
 			<br />
 			<input type="hidden" value="mc" name="type">
-			<input type="hidden" value="<?php echo $gaq_question_id; ?>" name="questionID">
+			<input type="hidden" value="<?php echo htmlspecialchars($gaq_question_id, ENT_QUOTES); ?>" name="questionID">
 			<input type="submit" class="add_to_quiz" id="addToQuizMC" value="Add To Quiz">
 <?php endif; ?>
 		</form>

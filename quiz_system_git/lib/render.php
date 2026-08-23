@@ -91,7 +91,7 @@ function render_questions_table(array $rows, array $answers_by_qid, string $mode
 						</td>
 						<td>
 							' . $control . '
-							<small><i>(' . $row['quiz_name'] . ')</i></small><br>';
+							<small><i>(' . htmlspecialchars((string) $row['quiz_name'], ENT_QUOTES) . ')</i></small><br>';
         } elseif ($mode === 'none') {
             $q .= '	<strong>' . $displayId . '.</strong>
 					</td>
@@ -103,7 +103,7 @@ function render_questions_table(array $rows, array $answers_by_qid, string $mode
 						' . $control . '
 					';
         }
-        $q .= '<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">' . $row['question'] . '</div></strong></pre>
+        $q .= '<pre class="question_style"><strong><div style="width: 730px; word-wrap: break-word;">' . htmlspecialchars((string) $row['question'], ENT_QUOTES) . '</div></strong></pre>
 					</td>
 				</tr>';
 
@@ -114,7 +114,7 @@ function render_questions_table(array $rows, array $answers_by_qid, string $mode
             $q .= '<tr>
 						' . $spacer . '
 						<td>
-							<pre class="brush: ' . $row['code_type'] . ';">' . $row['code'] . '</pre>
+							<pre class="brush: ' . htmlspecialchars((string) $row['code_type'], ENT_QUOTES) . ';">' . htmlspecialchars((string) $row['code'], ENT_QUOTES) . '</pre>
 						</td>
 					</tr>
 					';
@@ -130,7 +130,7 @@ function render_questions_table(array $rows, array $answers_by_qid, string $mode
             if ($answerRow['correct'] == 1) {
                 $answers .= '<u><i>';
             }
-            $answers .= '<div style="width: 730px; word-wrap: break-word;"><li>' . $answerRow['answer'] . '</li></div>';
+            $answers .= '<div style="width: 730px; word-wrap: break-word;"><li>' . htmlspecialchars((string) $answerRow['answer'], ENT_QUOTES) . '</li></div>';
             if ($answerRow['correct'] == 1) {
                 $answers .= '</i></u>';
             }
@@ -188,11 +188,11 @@ function render_results_table(array $rows, ?int $limit): string
     foreach ($rows as $row) {
         $output .= '<tr align="center">
 						  <td>' . $rank . '</td>
-						  <td>' . $row['username'] . '</td>
-						  <td>' . $row['marks'] . '</td>
-						  <td>' . $row['percentage'] . '</td>
-						  <td>' . $row['duration'] . '</td>
-						  <td>' . $row['date_time'] . '</td>
+						  <td>' . htmlspecialchars((string) $row['username'], ENT_QUOTES) . '</td>
+						  <td>' . htmlspecialchars((string) $row['marks'], ENT_QUOTES) . '</td>
+						  <td>' . htmlspecialchars((string) $row['percentage'], ENT_QUOTES) . '</td>
+						  <td>' . htmlspecialchars((string) $row['duration'], ENT_QUOTES) . '</td>
+						  <td>' . htmlspecialchars((string) $row['date_time'], ENT_QUOTES) . '</td>
 					  </tr>
 					 ';
         $rank++;
