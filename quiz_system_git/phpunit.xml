@@ -9,10 +9,14 @@
         </testsuite>
     </testsuites>
     <!--
-      Test-process credential defaults. Shell exports take precedence over
-      these (no forced override); CI supplies real values via its own
-      environment. Tests needing a live database skip gracefully when DB_PASS
-      is empty. See CONTRIBUTING.md and setup-remove.md.
+      Test-process credential defaults. <env> without force="true" only sets
+      a variable when it is not already defined, so shell exports (and CI
+      secrets) take precedence over these values. Tests needing a live
+      database skip gracefully when DB_PASS is empty. See CONTRIBUTING.md and
+      setup-remove.md.
     -->
-    <php>    </php>
+    <php>
+        <env name="DB_USER" value="quiz"/>
+        <env name="DB_PASS" value=""/>
+    </php>
 </phpunit>
