@@ -7,6 +7,8 @@
 
 
 	require_once("scripts/connect_db.php");
+	require_once __DIR__ . '/lib/headers.php';
+	send_security_headers();
 
     $stmt = $pdo->query("SELECT id as quiz_id, display_questions, time_allotted, quiz_name FROM quizes WHERE set_default=1");
     $selecting_quiz_row = $stmt->fetch();

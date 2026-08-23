@@ -9,6 +9,9 @@
     require_once __DIR__ . '/lib/csrf.php';
     csrf_verify();
 
+    require_once __DIR__ . '/lib/headers.php';
+    send_security_headers();
+
     // $pdo is available from session.php -> connect_db.php -> db.php
 
 //inserting the questions into the database

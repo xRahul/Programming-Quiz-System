@@ -6,6 +6,9 @@
     */
     
 
+    require_once __DIR__ . '/lib/headers.php';
+    send_security_headers();
+
     if(isset($_POST["total_ques"]) && isset($_POST["rollno"]) && isset($_POST["quizID"]))
     {
         if($_POST["total_ques"] != "" && $_POST["rollno"] != "" && $_POST["quizID"] != "")

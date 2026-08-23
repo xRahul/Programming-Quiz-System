@@ -23,7 +23,11 @@
         under certain conditions found in the GNU GPL license
     */
 
-    session_start();
+    require_once __DIR__ . '/lib/session.php';
+    secure_session_start();
+
+    require_once __DIR__ . '/lib/headers.php';
+    send_security_headers();
 
     $wrong = "";
     if(isset($_POST['user_msg']) && $_POST['user_msg']!=""){
