@@ -8,7 +8,10 @@
 
 	require_once("scripts/connect_db.php");
 	require_once __DIR__ . '/lib/headers.php';
+	require_once __DIR__ . '/lib/render.php';
 	send_security_headers();
+
+	use function App\fetch_answers_by_question_ids;
 
     $stmt = $pdo->query("SELECT id as quiz_id, display_questions, time_allotted, quiz_name FROM quizes WHERE set_default=1");
     $selecting_quiz_row = $stmt->fetch();
@@ -109,6 +112,10 @@
 	 //setting Question No. to 1 on quiz page(necessary due to rand() above)
 		$m_display_ID = 1;
 
+	 //one batched answers fetch for every displayed question
+	 //(replaces one "ORDER BY rand()" SELECT per question inside the loop)
+		$answers_by_qid = fetch_answers_by_question_ids($pdo, array_map('strval', array_column($sorted_questions, 'id')));
+
 	 //looping through the questions and adding them on the page
 		foreach($sorted_questions as $m_row){
 		 //initializing the options
@@ -143,15 +150,16 @@
 			}
 
 		 //gathering options of the question here
-            $stmtAns = $pdo->prepare("SELECT * FROM answers WHERE question_id=:questionID ORDER BY rand()");
-            $stmtAns->execute(['questionID' => $m_question_id]);
+		 //random-per-question answer order preserved: shuffle() replaces ORDER BY rand()
+			$m_answerRows = $answers_by_qid[(int) $m_question_id] ?? [];
+			shuffle($m_answerRows);
 
 				$m_answers .=  '<tr>
 									<td></td>
 									<td>
 								';
 				 //adding html to individual options here
-					while($m_row2 = $stmtAns->fetch()){
+					foreach($m_answerRows as $m_row2){
 					 //getting row attributes in variables
 						$m_answer = $m_row2['answer'];
 						$m_answer_ID = $m_row2['id'];
