@@ -20,7 +20,8 @@ Credentials live only in your environment (`lib/config.php` has empty-string
 defaults for `DB_USER`/`DB_PASS`); see `.env.example`. Tests that need a live
 database skip automatically when `DB_PASS` is unset, so CI can run the suite
 before secrets are wired up. Never commit real credentials anywhere in the
-tree — `git grep quizpass` staying empty is itself enforced by the suite.
+tree; the suite itself asserts that `lib/config.php` keeps its empty-string
+credential defaults.
 
 ## Branch flow
 
