@@ -18,9 +18,14 @@ Ubuntu's MariaDB lets the local OS user connect as MySQL `root` with no password
 
 ```bash
 sudo mysql -e "CREATE DATABASE IF NOT EXISTS debug CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
-mysql debug < quiz_system_git/database/debug.sql   # adjust path if importing into a worktree copy
-mysql debug -e "SELECT COUNT(*) FROM quizes"       # expect 2
+mysql debug < quiz_system_git/database/debug-v2.sql   # canonical post-migration seed; adjust path for worktree copies
+mysql debug -e "SELECT COUNT(*) FROM quizes"          # expect 2
 ```
+
+Coming from the legacy dataset instead? Import `database/debug.sql`, then
+apply the migration chain: `bash quiz_system_git/database/migrate.sh`
+(idempotent; records applied steps in `schema_migrations`). `debug-v2.sql`
+already bakes in the fully migrated schema, so prefer it for fresh installs.
 
 Optional dedicated user instead of root/socket (choose your own strong password — nothing is stored in the repo):
 
@@ -42,7 +47,7 @@ php -S localhost:8080           # dev server from quiz_system_git/, then open ht
 mariadb debug                   # SQL shell
 ```
 
-Reset data anytime: `mysql debug < database/debug.sql` (re-imports seeds; destructive).
+Reset data anytime: `mysql debug < quiz_system_git/database/debug-v2.sql` (re-imports the canonical seed; destructive).
 
 ## 4. Full removal / cleanup
 

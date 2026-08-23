@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-### 1.0.0 — revitalization of the legacy quiz system (in progress)
+## [1.0.0] - 2026-08-23
+
+Revitalization of the legacy quiz system
 
 Modernization pass over the original 2014 XAMPP-era codebase: every legacy
 feature preserved with bug-for-bug repairs, plus a security, testing, and
@@ -48,6 +50,8 @@ operations overhaul. Tracked on the `revitalize/v1` branch; see
   capped at 20 rows.
 - Reset-tables wipe reordered to survive foreign-key constraints and reseed
   with a bcrypt-hashed default admin.
+- Deleting a quiz now cascades its `quiz_takers` rows too (FK semantic drift:
+  previously those rows were orphaned).
 
 #### Security
 

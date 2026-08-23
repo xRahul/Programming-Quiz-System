@@ -49,8 +49,8 @@ lists what this revitalization added.
 | Results | Ranked by marks, then duration; Top-20 and All views | CSV results export (top/all scopes, percentage, filename contract) (#29) |
 | Admin | Create/edit/delete questions & quizzes, metadata updates, set-default quiz, register/change-password/delete-account, Reset All Tables | Admin-assisted password reset (#34), audit viewer panel (#33) |
 | Look & feel | Video overlay on instructions/quiz pages, favicon set, right-click disable | Responsive/a11y pass — labels, focus outlines, overflow containment (#35) |
-| Configuration — | | Branding config via `SITE_NAME` / `SITE_LOGO` / `FOOTER_HTML` (#32) |
-| Operations — | | Audit log for destructive actions (#33) |
+| Configuration | — | Branding config via `SITE_NAME` / `SITE_LOGO` / `FOOTER_HTML` (#32) |
+| Operations | — | Audit log for destructive actions (#33) |
 
 Code display uses [CodeMirror 5.65](https://codemirror.net/) for input and
 [Prism 1.29](https://prismjs.com/) for syntax-highlighted output
@@ -60,7 +60,9 @@ SyntaxHighlighter setup).
 ## Security model
 
 - **Authentication** — every privileged page calls `require_admin()`; every
-  state-changing POST verifies a CSRF token first (`csrf_verify()`).
+  state-changing POST verifies a CSRF token (`csrf_verify()`), with one
+  deliberate exemption: the login endpoint, where a pre-auth user holds no
+  token yet. All other state-changing POSTs are token-verified.
 - **Sessions** — hardened cookies (HttpOnly/SameSite), ID rotation on login,
   single active-session semantics, logout destroys session + cookie.
 - **Headers** — security headers (CSP, frame/media/referrer policies) set
@@ -99,7 +101,7 @@ fresh clone runs `vendor/bin/phpunit` green before you configure anything.
 cd quiz_system_git
 composer install
 export DB_USER=quiz DB_PASS='your-password'   # or let live-DB tests skip
-vendor/bin/phpunit                            # ~70s, needs local MariaDB
+vendor/bin/phpunit                            # ~1-2 min typical (longer on first run: scratch DBs are provisioned fresh); needs local MariaDB
 ```
 
 ## Upgrading from the legacy dataset

@@ -41,7 +41,8 @@ Types in use: `feat`, `fix`, `test`, `refactor`, `perf`, `docs`, `chore`.
 
 ```bash
 cd quiz_system_git
-vendor/bin/phpunit        # full suite; ~70s; requires local MariaDB
+vendor/bin/phpunit        # full suite; ~1-2 min typical, longer on first run
+                          # (scratch-DB suites provision fresh databases); needs local MariaDB
 ```
 
 The suite is green at ~94 tests / ~1100 assertions. Every commit that touches
