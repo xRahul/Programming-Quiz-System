@@ -12,10 +12,6 @@ try {
         [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            // Transitional until Phase 3 migrations land: legacy INSERTs omit
-            // columns (admin.php create-question, quiz.php, addNewQuiz.php) and
-            // STRICT_TRANS_TABLES fatals them. Relax to pre-migration semantics.
-            PDO::MYSQL_ATTR_INIT_COMMAND => "SET sql_mode = REPLACE(@@sql_mode,'STRICT_TRANS_TABLES','')",
         ]
     );
 } catch (PDOException $e) {

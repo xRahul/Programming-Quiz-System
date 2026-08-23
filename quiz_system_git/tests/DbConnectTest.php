@@ -27,6 +27,13 @@ final class DbConnectTest extends TestCase
 
         $this->assertInstanceOf(PDO::class, $pdo);
         $this->assertSame(2, (int) $pdo->query('SELECT COUNT(*) FROM quizes')->fetchColumn());
+
+        // The phase-3 sql_mode shim is gone: app connections must inherit the
+        // server default (strict) rather than relaxing it at connect time.
+        $this->assertStringContainsString(
+            'STRICT_TRANS_TABLES',
+            (string) $pdo->query('SELECT @@SESSION.sql_mode')->fetchColumn()
+        );
     }
 
     public function testBadCredentialsFailSanitized(): void

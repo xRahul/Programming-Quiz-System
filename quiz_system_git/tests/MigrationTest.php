@@ -317,8 +317,13 @@ final class MigrationTest extends TestCase
         );
 
         // A plain app-style connection (no init command) must inherit strict mode.
-        require_once dirname(__DIR__) . '/scripts/db.php';
-        $mode = (string) $pdo->query('SELECT @@SESSION.sql_mode')->fetchColumn();
+        $probe = new PDO(
+            'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4',
+            DB_USER,
+            DB_PASS,
+            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+        );
+        $mode = (string) $probe->query('SELECT @@SESSION.sql_mode')->fetchColumn();
         $this->assertStringContainsString(
             'STRICT_TRANS_TABLES',
             $mode,
