@@ -1,0 +1,103 @@
+name: CI
+
+# Pinned by major tag (choice: resilient to upstream patch releases;
+# SHAs of pinned majors at time of writing:
+#   actions/checkout v4        = 11d5960a326750d5838078e36cf38b85af677262
+#   shivammathur/setup-php v2  = b604ade2a87db23f8871b7182e69ec5e75effb45
+#   php-actions/phpstan v2     = (see https://github.com/php-actions/phpstan)
+on:
+  push:
+    branches: [master, main, revitalize/v1]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Syntax-check every PHP file
+        run: find quiz_system_git -name '*.php' -print0 | xargs -0 -n1 php -l
+
+  tests:
+    name: Tests (PHP 8.3 / MariaDB 10.11)
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mariadb:10.11
+        env:
+          MARIADB_DATABASE: debug
+          MARIADB_USER: quiz
+          # CI-only throwaway credential; never mirrors any real deployment
+          MARIADB_PASSWORD: ci_password
+          MARIADB_ROOT_PASSWORD: ci_root_password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval 5s
+          --health-retries 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql, mbstring, xml, curl
+          coverage: none
+
+      - name: Install Composer dependencies
+        working-directory: quiz_system_git
+        run: composer install --prefer-dist --no-progress
+
+      - name: Import seed database dump
+        run: |
+          # mariadb-client chosen over relying on preinstalled MySQL tooling
+          # so client/server versions stay aligned across runner image bumps.
+          sudo apt-get update && sudo apt-get install -y mariadb-client
+          mysql --host=127.0.0.1 --user=quiz --password=ci_password debug \
+            < quiz_system_git/database/debug-v2.sql
+
+      - name: Run PHPUnit
+        working-directory: quiz_system_git
+        env:
+          DB_HOST: 127.0.0.1
+          DB_NAME: debug
+          DB_USER: quiz
+          DB_PASS: ci_password
+        run: vendor/bin/phpunit
+
+  static-analysis:
+    name: Static analysis (PHPStan level 5)
+    needs: [lint]
+    runs-on: ubuntu-latest
+    # Non-blocking initially: legacy code carries a 129-error baseline.
+    # Flip continue-on-error to false once the baseline is driven to zero.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run PHPStan
+        uses: php-actions/phpstan@v2
+        with:
+          # Matches the version used to generate phpstan-baseline.neon,
+          # keeping baseline format and rule behaviour identical in CI.
+          version: '2.2.9'
+          path: quiz_system_git
+          configuration: quiz_system_git/phpstan.neon
+          level: 5
