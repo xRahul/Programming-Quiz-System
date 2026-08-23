@@ -1,198 +1,180 @@
-## Upgrading the codebase using Laravel & ReactJS
-* The flow will mostly remain the same.
-* Please check the [laravel-quiz](https://github.com/xRahul/Programming-Quiz-System/tree/laravel-quiz) branch to see it's progress and contribute.
+# Programming Quiz System
 
+[![CI](https://github.com/xRahul/Programming-Quiz-System/actions/workflows/ci.yml/badge.svg)](https://github.com/xRahul/Programming-Quiz-System/actions/workflows/ci.yml)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
-### Current code is live using [ByetHost](http://progquiz.byethost17.com)
+A small timed programming-quiz app in plain PHP, originally written in 2014 and
+now maintained on a modernized stack: PHPUnit test suite, prepared statements
+everywhere, CSRF tokens, schema migrations, and a hardened session layer.
+The legacy XAMPP-era codebase is preserved under `docs/history/v0-readme.md`.
 
-# Programming Multiple Quiz System
+    Short Programming Quiz Framework
+    Copyright (C) 2014  Rahul Jain
 
-    A simple Programming Quiz System containing-
-  
-* __Instruction page__
-  * Student enters Roll No. here 
-* __Quiz page__
-  *  Timed-Quiz appears here
-* __Result page__
-  * Result of the user is shown here 
-* __Login Page__
-  * Admin has to login here first._(admin, 12345)_
-* __Admin page__
-  * All admin related functions are here!
-* __Videos__
-  * Users can also watch a video during the quiz. Or anything you want to display to them.
-  
----
+## Quickstart (2 minutes)
 
-#### APIs used to enter and Display Programming codes
-* [CodeMirror](http://codemirror.net/) In-browser code editor.
-* [SyntaxHighlighter](http://alexgorbatchev.com/SyntaxHighlighter/) JavaScript code syntax highlighter.
+Prereqs: PHP 8.3 CLI (+ `pdo_mysql`, `mbstring`, `xml`, `curl`), MariaDB/MySQL,
+Composer.
 
----
+```bash
+git clone https://github.com/xRahul/Programming-Quiz-System.git
+cd Programming-Quiz-System/quiz_system_git
+composer install
 
-### Coded & Tested using-
-* __[XAMPP](http://www.apachefriends.org/index.html)__ for __Apache__ server and __MySQL__.
-* __[Sublime Text](http://www.sublimetext.com/)__ for code editing.
-* __Firefox__ and __Chrome__ browsers.
-* __Mac OSX__ & __Windows__.
+# database: create + import the seed dataset
+mysql -e "CREATE DATABASE IF NOT EXISTS debug CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+mysql debug < database/debug-v2.sql
 
----
+# credentials come from the environment only -- nothing is baked into the repo
+export DB_HOST=localhost DB_NAME=debug DB_USER=quiz DB_PASS='your-password' APP_ENV=production
 
-### How to install on your system-
-1. Install _XAMPP_ and make sure __Apache Web Server__ and __MySQL Database__ are running
-2. copy-paste the __quiz_system_git__ folder in __htdocs__ folder associated with _XAMPP_
-3. goto __phpMyAdmin__ and _create_ a database.
-4. _import_ the quiz database from __database__ folder into it and make sure it has all _5_ tables.
-4. _Truncate_ the tables to have clean database.
-5. `INSERT` first admin in the __admins__ database.
-6. make required changes in __scripts/connect_db.php__
-7. Get _favicons_-
-    * visit __[faviconit](http://faviconit.com/en)__ _(© 2013-2014 Eduardo Russo)_.
-    * Upload atleast 200x200px img with maximum 1MB size limit.
-    * click on __favicon it!__ and download the __zip__ file.
-    * extract the __faviconit.zip__ in the __img__ folder.
-8. Add videos in __webm__(_video.webmhd.webm_) and __mp4__(_video.mp4_) formats in __videos__ folder.
-9. login to the admin page using *http://localhost/quiz_system_git/login.php*
-10. start the quiz @ *http://localhost/quiz_system_git/*
+php -S localhost:8080
+# open http://localhost:8080/index.php  (admin login: http://localhost:8080/login.php)
+```
 
----
----
----
+See `.env.example` for the full variable list and `setup-remove.md` for a
+complete native-Ubuntu toolchain install (including creating the `quiz` MySQL
+user). The default admin after *Reset All Tables* is `admin` / `12345` — change
+it immediately outside throwaway environments.
 
-## Features provided for the _Admin_ in _admin.php_ page-
+## Features
 
-* Clicking on your __username__ in the navbar _refreshes_ the page.
-* __Quiz Homepage__ opens the _Instructions page_ in a new tab.
+All legacy behavior is preserved (bug-for-bug repairs included); the v1 column
+lists what this revitalization added.
 
-#### *Manage Questions*-
-* __Create a Question__-
-  * _True/False_ - Create a Question with 2 options- True and False.
-  * _Multiple Choice_ - Create a Question with 4 options.
-* __View All Questions__-
-  * Shows all the questions of all the quizes on a single page along with the correct answers.
-* __Edit a Question__-
-  * Select one question from all the questions in all quizes to edit.
-* __Delete Some Questions__-
-  * Select as many questions as you want to delete from the database.
-* __Delete All Questions__-
-  * Deletes all the questions from all the quizes, but leaves the quizes intact.
+| Area | Legacy (preserved) | Added in v1 |
+| --- | --- | --- |
+| Taking quizzes | Timed quiz, auto-submit at zero, no negative marking, once-per-quiz guard, back-button resubmit block | Quiz progress counter wired to the boot island (#30) |
+| Questions | True/False + Multiple Choice with inline program code (CodeMirror editor) | JSON question-bank import/export (#31) |
+| Results | Ranked by marks, then duration; Top-20 and All views | CSV results export (top/all scopes, percentage, filename contract) (#29) |
+| Admin | Create/edit/delete questions & quizzes, metadata updates, set-default quiz, register/change-password/delete-account, Reset All Tables | Admin-assisted password reset (#34), audit viewer panel (#33) |
+| Look & feel | Video overlay on instructions/quiz pages, favicon set, right-click disable | Responsive/a11y pass — labels, focus outlines, overflow containment (#35) |
+| Configuration — | | Branding config via `SITE_NAME` / `SITE_LOGO` / `FOOTER_HTML` (#32) |
+| Operations — | | Audit log for destructive actions (#33) |
 
-#### *Quiz Management*-
-    You will see all your quizes lined up here.
-* __Add New Quiz__-
-  * Add a new quiz to the database and allot the Duration for the quiz, and Max no. of Questions to be displayed to the users.
-* Further list contains __QuizName__ along with the time and no. of questions allotted to it.
+Code display uses [CodeMirror 5.65](https://codemirror.net/) for input and
+[Prism 1.29](https://prismjs.com/) for syntax-highlighted output
+(pinned copies under `assets/vendor/`, replacing the original
+SyntaxHighlighter setup).
 
-####### Hovering over a QuizName-
-* __Quiz Settings__
-  * _Set Default_ - Sets the quiz as default i.e. it will be the one USER will be attempting.
-  * _Update Metadata_ - edit the Duration for the quiz, and Max no. of Questions to be displayed.
-  * _Delete this Quiz_ - Deletes the quiz along with all its questions.
-* __Manage Questions__
-  * _View All Questions_ - Shows all Questions of the quiz
-  * _Edit a Question_ - Edit a single question from the quiz
-  * _Delete Some Questions_ - Delete some questions from the quiz
-* __Results__
-  * _Result(Top 20)_ - Shows the top 20 Rank Holders.
-  * _Result(All)_ - Shows all the users, sorted according to rank.
-  * _Clear the Result_ - Delete all records of the users who took this quiz.
-  
-#### *Settings*
+## Security model
 
-* _Register an Admin_
-  * Register a new admin
-* _Change Password_
-  * Change password to your account
-* _Delete Your Account_
-  * Delete Your admin account
-* _Reset All Tables_
-  * Truncates all tables and sets one admin ID as default _(admin, 12345)_
-* _LogOut_
-  * Log out of your admin account.
-    
----
+- **Authentication** — every privileged page calls `require_admin()`; every
+  state-changing POST verifies a CSRF token first (`csrf_verify()`).
+- **Sessions** — hardened cookies (HttpOnly/SameSite), ID rotation on login,
+  single active-session semantics, logout destroys session + cookie.
+- **Headers** — security headers (CSP, frame/media/referrer policies) set
+  centrally and asserted by `SecurityHeadersTest`.
+- **Escape on output** — stored values stay raw in the database; all rendering
+  escapes at output time (`EscapingTest`, hostile-fixture coverage).
+- **SQL** — PDO prepared statements throughout; strict-mode-safe inserts;
+  schema evolution via ordered migrations in `database/migrations/`
+  (charset, constraints, indexes, FKs, defaults) applied idempotently with
+  `database/migrate.sh`.
+- **Audit** — destructive admin actions append actor/action/detail rows to
+  `audit_log`; a viewer panel renders them escaped.
 
-#### Interface for Creating/Editing a Question
+Vulnerability reports: see [SECURITY.md](SECURITY.md).
 
-1. Select/re-select the quiz to which you want to add/transfer the question.
-    * If there are no quizes in the dropdown, create a Quiz first.
-2. Type/Change your Question.
-3. If there's a program/code in the question,
-    * Select/Change Language of the code
-    * Add/Edit the code below
-4. If adding a True/False Question-
-    * Select the correct answer
-5. If adding a Multiple Choice Question-
-    * Write/Edit the 4 options(single lined) and choose the correct one.
-6. Click Add to quiz/Save.
+## Configuration
 
-#### Interface for Viewing/SelectingForEdit/DeletingSome Questions
+All runtime configuration is read from the environment (`getenv()`); there are
+no credential defaults committed to this repository. Copy
+`.env.example` and export the values before running the server or tests.
 
-1. Quiz_Name is displayed above its question.
-2. If there's code, it'll be displayed after the text part of the Question.
-3. Options are displayed below.
-4. Correct answer is Underlined and Emphasised!
-5. You can select only 1 question for editing.
-6. You can select any number of questions to delete.
+| Variable | Purpose | Default when unset |
+| --- | --- | --- |
+| `DB_HOST` | Database host | `localhost` |
+| `DB_NAME` | Database name | `debug` |
+| `DB_USER` | Database user | *(empty)* |
+| `DB_PASS` | Database password | *(empty)* |
+| `APP_ENV` | `production` hides error details on failure | `production` |
 
-#### Result Interface
+Tests that need a live database skip gracefully when `DB_PASS` is empty, so a
+fresh clone runs `vendor/bin/phpunit` green before you configure anything.
 
-1. List is already sorted according to their **ranks**.
-2. Ranks are decided on the basis of *highest marks first*, followed by the *time taken by the user* to finish the quiz.
-3. TimeStamp contains the time user started the quiz.
+## Running the tests
 
+```bash
+cd quiz_system_git
+composer install
+export DB_USER=quiz DB_PASS='your-password'   # or let live-DB tests skip
+vendor/bin/phpunit                            # ~70s, needs local MariaDB
+```
 
----
----
----
-## Features provided in other pages
+## Upgrading from the legacy dataset
 
-#### # index.php(*Instructions page*)
+If your installation still runs the original `database/debug.sql` dump:
 
-1. Quiz name along with no. of questions to display and durations is displayed here.
-2. An overlay is provided, currently used to display a video to the user while they wait to start the quiz.
-3. User can't proceed without entering the username/RollNo.
-4. User can't attempt the same quiz twice.
-5. HTML can be edited to add your own rules and the like.
-6. Right-click is disabled.
+1. Import it as before (`mysql debug < database/debug.sql`) — legacy data is
+   preserved untouched.
+2. Apply the migration chain: `bash database/migrate.sh` (idempotent; records
+   applied steps in `schema_migrations`; converts charset, adds constraints/
+   indexes/FKs, decodes stored entities, drops denormalized columns).
+3. Load the matching seed baseline if you want demo content:
+   `mysql debug < database/debug-v2.sql`.
 
-#### # quiz.php(*Quiz page*)
+## Question-bank JSON format
 
-1. Quiz name is displayed on the top
-2. Countdown is fixed & displayed on the top-right of the screen.
-3. At zero the quiz will automatically be submitted.4. 
-4. There's no negative marking.
-5. User can answer none, some or all the questions.
-6. Code/Program will be displayed in color-coded format.
-7. A confirmation dialog will pop-up if the user tries to close, refresh or navigate away from this page.
-8. Right-click is disabled.
-9. An overlay is provided, currently used to display a video to the user during the quiz.
-10. User can't directly access this page.
+Admin-only round-trip format used by *Export questions* (`export_questions.php`)
+and *Import questions* (`import_questions.php`, multipart field `jsonfile`,
+≤2 MB):
 
-#### # result.php(*Result page*)
+```json
+{
+  "quiz": {
+    "name": "Midterm A",
+    "time_allotted": 45,
+    "display_questions": 10
+  },
+  "questions": [
+    {
+      "question": "What does this C program print?",
+      "type": "mc",
+      "code": "#include <stdio.h>\nint main(){return 0;}",
+      "code_type": "cpp",
+      "answers": [
+        { "text": "nothing", "correct": true },
+        { "text": "0",       "correct": false }
+      ]
+    }
+  ]
+}
+```
 
-1. Marks of the user are dosplayed here(1 mark per correct answer).
-2. An overlay is provided, currently used to display a message to the user on click.
-3. User can't directly access this page.
-4. if user clicks on back and goes back to the quiz, he can't resubmit the quiz.
+Validation contract:
 
-#### # login.php(Admin-Login page)
+- `quiz.name` — non-empty string; on collision the import creates
+  `<name>-imported`, `<name>-imported2`, … instead of failing.
+- `quiz.time_allotted`, `quiz.display_questions` — integers.
+- `question.type` — `"tf"` (exactly 2 answers) or `"mc"` (2–4 answers).
+- `question.code`, `question.code_type` — optional strings.
+- Every answer needs non-empty `text` and boolean `correct`; exactly one
+  answer per question may be `correct: true`.
+- Imports are transactional: any validation failure answers HTTP 422 with a
+  JSON error body and writes zero rows; successful imports are audit-logged.
 
-1. A user can login from multiple systems at the same time.
-2. User can't access admin page before logging in.
-3. Using sessions to store the session of an admin. Re-login isn't necessary as long as the admin doesn't click logOut.
+## Screenshots
 
+QA captures from the parity/security passes live in `docs/qa/`:
 
----
----
+![Admin question list before/after Prism swap](docs/qa/phase6a-admin-editor-after-swap.png)
+![Quiz page after Prism swap](docs/qa/phase6a-quiz-after-swap.png)
 
-### Miscellaneous features
+## Project docs
 
-1. Using *codemirror* to have a better textarea input for programs/codes.
-2. Using *syntax highlighter* to display the code better in a question.
-3. A lot of *MYSQL error checks* are in place in case of some unknown error.
-4. Basic **failsafes** are in place for things like *SQL injection*.
-5. Layout is designed keeping *different window sizes* in mind.
-6. It isn't designed to work on **Internet Explorer** also. So, it might be displayed differently on that(Styling difference).
-7. None of the other pages can be accessed directly except the **logout.php** as it can only be accessed by the admin to logout.
+- [SECURITY.md](SECURITY.md) — supported versions, private reporting
+- [CONTRIBUTING.md](CONTRIBUTING.md) — dev setup, branch flow, releases
+- [CHANGELOG.md](CHANGELOG.md) — notable changes (Keep a Changelog)
+- [setup-remove.md](setup-remove.md) — native Ubuntu toolchain setup/teardown
+- [docs/history/v0-readme.md](docs/history/v0-readme.md) — the original 2014
+  readme (historical reference)
 
+## License
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version. See [gnu_gpl.txt](quiz_system_git/gnu_gpl.txt).
+
+Coded & tested since 2014 by Rahul Jain.
