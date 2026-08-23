@@ -82,99 +82,76 @@
 			}
 		}
 
-	 //inserting the question and type into table question
-        $stmt = $pdo->prepare("INSERT INTO questions (quiz_id, question, code, code_type, type) VALUES (:quizID, :question, :program, :programType, :type)");
-        $stmt->execute([
-            'quizID' => $quizID,
-            'question' => $question,
-            'program' => $program,
-            'programType' => $programType,
-            'type' => $type
-        ]);
-
-		//lastId is there, so we can insert the id, question_id in our table
-			$lastId = $pdo->lastInsertId();
-            $stmt = $pdo->prepare("UPDATE questions SET question_id=:lastId WHERE id=:lastId LIMIT 1");
-            $stmt->execute(['lastId' => $lastId]);
-
-	 ///////Updating value of total questions in quizes
-        $stmt = $pdo->prepare("UPDATE quizes SET total_questions=total_questions+1 WHERE id=:quizID LIMIT 1");
-        $stmt->execute(['quizID' => $quizID]);
-
-
-	 /// Update answers based on which is correct //////////////
-
-	 //if inserting a true/false question, insert answers by this-
+	 //resolve the answer order for the marked correct option
+		$answerRows = array();
 		if($type == 'tf'){
-            $stmtInsert = $pdo->prepare("INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES (:quizID, :questionID, :answer, :correct)");
-		 //if answer1 is marked correct, do this--
 			if($isCorrect == "answer1"){
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer1, 'correct' => '1']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer2, 'correct' => '0']);
-
-				$msg = 'Thanks, question no.'.$lastId.' has been added';
-				header('location: admin.php?msg='.urlencode($msg));
-				exit();
+				$answerRows = array(array($answer1,'1'), array($answer2,'0'));
+			}elseif($isCorrect == "answer2"){
+				$answerRows = array(array($answer2,'1'), array($answer1,'0'));
 			}
-		 //if answer2 is marked correct, do this--
-			if($isCorrect == "answer2"){
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer2, 'correct' => '1']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer1, 'correct' => '0']);
-
-				$msg = 'Thanks, question no.'.$lastId.' has been added';
-				header('location: admin.php?msg='.urlencode($msg));
-				exit();
+		}elseif($type == 'mc'){
+			if($isCorrect == "answer1"){
+				$answerRows = array(array($answer1,'1'), array($answer2,'0'), array($answer3,'0'), array($answer4,'0'));
+			}elseif($isCorrect == "answer2"){
+				$answerRows = array(array($answer2,'1'), array($answer1,'0'), array($answer3,'0'), array($answer4,'0'));
+			}elseif($isCorrect == "answer3"){
+				$answerRows = array(array($answer3,'1'), array($answer1,'0'), array($answer2,'0'), array($answer4,'0'));
+			}elseif($isCorrect == "answer4"){
+				$answerRows = array(array($answer4,'1'), array($answer1,'0'), array($answer2,'0'), array($answer3,'0'));
 			}
 		}
 
-	 //if inserting a multiple choice question, insert answers by this-
-		if($type == 'mc'){
-            $stmtInsert = $pdo->prepare("INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES (:quizID, :questionID, :answer, :correct)");
+	 //transactional write: question -> denormalized question_id -> quiz counter -> answers
+		try{
+			$pdo->beginTransaction();
 
-		 //if answer1 is marked correct, do this--
-			if($isCorrect == "answer1"){
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer1, 'correct' => '1']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer2, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer3, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer4, 'correct' => '0']);
+		 //inserting the question and type into table question
+			$stmt = $pdo->prepare("INSERT INTO questions (quiz_id, question, code, code_type, type) VALUES (:quizID, :question, :program, :programType, :type)");
+			$stmt->execute([
+				'quizID' => $quizID,
+				'question' => $question,
+				'program' => $program,
+				'programType' => $programType,
+				'type' => $type
+			]);
 
-				$msg = 'Thanks, question no.'.$lastId.' has been added';
-				header('location: admin.php?msg='.urlencode($msg));
-				exit();
+			//lastId is there, so we can insert the id, question_id in our table
+				$lastId = $pdo->lastInsertId();
+				$stmt = $pdo->prepare("UPDATE questions SET question_id=:lastId WHERE id=:lastId LIMIT 1");
+				$stmt->execute(['lastId' => $lastId]);
+
+		 ///////Updating value of total questions in quizes
+			$stmt = $pdo->prepare("UPDATE quizes SET total_questions=total_questions+1 WHERE id=:quizID LIMIT 1");
+			$stmt->execute(['quizID' => $quizID]);
+
+		 /// Insert answers based on which is correct //////////////
+			if(!empty($answerRows)){
+				$stmtInsert = $pdo->prepare("INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES (:quizID, :questionID, :answer, :correct)");
+				foreach($answerRows as $answerRow){
+					$stmtInsert->execute([
+						'quizID' => $quizID,
+						'questionID' => $lastId,
+						'answer' => $answerRow[0],
+						'correct' => $answerRow[1]
+					]);
+				}
 			}
-		 //if answer2 is marked correct, do this--
-			if($isCorrect == "answer2"){
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer2, 'correct' => '1']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer1, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer3, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer4, 'correct' => '0']);
 
-				$msg = 'Thanks, question no.'.$lastId.' has been added';
-				header('location: admin.php?msg='.urlencode($msg));
-				exit();
+			$pdo->commit();
+		}catch(Throwable $e){
+			if($pdo->inTransaction()){
+				$pdo->rollBack();
 			}
-		 //if answer3 is marked correct, do this--
-			if($isCorrect == "answer3"){
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer3, 'correct' => '1']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer1, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer2, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer4, 'correct' => '0']);
+			$msg = 'Sorry, something went wrong while saving the question. Please try again.';
+			header('location: admin.php?msg='.urlencode($msg));
+			exit();
+		}
 
-				$msg = 'Thanks, question no.'.$lastId.' has been added';
-				header('location: admin.php?msg='.urlencode($msg));
-				exit();
-			}
-		 //if answer4 is marked correct, do this--
-			if($isCorrect == "answer4"){
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer4, 'correct' => '1']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer1, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer2, 'correct' => '0']);
-                $stmtInsert->execute(['quizID' => $quizID, 'questionID' => $lastId, 'answer' => $answer3, 'correct' => '0']);
-
-				$msg = 'Thanks, question no.'.$lastId.' has been added';
-				header('location: admin.php?msg='.urlencode($msg));
-				exit();
-			}
+		if(!empty($answerRows)){
+			$msg = 'Thanks, question no.'.$lastId.' has been added';
+			header('location: admin.php?msg='.urlencode($msg));
+			exit();
 		}
 	}
 ?>
@@ -395,11 +372,8 @@
         $stmt = $pdo->prepare("DELETE FROM admins WHERE username = :username");
         $stmt->execute(['username' => $deleteA]);
 
-	//checking the admins table
-        $stmtCheck = $pdo->prepare("SELECT id FROM admins WHERE username = :username");
-        $stmtCheck->execute(['username' => $deleteA]);
-
-		if($stmtCheck->rowCount() > 0){
+	//verifying the delete via the DML row count itself
+		if($stmt->rowCount() < 1){
 			echo "Sorry, there was a problem deleting the /".htmlspecialchars($deleteA)."/ admin. Please try again later.";
 			exit();
 		}else{
@@ -424,13 +398,8 @@
         $stmt->execute(['quizName' => $defaultQ]);
 
 
- //checking if update is successful
-	//getting rows from tables
-		$stmtCheck = $pdo->query("SELECT id FROM quizes WHERE set_default=1");
-	//getting number of rows that were returned
-		$numDefaults = $stmtCheck->rowCount();
-	//checking if the number of rows==0
-		if($numDefaults < 1 || $numDefaults > 1){
+ //verifying the update via the DML row count itself
+		if($stmt->rowCount() < 1){
 			echo "Sorry, there was a problem setting /".htmlspecialchars($defaultQ)."/ default. Please try again later.";
 			exit();
 		}else{
@@ -450,24 +419,12 @@
 	if(isset($_POST['clearResult']) && $_POST['clearResult'] != ""){
 		$clearR = preg_replace('/[^0-9]/', "", $_POST['clearResult']);
 
-	//deleting
+	//deleting; the DELETE row count is the verification (zero rows remain either way)
         $stmt = $pdo->prepare("DELETE FROM quiz_takers WHERE quiz_id=:quizID");
         $stmt->execute(['quizID' => $clearR]);
 
- //checking if delete is successful
-	//getting rows from tables
-        $stmtCheck = $pdo->prepare("SELECT id FROM quiz_takers WHERE quiz_id=:quizID LIMIT 1");
-        $stmtCheck->execute(['quizID' => $clearR]);
-	//getting number of rows that were returned
-		$numQuizTakers = $stmtCheck->rowCount();
-	//checking if the number of rows==0
-		if($numQuizTakers > 0){
-			echo "Sorry, there was a problem clearing the result. Please try again later.";
-			exit();
-		}else{
-			echo "Result has been cleared!";
-			exit();
-		}
+		echo "Result has been cleared!";
+		exit();
 	}
 ?>
 
@@ -481,30 +438,15 @@
 	if(isset($_POST['reset']) && $_POST['reset'] != ""){
 		$reset = preg_replace('/[^0-9]/', "", $_POST['reset']);
 
-	//resetting the tables
+	//resetting the tables (any failure surfaces as a PDOException under ERRMODE_EXCEPTION)
 		$pdo->exec("TRUNCATE TABLE questions");
 		$pdo->exec("TRUNCATE TABLE answers");
 
 	 ///////Updating value of total questions in quizes
 		$pdo->exec("UPDATE quizes SET total_questions=0");
 
-
- //checking if truncate is successful
-	//getting rows from tables
-        $stmt1 = $pdo->query("SELECT id FROM questions LIMIT 1");
-        $stmt2 = $pdo->query("SELECT id FROM answers LIMIT 1");
-
-	//getting number of rows that were returned
-		$numQuestions = $stmt1->rowCount();
-		$numAnswers = $stmt2->rowCount();
-	//checking if the number of rows==0
-		if($numQuestions > 0 || $numAnswers > 0){
-			echo "Sorry, there was a problem reseting the quiz. Please try again later.";
-			exit();
-		}else{
-			echo "Thanks! The all quizes have now been reset back to 0 questions.";
-			exit();
-		}
+		echo "Thanks! The all quizes have now been reset back to 0 questions.";
+		exit();
 	}
 ?>
 
@@ -516,38 +458,36 @@
 	if(isset($_POST['deleteQuiz']) && $_POST['deleteQuiz'] != ""){
 		$deleteQ = $_POST['deleteQuiz'];
 
-	//resetting the tables
+	//resolving the quiz id
         $stmt = $pdo->prepare("SELECT id as quiz_id FROM quizes WHERE quiz_name = :quizName");
         $stmt->execute(['quizName' => $deleteQ]);
         $row = $stmt->fetch();
         $qz_id = $row['quiz_id'];
 
-        $stmtDel = $pdo->prepare("DELETE FROM quizes WHERE id = :quizID");
-        $stmtDel->execute(['quizID' => $qz_id]);
+	 //transactional cascade: quiz -> questions -> answers
+		try{
+			$pdo->beginTransaction();
 
-        $stmtDelQ = $pdo->prepare("DELETE FROM questions WHERE quiz_id = :quizID");
-        $stmtDelQ->execute(['quizID' => $qz_id]);
+			$stmtDel = $pdo->prepare("DELETE FROM quizes WHERE id = :quizID");
+			$stmtDel->execute(['quizID' => $qz_id]);
 
-        $stmtDelA = $pdo->prepare("DELETE FROM answers WHERE quiz_id = :quizID");
-        $stmtDelA->execute(['quizID' => $qz_id]);
+			$stmtDelQ = $pdo->prepare("DELETE FROM questions WHERE quiz_id = :quizID");
+			$stmtDelQ->execute(['quizID' => $qz_id]);
 
- //checking if delete is successful
-	//getting rows from tables
-        $stmt1 = $pdo->prepare("SELECT id FROM questions WHERE quiz_id = :quizID LIMIT 1");
-        $stmt1->execute(['quizID' => $qz_id]);
+			$stmtDelA = $pdo->prepare("DELETE FROM answers WHERE quiz_id = :quizID");
+			$stmtDelA->execute(['quizID' => $qz_id]);
 
-        $stmt2 = $pdo->prepare("SELECT id FROM answers WHERE quiz_id = :quizID LIMIT 1");
-        $stmt2->execute(['quizID' => $qz_id]);
+			$pdo->commit();
+		}catch(Throwable $e){
+			if($pdo->inTransaction()){
+				$pdo->rollBack();
+			}
+			echo "Sorry, there was a problem deleting the /".htmlspecialchars($deleteQ)."/ quiz. Please try again later.";
+			exit();
+		}
 
-        $stmt3 = $pdo->prepare("SELECT id FROM quizes WHERE id = :quizID LIMIT 1");
-        $stmt3->execute(['quizID' => $qz_id]);
-
-	//getting number of rows that were returned
-		$qz_numQuestions = $stmt1->rowCount();
-		$qz_numAnswers = $stmt2->rowCount();
-		$qz_numQuizes = $stmt3->rowCount();
-	//checking if the number of rows==0
-		if($qz_numQuestions > 0 || $qz_numAnswers > 0 || $qz_numQuizes > 0)
+	 //verifying the delete via the DML row count itself
+		if((int) $stmtDel->rowCount() < 1)
 			echo "Sorry, there was a problem deleting the /".htmlspecialchars($deleteQ)."/ quiz. Please try again later.";
 		else
 			echo "Thanks! The quiz /".htmlspecialchars($deleteQ)."/ has now been deleted.";

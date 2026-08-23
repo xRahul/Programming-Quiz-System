@@ -69,104 +69,73 @@
 				exit();
 			}
 		}
-		
-	 //updating the question and type into table question
-        $stmt = $pdo->prepare("UPDATE questions SET quiz_id=:quizID, question=:question, code=:program, code_type=:programType, type=:type WHERE question_id=:q_id");
-        $stmt->execute([
-            'quizID' => $quizID,
-            'question' => $question,
-            'program' => $program,
-            'programType' => $programType,
-            'type' => $type,
-            'q_id' => $q_id
-        ]);
 
-	 //deleting the answers
-        $stmtDel = $pdo->prepare("DELETE FROM answers WHERE question_id=:q_id");
-        $stmtDel->execute(['q_id' => $q_id]);
-		
- 	 /// inserting answers again based on which is correct //////////////
-
-	 //if inserting a true/false question, insert answers by this-
+	 //resolve the answer order for the marked correct option
+		$answerRows = array();
 		if($type == 'tf'){
-            $stmtInsert = $pdo->prepare("INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES (:quizID1, :q_id1, :answer1, :correct1), (:quizID2, :q_id2, :answer2, :correct2)");
-		 //if answer1 is marked correct, do this--
 			if($isCorrect == "answer1"){
-                $stmtInsert->execute([
-                    'quizID1' => $quizID, 'q_id1' => $q_id, 'answer1' => $answer1, 'correct1' => '1',
-                    'quizID2' => $quizID, 'q_id2' => $q_id, 'answer2' => $answer2, 'correct2' => '0'
-                ]);
-				$msg = 'Thanks, question no.'.$q_id.' has been edited';
-				header('location: admin.php?msg='.urlencode($msg));
-				exit();
+				$answerRows = array(array($answer1,'1'), array($answer2,'0'));
+			}elseif($isCorrect == "answer2"){
+				$answerRows = array(array($answer2,'1'), array($answer1,'0'));
 			}
-		 //if answer2 is marked correct, do this--
-			if($isCorrect == "answer2"){
-                $stmtInsert->execute([
-                    'quizID1' => $quizID, 'q_id1' => $q_id, 'answer1' => $answer2, 'correct1' => '1',
-                    'quizID2' => $quizID, 'q_id2' => $q_id, 'answer2' => $answer1, 'correct2' => '0'
-                ]);
-				$msg = 'Thanks, question no.'.$q_id.' has been edited';
-				header('location: admin.php?msg='.urlencode($msg));
-				exit();
-			}	
+		}elseif($type == 'mc'){
+			if($isCorrect == "answer1"){
+				$answerRows = array(array($answer1,'1'), array($answer2,'0'), array($answer3,'0'), array($answer4,'0'));
+			}elseif($isCorrect == "answer2"){
+				$answerRows = array(array($answer2,'1'), array($answer1,'0'), array($answer3,'0'), array($answer4,'0'));
+			}elseif($isCorrect == "answer3"){
+				$answerRows = array(array($answer3,'1'), array($answer1,'0'), array($answer2,'0'), array($answer4,'0'));
+			}elseif($isCorrect == "answer4"){
+				$answerRows = array(array($answer4,'1'), array($answer1,'0'), array($answer2,'0'), array($answer3,'0'));
+			}
 		}
 
-	 //if inserting a multiple choice question, insert answers by this-
-		if($type == 'mc'){
-            $stmtInsert = $pdo->prepare("INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES
-                (:quizID1, :q_id1, :answer1, :correct1),
-                (:quizID2, :q_id2, :answer2, :correct2),
-                (:quizID3, :q_id3, :answer3, :correct3),
-                (:quizID4, :q_id4, :answer4, :correct4)");
-		 //if answer1 is marked correct, do this--
-			if($isCorrect == "answer1"){
-                $stmtInsert->execute([
-                    'quizID1' => $quizID, 'q_id1' => $q_id, 'answer1' => $answer1, 'correct1' => '1',
-                    'quizID2' => $quizID, 'q_id2' => $q_id, 'answer2' => $answer2, 'correct2' => '0',
-                    'quizID3' => $quizID, 'q_id3' => $q_id, 'answer3' => $answer3, 'correct3' => '0',
-                    'quizID4' => $quizID, 'q_id4' => $q_id, 'answer4' => $answer4, 'correct4' => '0'
-                ]);
-				$msg = 'Thanks, question no.'.$q_id.' has been edited';
-				header('location: admin.php?msg='.urlencode($msg));
-				exit();
+	 //transactional write: update question -> delete answers -> insert answers
+		try{
+			$pdo->beginTransaction();
+
+		 //updating the question and type into table question
+			$stmt = $pdo->prepare("UPDATE questions SET quiz_id=:quizID, question=:question, code=:program, code_type=:programType, type=:type WHERE question_id=:q_id");
+			$stmt->execute([
+				'quizID' => $quizID,
+				'question' => $question,
+				'program' => $program,
+				'programType' => $programType,
+				'type' => $type,
+				'q_id' => $q_id
+			]);
+
+		 //deleting the answers
+			$stmtDel = $pdo->prepare("DELETE FROM answers WHERE question_id=:q_id");
+			$stmtDel->execute(['q_id' => $q_id]);
+
+		 /// inserting answers again based on which is correct //////////////
+			if(!empty($answerRows)){
+				$stmtInsert = $pdo->prepare("INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES (:quizID, :questionID, :answer, :correct)");
+				foreach($answerRows as $answerRow){
+					$stmtInsert->execute([
+						'quizID' => $quizID,
+						'questionID' => $q_id,
+						'answer' => $answerRow[0],
+						'correct' => $answerRow[1]
+					]);
+				}
 			}
-		 //if answer2 is marked correct, do this--
-			if($isCorrect == "answer2"){
-                $stmtInsert->execute([
-                    'quizID1' => $quizID, 'q_id1' => $q_id, 'answer1' => $answer2, 'correct1' => '1',
-                    'quizID2' => $quizID, 'q_id2' => $q_id, 'answer2' => $answer1, 'correct2' => '0',
-                    'quizID3' => $quizID, 'q_id3' => $q_id, 'answer3' => $answer3, 'correct3' => '0',
-                    'quizID4' => $quizID, 'q_id4' => $q_id, 'answer4' => $answer4, 'correct4' => '0'
-                ]);
-				$msg = 'Thanks, question no.'.$q_id.' has been edited';
-				header('location: admin.php?msg='.urlencode($msg));
-				exit();
+
+			$pdo->commit();
+		}catch(Throwable $e){
+			if($pdo->inTransaction()){
+				$pdo->rollBack();
 			}
-		 //if answer3 is marked correct, do this--
-			if($isCorrect == "answer3"){
-                $stmtInsert->execute([
-                    'quizID1' => $quizID, 'q_id1' => $q_id, 'answer1' => $answer3, 'correct1' => '1',
-                    'quizID2' => $quizID, 'q_id2' => $q_id, 'answer2' => $answer1, 'correct2' => '0',
-                    'quizID3' => $quizID, 'q_id3' => $q_id, 'answer3' => $answer2, 'correct3' => '0',
-                    'quizID4' => $quizID, 'q_id4' => $q_id, 'answer4' => $answer4, 'correct4' => '0'
-                ]);
-				$msg = 'Thanks, question no.'.$q_id.' has been edited';
-				header('location: admin.php?msg='.urlencode($msg));
-				exit();
-			}
-		 //if answer4 is marked correct, do this--
-			if($isCorrect == "answer4"){
-                $stmtInsert->execute([
-                    'quizID1' => $quizID, 'q_id1' => $q_id, 'answer1' => $answer4, 'correct1' => '1',
-                    'quizID2' => $quizID, 'q_id2' => $q_id, 'answer2' => $answer1, 'correct2' => '0',
-                    'quizID3' => $quizID, 'q_id3' => $q_id, 'answer3' => $answer2, 'correct3' => '0',
-                    'quizID4' => $quizID, 'q_id4' => $q_id, 'answer4' => $answer3, 'correct4' => '0'
-                ]);
-				$msg = 'Thanks, question no.'.$q_id.' has been edited';
-				header('location: admin.php?msg='.urlencode($msg));
-				exit();
-			}
+			$msg = 'Sorry, something went wrong while saving the question. Please try again.';
+			header('location: admin.php?msg='.urlencode($msg));
+			exit();
+		}
+
+		if(!empty($answerRows)){
+			$msg = 'Thanks, question no.'.$q_id.' has been edited';
+			header('location: admin.php?msg='.urlencode($msg));
+			exit();
 		}
 	}else{
         $user_msg = 'Sorry, but Something went wrong';
