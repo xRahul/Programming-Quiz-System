@@ -480,7 +480,7 @@
 				}
 
 				$editQoutput .= '<script>
-									document.getElementById(\'mcanswer'.$ga_index.'\').value = '.json_encode($gaq_answer).';
+									document.getElementById(\'mcanswer'.$ga_index.'\').value = '.json_encode($ga_answer).';
 								 </script>
 								';
 
