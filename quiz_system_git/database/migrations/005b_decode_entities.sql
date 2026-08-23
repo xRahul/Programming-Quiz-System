@@ -1,0 +1,13 @@
+-- 005b_decode_entities.sql
+-- This file is intentionally statement-free documentation. The real work of
+-- this migration step is performed by bin/decode-stored-entities.php, which
+-- database/migrate.sh invokes when applying this file:
+--
+--   1. Snapshot questions, answers and quizes into *_entitybak backup tables
+--      (CREATE TABLE ... LIKE + INSERT ... SELECT, guarded against reruns).
+--   2. html_entity_decode() questions.question, questions.code,
+--      answers.answer and quizes.quiz_name -- only rows containing '&' are
+--      touched.
+--
+-- Keeping no SQL here means an interrupted run simply re-executes on the next
+-- migrate.sh invocation without double-decoding.
