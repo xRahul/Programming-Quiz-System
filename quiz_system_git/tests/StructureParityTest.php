@@ -38,6 +38,33 @@ final class StructureParityTest extends TestCase
 
     private const PAGES = ['index', 'login', 'admin', 'quiz', 'result'];
 
+    /**
+     * Deterministic seed rows backing the five admin AJAX renderer bodies
+     * (T4.2). Seeded once and left in place so the autoincrement ids (and
+     * therefore the captured markup) stay byte-stable across runs; the names
+     * are namespaced so re-runs are a no-op.
+     */
+    private const AJAX_SEED_QUIZ_ID = 987100;
+    private const AJAX_SEED_QUIZ = 'Parity Ajax Fixture Quiz';
+    private const AJAX_Q_TF_ID = 987101;
+    private const AJAX_Q_MC_ID = 987102;
+
+    /**
+     * fixture name => [POST key, POST value] for the five admin AJAX POST
+     * bodies (T4.2). The *-all variants drive the allthequestions branch,
+     * the -quiz variants the per-quiz branch.
+     */
+    private const AJAX_SPECS = [
+        'ajax-usersQuiz' => ['usersQuiz', self::AJAX_SEED_QUIZ],
+        'ajax-usersAll' => ['usersAll', self::AJAX_SEED_QUIZ],
+        'ajax-questionsQuiz-quiz' => ['questionsQuiz', self::AJAX_SEED_QUIZ],
+        'ajax-editaquestion-quiz' => ['editaquestion', self::AJAX_SEED_QUIZ],
+        'ajax-deleteSomeQuestions-quiz' => ['deleteSomeQuestions', self::AJAX_SEED_QUIZ],
+        'ajax-questionsQuiz-all' => ['questionsQuiz', 'allthequestions'],
+        'ajax-editaquestion-all' => ['editaquestion', 'allthequestions'],
+        'ajax-deleteSomeQuestions-all' => ['deleteSomeQuestions', 'allthequestions'],
+    ];
+
     private static string $base;
     private static string $anonJar;
     private static string $authJar;
@@ -122,6 +149,14 @@ final class StructureParityTest extends TestCase
                 file_put_contents($fixture, self::renderPage($page));
             }
         }
+
+        self::seedAjaxFixtureRows();
+        foreach (array_keys(self::AJAX_SPECS) as $name) {
+            $fixture = __DIR__ . '/fixtures/' . $name . '.html';
+            if (!is_file($fixture)) {
+                file_put_contents($fixture, self::renderAjaxBody($name));
+            }
+        }
     }
 
     public static function tearDownAfterClass(): void
@@ -129,6 +164,19 @@ final class StructureParityTest extends TestCase
         if (self::$pdo !== null) {
             $cleanup = self::$pdo->prepare('DELETE FROM quiz_takers WHERE username IN (?, ?)');
             $cleanup->execute([self::QUIZ_ROLL, self::RESULT_ROLL]);
+
+            // Remove the T4.2 AJAX seed rows so suites asserting absolute
+            // table counts (DbConnectTest) see an untouched database. The
+            // ids are fixed constants, so the next run reseeds identical
+            // bytes and the committed fixtures keep matching.
+            foreach ([
+                'DELETE FROM quiz_takers WHERE quiz_id = ' . self::AJAX_SEED_QUIZ_ID,
+                'DELETE FROM answers WHERE quiz_id = ' . self::AJAX_SEED_QUIZ_ID,
+                'DELETE FROM questions WHERE quiz_id = ' . self::AJAX_SEED_QUIZ_ID,
+                'DELETE FROM quizes WHERE id = ' . self::AJAX_SEED_QUIZ_ID,
+            ] as $sql) {
+                self::$pdo->exec($sql);
+            }
         }
         if (is_resource(self::$server)) {
             // proc_terminate alone leaves the built-in server running (it
@@ -184,6 +232,130 @@ final class StructureParityTest extends TestCase
     {
         foreach (self::PAGES as $page) {
             yield $page => [$page];
+        }
+    }
+
+    /**
+     * Idempotent seed of the rows behind the five AJAX renderer bodies.
+     * Rows are inserted once and never deleted so ids stay stable and the
+     * committed fixtures keep matching byte for byte.
+     */
+    private static function seedAjaxFixtureRows(): void
+    {
+        $exists = self::$pdo->prepare('SELECT id FROM quizes WHERE id = :id');
+        $exists->execute(['id' => self::AJAX_SEED_QUIZ_ID]);
+        if ($exists->fetch() !== false) {
+            return;
+        }
+
+        self::$pdo->prepare(
+            'INSERT INTO quizes (id, quiz_id, quiz_name, total_questions, display_questions, time_allotted, set_default)
+             VALUES (:id, :id, :name, 2, 2, 60, 0)'
+        )->execute(['id' => self::AJAX_SEED_QUIZ_ID, 'name' => self::AJAX_SEED_QUIZ]);
+
+        $stmtQ = self::$pdo->prepare(
+            'INSERT INTO questions (id, quiz_id, question_id, question, code, code_type, type)
+             VALUES (:id, :quizId, :id, :question, :code, :codeType, :type)'
+        );
+        $stmtQ->execute([
+            'id' => self::AJAX_Q_TF_ID,
+            'quizId' => self::AJAX_SEED_QUIZ_ID,
+            'question' => 'Parity fixture: what is 2+2?',
+            'code' => '',
+            'codeType' => '',
+            'type' => 'tf',
+        ]);
+        $stmtQ->execute([
+            'id' => self::AJAX_Q_MC_ID,
+            'quizId' => self::AJAX_SEED_QUIZ_ID,
+            'question' => "Parity fixture: which one is O'Brien's?",
+            'code' => '<?php echo "parity"; ?>',
+            'codeType' => 'php',
+            'type' => 'mc',
+        ]);
+
+        $stmtA = self::$pdo->prepare(
+            'INSERT INTO answers (quiz_id, question_id, answer, correct) VALUES (:quizId, :qid, :answer, :correct)'
+        );
+        foreach ([['True', 1], ['False', 0]] as [$answer, $correct]) {
+            $stmtA->execute([
+                'quizId' => self::AJAX_SEED_QUIZ_ID,
+                'qid' => self::AJAX_Q_TF_ID,
+                'answer' => $answer,
+                'correct' => $correct,
+            ]);
+        }
+        foreach ([["parityA O'Brien", 1], ['parityB', 0], ['parityC', 0], ['parityD', 0]] as [$answer, $correct]) {
+            $stmtA->execute([
+                'quizId' => self::AJAX_SEED_QUIZ_ID,
+                'qid' => self::AJAX_Q_MC_ID,
+                'answer' => $answer,
+                'correct' => $correct,
+            ]);
+        }
+
+        $stmtT = self::$pdo->prepare(
+            "INSERT INTO quiz_takers (username, percentage, date_time, quiz_id, duration, marks)
+             VALUES (:username, :percentage, '2026-01-02 03:04:05', :quizId, :duration, :marks)"
+        );
+        $stmtT->execute(['username' => 'parity_ajax_a', 'percentage' => '100', 'quizId' => self::AJAX_SEED_QUIZ_ID, 'duration' => 5, 'marks' => 10]);
+        $stmtT->execute(['username' => 'parity_ajax_b', 'percentage' => '80', 'quizId' => self::AJAX_SEED_QUIZ_ID, 'duration' => 9, 'marks' => 8]);
+    }
+
+    private static ?string $ajaxToken = null;
+
+    /**
+     * Render one of the five admin AJAX POST bodies through the live server.
+     */
+    private static function renderAjaxBody(string $fixtureName): string
+    {
+        if (self::$ajaxToken === null) {
+            [, , $adminHtml] = self::request('GET', 'admin.php', [], self::$authJar);
+            self::assertSame(
+                1,
+                preg_match('/name="csrf_token" value="([^"]+)"/', $adminHtml, $m),
+                'admin page must expose a csrf token for AJAX fixtures'
+            );
+            self::$ajaxToken = $m[1];
+        }
+
+        [$key, $value] = self::AJAX_SPECS[$fixtureName];
+        [$status, , $body] = self::request('POST', 'admin.php', [
+            $key => $value,
+            'csrf_token' => self::$ajaxToken,
+        ], self::$authJar);
+        self::assertSame(200, $status, "$fixtureName should render an AJAX body (got $status)");
+
+        return $body;
+    }
+
+    /**
+     * @dataProvider ajaxProvider
+     */
+    public function testAjaxBodyMatchesCommittedSnapshot(string $fixtureName): void
+    {
+        $fixture = __DIR__ . '/fixtures/' . $fixtureName . '.html';
+        self::assertFileExists($fixture, "$fixtureName fixture should exist (self-seeding failed)");
+
+        $expected = (string) file_get_contents($fixture);
+        $actual = self::renderAjaxBody($fixtureName);
+
+        // Same normalization contract as the wrapper regions: whitespace
+        // runs collapse, script elements vanish; everything else must match.
+        self::assertSame(
+            self::normalize($expected),
+            self::normalize($actual),
+            "$fixtureName: AJAX body diverged from committed snapshot"
+        );
+    }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function ajaxProvider(): iterable
+    {
+        foreach (array_keys(self::AJAX_SPECS) as $name) {
+            yield $name => [$name];
         }
     }
 
