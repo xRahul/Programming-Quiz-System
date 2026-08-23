@@ -466,6 +466,11 @@ final class CorrectnessFixesTest extends TestCase
         [$status, $redirect] = self::request('POST', 'quiz.php', ['rollno' => $rollno]);
         $this->assertSame(200, $status, 'quiz.php should render the quiz page, got redirect to ' . $redirect);
 
+        // result.php derives the recorded duration (and the replay guard) from
+        // TIMESTAMPDIFF(SECOND, date_time, now()); make sure the submission
+        // lands in a later second than the taker insert even under load.
+        sleep(2);
+
         $rowState = static function () use ($rollno): array {
             $stmt = self::$pdo->prepare(
                 'SELECT COUNT(*) AS rows_count, MAX(duration) AS max_duration, MAX(marks) AS marks FROM quiz_takers WHERE username = :username'
