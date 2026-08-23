@@ -867,6 +867,9 @@
 					<a href="javascript:change_pass();">
 						<li>Change Password</li>
 					</a>
+					<a href="javascript:open_overlay('regResetPass', 'regNewAdmin');">
+						<li>Reset an Admin Password</li>
+					</a>
 					<a href="javascript:delete_account();">
 						<li>Delete Your Account</li>
 					</a>
@@ -945,6 +948,21 @@
 			      <button  onClick="submit()" id="addQuiz_button" class="addQuiz-button">Add</button>
 			    </p>
 			    <p id="required"></p>
+			</form>
+
+			<form action="reset_password.php" class="login" method="POST" name="reset_pass_name" id="regResetPass" style="display:none;">
+				<?php echo csrf_field(); ?>
+				<p>
+			      <label class="reg_label" for="reset_username">Admin Username:</label><br>
+			      <input type="text" name="username" id="reset_username" required="required">
+			    </p>
+			    <p>
+			      <label class="reg_label" for="new_password">New Password (min 6 chars):</label><br>
+			      <input type="password" name="new_password" id="new_password" required="required">
+			    </p>
+			    <p class="login-submit">
+			      <button type="submit" class="login-button">Reset Password</button>
+			    </p>
 			</form>
 
         </div>
