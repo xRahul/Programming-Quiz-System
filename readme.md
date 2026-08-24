@@ -49,7 +49,7 @@ lists what this revitalization added.
 | Results | Ranked by marks, then duration; Top-20 and All views | CSV results export (top/all scopes, percentage, filename contract) (#29) |
 | Admin | Create/edit/delete questions & quizzes, metadata updates, set-default quiz, register/change-password/delete-account, Reset All Tables | Admin-assisted password reset (#34), audit viewer panel (#33) |
 | Look & feel | Video overlay on instructions/quiz pages, favicon set, right-click disable | Responsive/a11y pass — labels, focus outlines, overflow containment (#35) |
-| Configuration | — | Branding config via `SITE_NAME` / `SITE_LOGO` / `FOOTER_HTML` (#32) |
+| Branding | — | `SITE_NAME` / `SITE_LOGO` / `FOOTER_HTML` constants in `lib/config.php` (#32) |
 | Operations | — | Audit log for destructive actions (#33) |
 
 Code display uses [CodeMirror 5.65](https://codemirror.net/) for input and
@@ -111,6 +111,11 @@ vendor/bin/phpunit                            # ~1-2 min typical (longer on firs
 ## Upgrading from the legacy dataset
 
 If your installation still runs the original `database/debug.sql` dump:
+
+> `migrate.sh` reads the same `DB_HOST` / `DB_NAME` / `DB_USER` / `DB_PASS`
+> environment variables as the app (see Configuration above); its mysql client
+> steps fall back to socket auth when they are unset, but the PDO decode step
+> always needs real credentials.
 
 1. Import it as before (`mysql debug < database/debug.sql`) — legacy data is
    preserved untouched.

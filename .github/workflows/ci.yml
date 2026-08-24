@@ -109,7 +109,7 @@ jobs:
             sleep 5
           done
           if kill -0 "$PID" 2>/dev/null; then
-            echo "HANG DETECTED after 25m - last PHPUnit events:"
+            echo "HANG DETECTED after 20m - last PHPUnit events:"
             tail -40 /tmp/events.log || true
             kill -9 "$PID" 2>/dev/null || true
             exit 124

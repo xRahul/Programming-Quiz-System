@@ -52,7 +52,7 @@ operations overhaul. Tracked on the `revitalize/v1` branch; see
 - Audit log for destructive admin actions + escaped viewer panel.
 - Admin-assisted password reset flow.
 - Quiz progress counter wired into the quiz-page boot island.
-- Branding configuration via `SITE_NAME` / `SITE_LOGO` / `FOOTER_HTML`.
+- Branding via `SITE_NAME` / `SITE_LOGO` / `FOOTER_HTML` constants in `lib/config.php`.
 - Responsive/accessibility pass: form labels, focus outlines, overflow
   containment.
 - Ordered schema migrations (`database/migrations/`) applied idempotently by
