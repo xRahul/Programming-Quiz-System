@@ -11,8 +11,8 @@ final class DbConnectTest extends TestCase
         $this->assertFileExists(__DIR__ . '/../lib/config.php');
         require_once __DIR__ . '/../lib/config.php';
 
-        $this->assertSame('localhost', DB_HOST);
-        $this->assertSame('debug', DB_NAME);
+        $this->assertSame((string) (getenv('DB_HOST') ?: 'localhost'), DB_HOST);
+        $this->assertSame((string) (getenv('DB_NAME') ?: 'debug'), DB_NAME);
         // Credentials come strictly from the environment; no secret may be
         // baked into the repo.
         $this->assertSame((string) getenv('DB_USER'), DB_USER);
