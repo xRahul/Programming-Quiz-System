@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+#### Fixed
+
+- Scratch-database test suites are credential-portable: the admin identity
+  now resolves through explicit `DB_ADMIN_*` variables, CI's elevated app
+  user, or the local OS socket account (`tests/TestEnv.php`) instead of
+  assuming a local superuser exists.
+- `database/migrate.sh` authenticates its `mysql` client from `DB_HOST` /
+  `DB_USER` / `DB_PASS` when set, falling back to socket auth locally,
+  instead of silently assuming a socket connection everywhere.
+- Grant/revoke principals inside scratch suites interpolate correctly for
+  both `user@localhost` (socket) and `user@%` (TCP) MariaDB accounts.
+- CI: PHPUnit executes under a watchdog that reports wedged runs with the
+  PHPUnit event-log tail; failing-run logs reach check-run annotations even
+  when no known failure pattern matches, and step diagnostics survive
+  non-zero exits and unmatched greps under `bash -e`/`pipefail`.
+
+#### Changed
+
+- CI tests job is bounded at 25 minutes with an always-on diagnostics
+  artifact; the watchdog gives up at 20 minutes so it fires first.
+- CONTRIBUTING.md documents the complete `DB_*` / `DB_ADMIN_*`
+  environment contract, the four-tier resolution order, and why exporting
+  `DB_HOST` locally is discouraged outside TCP-only setups.
+
 ## [1.0.0] - 2026-08-23
 
 Revitalization of the legacy quiz system

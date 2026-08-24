@@ -95,6 +95,10 @@ no credential defaults committed to this repository. Copy
 Tests that need a live database skip gracefully when `DB_PASS` is empty, so a
 fresh clone runs `vendor/bin/phpunit` green before you configure anything.
 
+Branding strings (`SITE_NAME`, `SITE_LOGO`, `FOOTER_HTML`) are PHP constants
+in `quiz_system_git/lib/config.php` — edit the file to rebrand; they are not
+environment-driven.
+
 ## Running the tests
 
 ```bash

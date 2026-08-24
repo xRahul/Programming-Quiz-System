@@ -4,7 +4,7 @@
 
 | Version | Branch | Supported |
 | --- | --- | --- |
-| 1.0.x (revitalized tree) | `main` (and `revitalize/v1` until merged) | Yes |
+| 1.0.x (revitalized tree) | `master` | Yes |
 | 0.x (legacy XAMPP-era code) | — | No |
 
 Only the revitalized tree receives security fixes. The legacy pre-2026 code
