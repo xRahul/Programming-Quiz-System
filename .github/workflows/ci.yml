@@ -95,9 +95,24 @@ jobs:
           DB_PASS: ci_password
         run: |
           set -o pipefail
-          # Event log pinpoints the exact test a wedged run stalls on.
-          vendor/bin/phpunit --log-events-text /tmp/phpunit-events.log 2>&1 | tee /tmp/phpunit.log
-          code=$?
+          # Background + watchdog: a wedged test must not burn the job's
+          # whole timeout silently. On hang, the event-log tail is printed
+          # into THIS step's log (anonymously viewable in the Actions UI),
+          # naming the culprit test without any API credentials.
+          vendor/bin/phpunit --log-events-text /tmp/events.log > /tmp/phpunit.log 2>&1 &
+          PID=$!
+          for i in $(seq 1 300); do
+            kill -0 "$PID" 2>/dev/null || break
+            sleep 5
+          done
+          if kill -0 "$PID" 2>/dev/null; then
+            echo "HANG DETECTED after 25m - last PHPUnit events:"
+            tail -40 /tmp/events.log || true
+            kill -9 "$PID" 2>/dev/null || true
+            exit 124
+          fi
+          wait "$PID"; code=$?
+          cat /tmp/phpunit.log
           # Surface failures as check-run annotations (readable via API).
           grep -E '^[0-9]+\)|Access denied|did not become ready|Failed asserting' \
             /tmp/phpunit.log | head -40 | while IFS= read -r line; do
@@ -112,7 +127,7 @@ jobs:
           name: phpunit-diagnostics
           path: |
             /tmp/phpunit.log
-            /tmp/phpunit-events.log
+            /tmp/events.log
           if-no-files-found: ignore
 
   static-analysis:
