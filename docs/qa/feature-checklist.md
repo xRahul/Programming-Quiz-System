@@ -19,8 +19,8 @@ security-regression.md) · **new** = approved addition.
 | 4 | User can't attempt the same quiz twice | readme L148; quiz.php source notes, L154–155 | kept | `OncePerQuizGuardTest::testSecondStartOfSameQuizIsBlockedWithLegacyMessage` (start-side) + `CorrectnessFixesTest::testResultResubmissionGuardBlocksSecondSubmission` (replay-side) |
 | 5 | Quiz page renders N random questions as `rads1..N` radio groups | quiz.php source notes, L148–150 | kept | `QuizRenderParityTest::testQuizBodyMatchesCommittedSnapshot` (sequential-group assertion) |
 | 6 | Server-rendered hidden inputs `rollno`, `total_ques`, `total_time`, `quizID` | quiz.php source notes, L149 | kept | `QuizRenderParityTest::testQuizBodyMatchesCommittedSnapshot` (verbatim `substr_count` assertions) |
-| 7 | Countdown auto-submits at zero; timer stops on manual submit | readme quiz page L155–156 | kept | `CorrectnessFixesTest::testQuizTimerUsesIntervalAndStopsOnSubmit`; dial position: MANUAL |
-| 8 | No negative marking; marks = count of submitted correct answer ids | result.php observed scoring, L163 | kept | `CorrectnessFixesTest::testResultResubmissionGuardBlocksSecondSubmission` (marks recorded once) + `ExportResultsTest::testTopScopeOrdersByMarksDescDurationAscAndComputesPercentage` (percentage math); unknown-answer-id tolerance: MANUAL edge |
+| 7 | Countdown auto-submits at zero; timer stops on manual submit | readme quiz page L155–156 | kept | `CorrectnessFixesTest::testQuizTimerUsesIntervalAndStopsOnSubmit`; dial position: PASS (E2E 2026-08-24) — live quiz render shows `<div id="countdown">` in position above form (quiz.php:297); curl cannot measure pixels, verified as markup presence |
+| 8 | No negative marking; marks = count of submitted correct answer ids | result.php observed scoring, L163 | kept | `CorrectnessFixesTest::testResultResubmissionGuardBlocksSecondSubmission` (marks recorded once) + `ExportResultsTest::testTopScopeOrdersByMarksDescDurationAscAndComputesPercentage` (percentage math); unknown-answer-id tolerance: PASS (E2E 2026-08-24) — POSTed result with rads2=999999 alongside a correct id: HTTP 200, no fatal, marks=1 counted from recognized ids only, single taker row |
 | 9 | Back-button resubmission blocked (`duration != 0` guard) | result.php, L164 | kept | `CorrectnessFixesTest::testResultResubmissionGuardBlocksSecondSubmission` |
 | 10 | Result body renders `<roll>, You scored X/Y` | result.php, L163 | kept | `CorrectnessFixesTest::testResultResubmissionGuardBlocksSecondSubmission` (`You scored`) |
 
@@ -45,7 +45,7 @@ security-regression.md) · **new** = approved addition.
 | 25 | Reset All Tables → single bcrypt admin/'12345' | readme L101–102; admin.php resetTables handler | kept+fixed (FK-safe child-first wipe; was a blank-500 lockout defect found by T8) | `ResetTablesReseedTest::testResetTablesTruncatesAndReseedsBcryptAdmin` — see security-regression.md #20 |
 | 26 | LogOut destroys session + cookie | logout section, L237–242 | kept | `SessionHardeningTest::testLogoutExpiresCookieAndRejectsOldSession` |
 | 27 | Audit viewer panel (recent destructive actions) | new addition surface | kept | `AuditLogTest::testAuditRecentViewerReturnsEscapedRows` |
-| 28 | Wrong-credentials login bounce `Wrong Username or Password!` | login_check table, L61 | kept | MANUAL — string verified against `login_check.php`; only the empty-input branch is automated (`SessionHardeningTest::testEmptyInputLoginRedirectsToLoginNotAdmin`) |
+| 28 | Wrong-credentials login bounce `Wrong Username or Password!` | login_check table, L61 | kept | PASS (E2E 2026-08-24) — live POST admin/nope → 302 `login.php?user_msg=Wrong+Username+or+Password%21`, login.php echoes string verbatim; automated branch unchanged (`SessionHardeningTest::testEmptyInputLoginRedirectsToLoginNotAdmin`) |
 
 ## Approved additions (v1 scope)
 
@@ -54,10 +54,10 @@ security-regression.md) · **new** = approved addition.
 | 29 | CSV results export (top/all scopes, percentage, filename contract) | new | `ExportResultsTest` (5 methods incl. ordering + auth redirect + unknown-quiz rejection) |
 | 30 | Quiz progress counter wired to boot island | new | `ProgressIndicatorTest::testQuizPageRendersProgressSpanAndBootTotal` + `::testQuizJsCountsAnsweredRadioGroupsIntoProgressSpan` |
 | 31 | JSON question-bank import/export | new | `ImportExportQuestionsTest` (6 methods: shape contract, round-trip, invalid rejection, collision ladder, audits, auth) |
-| 32 | Branding config (`SITE_NAME`, `SITE_LOGO`, `FOOTER_HTML`) | new | `DbConnectTest::testConfigDefinesExpectedConstants`; rendered copy: MANUAL eyeball |
+| 32 | Branding config (`SITE_NAME`, `SITE_LOGO`, `FOOTER_HTML`) | new | `DbConnectTest::testConfigDefinesExpectedConstants`; rendered copy: PASS (E2E 2026-08-24) — live pages show `<title>Programming Quiz System - Admin Login</title>` (SITE_NAME), `img/header.jpg` header on index/admin (SITE_LOGO), footer FOOTER_HTML slot echoes configured value (empty string → renders nothing, per lib/views/footer.php:11) |
 | 33 | Audit log for destructive actions | new | `AuditLogTest` (2 methods) + `ImportExportQuestionsTest::testBothImportOutcomesAreAudited` + `ResetPasswordTest::testSuccessfulResetChangesHashAndWritesAuditRow` |
 | 34 | Admin-assisted password reset | new | `ResetPasswordTest` (3 methods) |
-| 35 | Responsive/a11y pass (labels, focus outlines, overflow containment) | new | MANUAL — CSS/DOM visual (commits 1d65b81, 46abeb3); label presence rides the wrapper-region snapshots |
+| 35 | Responsive/a11y pass (labels, focus outlines, overflow containment) | new | PASS (E2E 2026-08-24, static CSS method — curl cannot measure pixels) — containment blocks verified: `overflow-x:auto` + `max-width:100%` on wide tables (master.css:253-258, login.css:245-250, admin.css:504-509), login card `max-width:calc(100vw - 16px)` (login.css:72), `:focus-visible` outline (addNewQuiz.css:218); question-form inline widths all clamped (`width:400px;max-width:100%` textareas, `width:100%;max-width:780px` tables) — no unclamped >viewport width remains; commits 1d65b81, 46abeb3 |
 
 ## Cross-cutting correctness (bug-for-bug repairs)
 
@@ -71,4 +71,4 @@ security-regression.md) · **new** = approved addition.
 | 41 | Literal `'0'` passes required-field validation | admin validation strings, L100–103 | kept+fixed | `CorrectnessFixesTest::testCreateQuestionRejectsEmptyDescButAcceptsLiteralZero` + `::testEditQuestion…` |
 | 42 | Answers fetched in exactly one query on quiz render | perf work phase 7 | kept | `QuizQueryCountTest::testQuizRenderHitsAnswersTableExactlyOnce` |
 | 43 | Page structure parity (wrapper regions, AJAX fragments) | whole baseline | kept | `StructureParityTest` (snapshots, 13 data sets) + `QuizRenderParityTest` |
-| 44 | Right-click disable, video overlay markup, favicon set | global quirks L32–33 | kept | MANUAL — static JS/markup presence, externalized scripts (commit 36cb0fc) |
+| 44 | Right-click disable, video overlay markup, favicon set | global quirks L32–33 | kept | PASS (E2E 2026-08-24, static presence) — `contextmenu` guards live in index.js + login.js (externalized, commit 36cb0fc), `open_overlay()` wired from footer.php:15 with handler in admin.js, faviconit set present on disk and linked via lib/views/favicon.php |
