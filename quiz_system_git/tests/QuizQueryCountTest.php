@@ -211,9 +211,9 @@ final class QuizQueryCountTest extends TestCase
     private static function deleteRunnerRows(): void
     {
         $pdo = new PDO(
-            'mysql:host=localhost;dbname=' . self::$scratchDb . ';charset=utf8mb4',
-            (string) getenv('DB_USER'),
-            (string) getenv('DB_PASS'),
+            'mysql:host=' . TestEnv::adminHost() . ';dbname=' . self::$scratchDb . ';charset=utf8mb4',
+            TestEnv::appUser(),
+            (string) (getenv('DB_PASS') ?: ''),
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
         );
         $pdo->prepare('DELETE FROM quiz_takers WHERE username = ?')->execute([self::ROLL]);
