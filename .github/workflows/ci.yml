@@ -111,7 +111,10 @@ jobs:
             kill -9 "$PID" 2>/dev/null || true
             exit 124
           fi
-          wait "$PID"; code=$?
+          # Condition context: set -e must not kill the step before the
+          # diagnostics below run when phpunit exits non-zero.
+          code=0
+          wait "$PID" || code=$?
           cat /tmp/phpunit.log
           # Surface failures as check-run annotations (readable via API).
           grep -E '^[0-9]+\)|Access denied|did not become ready|Failed asserting|^Error|^Exception' \
