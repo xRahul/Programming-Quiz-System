@@ -9,11 +9,18 @@ declare(strict_types=1);
  * Admin credential resolution order:
  *   1. DB_ADMIN_USER / DB_ADMIN_PASS / DB_ADMIN_HOST   (explicit override;
  *      a set-but-wrong value fails loud rather than silently skipping)
- *   2. DB_HOST explicitly exported                      (CI contract: the app
- *      user was elevated to ALL PRIVILEGES ON *.* WITH GRANT OPTION)
+ *   2. CI marker (CI=true, as set by GitHub Actions runners) combined with
+ *      DB_HOST explicitly exported                       (CI contract: the
+ *      app user was elevated to ALL PRIVILEGES ON *.* WITH GRANT OPTION)
  *   3. OS-account unix_socket                           (local zero-config:
  *      `mysql -e CREATE DATABASE` works passwordless as the login user)
  *   4. App credentials against DB_HOST                  (last resort)
+ *
+ * Tier 2 deliberately requires the CI marker: a local developer who merely
+ * exports DB_HOST (as older docs suggested) must NOT be silently opted into
+ * assuming an elevated app user — they fall through to the working tier-3
+ * socket path and scratch suites skip gracefully instead of erroring.
+ * Set DB_ADMIN_ASSUME_ELEVATED=1 to opt in to tier 2 outside CI.
  *
  * Grant principal follows how the APP connects (socket -> user@localhost,
  * TCP -> user@%), mirroring MariaDB's separate accounts per host.
@@ -39,7 +46,9 @@ final class TestEnv
             ];
         }
         $dbHost = getenv('DB_HOST');
-        if ($dbHost !== false && $dbHost !== '') {
+        $ciMarker = getenv('CI') === 'true' || getenv('CI') === '1'
+            || getenv('DB_ADMIN_ASSUME_ELEVATED') === '1';
+        if ($dbHost !== false && $dbHost !== '' && $ciMarker) {
             return self::$resolved = [
                 'user' => getenv('DB_USER') ?: 'quiz',
                 'pass' => getenv('DB_PASS') ?: '',
@@ -90,7 +99,16 @@ final class TestEnv
                 self::adminPass(),
                 [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            // Tier 1 is an explicit operator instruction: a wrong value is a
+            // misconfiguration to surface, never something to skip around.
+            if (self::resolveAdmin()['tier'] === 1) {
+                throw new RuntimeException(
+                    'Explicit DB_ADMIN_* credentials failed to connect: ' . $e->getMessage(),
+                    0,
+                    $e
+                );
+            }
             return null;
         }
     }
