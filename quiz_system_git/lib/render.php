@@ -77,9 +77,9 @@ function render_questions_table(array $rows, array $answers_by_qid, string $mode
 
         $control = '';
         if ($mode === 'radio') {
-            $control = '<input type="radio" name="editAQ" value="' . $qid . '">';
+            $control = '<input type="radio" name="editAQ" value="' . htmlspecialchars((string) $qid, ENT_QUOTES) . '">';
         } elseif ($mode === 'checkbox') {
-            $control = '<input type="checkbox" name="qu' . $displayId . '" value="' . $qid . '">';
+            $control = '<input type="checkbox" name="qu' . $displayId . '" value="' . htmlspecialchars((string) $qid, ENT_QUOTES) . '">';
         }
 
         $q = '<tr>

@@ -23,7 +23,8 @@ function audit_log(string $action, string $detail = ''): void
             : 'system';
 
      //column limits are actor 50 / action 50 / detail 255 (migration 007);
-     //byte-truncate so oversized values can never raise a strict-mode error
+     //char-truncate with substr (VARCHAR(n) counts characters) so oversized
+     //values can never raise a strict-mode error
         $stmt = $pdo->prepare("INSERT INTO audit_log (actor, action, detail) VALUES (:actor, :action, :detail)");
         $stmt->execute([
             'actor' => substr($actor, 0, 50),

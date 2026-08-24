@@ -374,11 +374,11 @@
 
 	//verifying the delete via the DML row count itself
 		if($stmt->rowCount() < 1){
-			echo "Sorry, there was a problem deleting the /".htmlspecialchars($deleteA)."/ admin. Please try again later.";
+			echo "Sorry, there was a problem deleting the /".htmlspecialchars($deleteA, ENT_QUOTES)."/ admin. Please try again later.";
 			exit();
 		}else{
 			audit_log('delete_admin', $deleteA);
-			echo "Alright! The admin /".htmlspecialchars($deleteA)."/ has now been deleted. You just have to logout now!";
+			echo "Alright! The admin /".htmlspecialchars($deleteA, ENT_QUOTES)."/ has now been deleted. You just have to logout now!";
 			exit();
 		}
 	}
@@ -401,10 +401,10 @@
 
  //verifying the update via the DML row count itself
 		if($stmt->rowCount() < 1){
-			echo "Sorry, there was a problem setting /".htmlspecialchars($defaultQ)."/ default. Please try again later.";
+			echo "Sorry, there was a problem setting /".htmlspecialchars($defaultQ, ENT_QUOTES)."/ default. Please try again later.";
 			exit();
 		}else{
-			echo "Thanks! The quiz, /".htmlspecialchars($defaultQ)."/ has now been set as default.";
+			echo "Thanks! The quiz, /".htmlspecialchars($defaultQ, ENT_QUOTES)."/ has now been set as default.";
 			exit();
 		}
 	}

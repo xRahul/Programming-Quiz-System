@@ -181,7 +181,7 @@
 
 						
 						$m_answers .= ' <label style="cursor:pointer;">
-									   		<input type="radio" name="rads'.$m_display_ID.'" value="'.$m_answer_ID.'">'.htmlspecialchars($m_answer, ENT_QUOTES).'</label>
+									   		<input type="radio" name="rads'.$m_display_ID.'" value="'.htmlspecialchars((string) $m_answer_ID, ENT_QUOTES).'">'.htmlspecialchars($m_answer, ENT_QUOTES).'</label>
 										<br /><br />
 									  ';
 					}

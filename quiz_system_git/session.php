@@ -17,7 +17,9 @@
     $stmt->execute(['username' => $check]);
     $row = $stmt->fetch();
 
-	$login_session = $row['username'];
+	//read only after the falsy check shape: a vanished row must not raise
+	//a warning when we are about to bounce the session anyway
+	$login_session = is_array($row) ? (string) $row['username'] : '';
 
 	if(!$login_session) {
 		$user_msg = 'Please Login First!';
