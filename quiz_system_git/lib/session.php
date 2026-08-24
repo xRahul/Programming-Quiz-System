@@ -21,5 +21,8 @@ function secure_session_start(): void
         'httponly' => true,
         'samesite' => 'Lax',
     ]);
+    // Must precede session_start(): strict mode only applies when set before
+    // the session starts, and it stops PHP accepting attacker-supplied ids.
+    ini_set('session.use_strict_mode', '1');
     session_start();
 }
