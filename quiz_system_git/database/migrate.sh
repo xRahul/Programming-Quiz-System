@@ -21,7 +21,15 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DB="${DB_NAME:-debug}"
 DIR="$ROOT/database/migrations"
 
-mysql_q() { mysql -N "$DB" -e "$1"; }
+# Client auth mirrors lib/config.php: DB_HOST/DB_USER/DB_PASS when exported
+# (CI), default socket/OS-auth otherwise. Without --host the client targets a
+# local unix socket that does not exist in containerized environments.
+MYSQL_ARGS=()
+if [ -n "${DB_HOST:-}" ]; then MYSQL_ARGS+=(--host="$DB_HOST"); fi
+if [ -n "${DB_USER:-}" ]; then MYSQL_ARGS+=(--user="$DB_USER"); fi
+if [ -n "${DB_PASS:-}" ]; then MYSQL_ARGS+=(--password="$DB_PASS"); fi
+
+mysql_q() { mysql "${MYSQL_ARGS[@]}" -N "$DB" -e "$1"; }
 
 mysql_q "CREATE TABLE IF NOT EXISTS schema_migrations (
   name VARCHAR(64) PRIMARY KEY,
@@ -44,7 +52,7 @@ for file in "$DIR"/*.sql; do
       php "$ROOT/bin/decode-stored-entities.php"
       ;;
   esac
-  mysql "$DB" < "$file"
+  mysql "${MYSQL_ARGS[@]}" "$DB" < "$file"
   mysql_q "INSERT INTO schema_migrations (name) VALUES ('$name')"
   applied=$((applied + 1))
 done
