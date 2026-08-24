@@ -59,20 +59,19 @@ final class QuizQueryCountTest extends TestCase
         }
 
         try {
-            // unix_socket auth binds this PDO to the OS user running phpunit.
-            self::$controller = new PDO(
-                'mysql:host=localhost;charset=utf8mb4',
-                'rahul',
-                '',
-                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-            );
+            // Elevated controller: explicit admin creds, else CI's app user
+            // (elevated in ci.yml, includes SUPER for SET GLOBAL).
+            self::$controller = TestEnv::adminPdo();
+            if (self::$controller === null) {
+                self::markTestSkipped('general_log control unavailable (no working admin credentials)');
+            }
             self::$origLogState = (string) self::$controller->query('SELECT @@general_log')->fetchColumn();
             self::$origLogOutput = (string) self::$controller->query('SELECT @@log_output')->fetchColumn();
             self::$controller->exec("SET GLOBAL general_log = 'OFF'");
             self::$controller->exec("SET GLOBAL log_output = 'TABLE'");
         } catch (PDOException | RuntimeException $e) {
             self::markTestSkipped(
-                'general_log control unavailable (need SUPER via unix_socket user rahul): ' . $e->getMessage()
+                'general_log control unavailable (need SUPER admin): ' . $e->getMessage()
             );
         }
 
@@ -81,12 +80,12 @@ final class QuizQueryCountTest extends TestCase
         }
         self::$controller->exec('CREATE DATABASE `' . self::$scratchDb . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
         self::$controller->exec(
-            "GRANT ALL PRIVILEGES ON `" . self::$scratchDb . "`.* TO 'quiz'@'localhost'"
+            "GRANT ALL PRIVILEGES ON `" . self::$scratchDb . "`.* TO ' . TestEnv::grantPrincipal() . '"
         );
 
         $dump = dirname(__DIR__) . '/database/debug-v2.sql';
         exec(
-            'mysql --default-character-set=utf8mb4 ' . escapeshellarg(self::$scratchDb)
+            'mysql --default-character-set=utf8mb4' . TestEnv::cliFlags() . ' ' . escapeshellarg(self::$scratchDb)
             . ' < ' . escapeshellarg($dump) . ' 2>&1',
             $importOut,
             $importCode
@@ -159,7 +158,7 @@ final class QuizQueryCountTest extends TestCase
             try {
                 self::$controller->exec('DROP DATABASE IF EXISTS `' . self::$scratchDb . '`');
                 self::$controller->exec(
-                    "REVOKE ALL PRIVILEGES ON `" . self::$scratchDb . "`.* FROM 'quiz'@'localhost'"
+                    "REVOKE ALL PRIVILEGES ON `" . self::$scratchDb . "`.* FROM ' . TestEnv::grantPrincipal() . '"
                 );
             } catch (PDOException $e) {
                 fwrite(STDERR, '[QuizQueryCountTest] scratch teardown failed: ' . $e->getMessage() . "\n");

@@ -26,6 +26,15 @@ final class MigrationTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         require_live_db_credentials();
+
+        // Scratch provisioning shells out to the mysql CLI with admin
+        // credentials; without a working admin account there is nothing to
+        // test here (e.g. developer box with neither elevated app user nor
+        // OS-account socket access).
+        if (TestEnv::adminPdo() === null) {
+            self::markTestSkipped('scratch DB control unavailable (no working admin credentials)');
+        }
+
         self::$base = sprintf('http://%s:%d', self::HOST, self::PORT);
         self::$authJar = tempnam(sys_get_temp_dir(), 'p3mig_jar_');
 
@@ -70,7 +79,7 @@ final class MigrationTest extends TestCase
      */
     private static function rawSql(string $statement, ?string $db = null): array
     {
-        $cmd = 'mysql -N'
+        $cmd = 'mysql -N' . TestEnv::cliFlags()
             . ($db !== null ? ' ' . escapeshellarg($db) : '')
             . ' -e ' . escapeshellarg($statement) . ' 2>&1';
         $out = [];
@@ -104,12 +113,12 @@ final class MigrationTest extends TestCase
         $db = 'debug_test_p3_' . bin2hex(random_bytes(4));
         self::sql("CREATE DATABASE `$db`");
         try {
-            $importCmd = 'mysql ' . escapeshellarg($db) . ' < '
+            $importCmd = 'mysql' . TestEnv::cliFlags() . ' ' . escapeshellarg($db) . ' < '
                 . escapeshellarg(dirname(__DIR__) . '/database/debug.sql');
             [$importCode, $importOut] = self::shell($importCmd);
             self::assertSame(0, $importCode, 'legacy dump import failed: ' . $importOut);
 
-            self::sql("GRANT ALL PRIVILEGES ON `$db`.* TO 'quiz'@'localhost'");
+            self::sql("GRANT ALL PRIVILEGES ON `$db`.* TO " . TestEnv::grantPrincipal());
 
             $fn($db);
         } finally {

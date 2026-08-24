@@ -43,10 +43,11 @@ final class ResetQuestionsHandlerTest extends TestCase
         }
 
         try {
-            // unix_socket auth binds this PDO to the OS user running phpunit.
-            self::$controller = new PDO('mysql:host=localhost;charset=utf8mb4', 'rahul', '', [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            ]);
+            // Elevated controller: explicit admin creds, else CI's app user.
+            self::$controller = TestEnv::adminPdo();
+            if (self::$controller === null) {
+                self::markTestSkipped('scratch DB control unavailable (no working admin credentials)');
+            }
         } catch (PDOException $e) {
             self::markTestSkipped('scratch DB control unavailable (need unix_socket admin user): ' . $e->getMessage());
         }
@@ -55,11 +56,11 @@ final class ResetQuestionsHandlerTest extends TestCase
         self::$controller->exec(
             'CREATE DATABASE `' . self::$scratchDb . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
         );
-        self::$controller->exec("GRANT ALL PRIVILEGES ON `" . self::$scratchDb . "`.* TO 'quiz'@'localhost'");
+        self::$controller->exec("GRANT ALL PRIVILEGES ON `" . self::$scratchDb . "`.* TO ' . TestEnv::grantPrincipal() . '");
 
         $dump = dirname(__DIR__) . '/database/debug-v2.sql';
         exec(
-            'mysql --default-character-set=utf8mb4 ' . escapeshellarg(self::$scratchDb)
+            'mysql --default-character-set=utf8mb4' . TestEnv::cliFlags() . ' ' . escapeshellarg(self::$scratchDb)
             . ' < ' . escapeshellarg($dump) . ' 2>&1',
             $importOut,
             $importCode
@@ -113,7 +114,7 @@ final class ResetQuestionsHandlerTest extends TestCase
             try {
                 self::$controller->exec('DROP DATABASE IF EXISTS `' . self::$scratchDb . '`');
                 self::$controller->exec(
-                    "REVOKE ALL PRIVILEGES ON `" . self::$scratchDb . "`.* FROM 'quiz'@'localhost'"
+                    "REVOKE ALL PRIVILEGES ON `" . self::$scratchDb . "`.* FROM ' . TestEnv::grantPrincipal() . '"
                 );
             } catch (PDOException $e) {
                 fwrite(STDERR, '[ResetQuestionsHandlerTest] scratch teardown failed: ' . $e->getMessage() . "\n");

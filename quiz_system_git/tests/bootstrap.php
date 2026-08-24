@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/TestEnv.php';
 
 /**
  * Tests that touch a live database authenticate as DB_USER/DB_PASS. Call at
