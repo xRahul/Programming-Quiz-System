@@ -117,10 +117,12 @@ jobs:
           wait "$PID" || code=$?
           cat /tmp/phpunit.log
           # Surface failures as check-run annotations (readable via API).
+          # || true: a no-match grep must not trip set -e/pipefail before
+          # the summary and chunked-annotation delivery below.
           grep -E '^[0-9]+\)|Access denied|did not become ready|Failed asserting|^Error|^Exception' \
             /tmp/phpunit.log | head -40 | while IFS= read -r line; do
               echo "::error::$line"
-            done
+            done || true
           # Full diagnostics ride the job summary -> check-run output.summary,
           # which the public API exposes without authentication. This makes CI
           # failures diagnosable from any machine, no token required.
