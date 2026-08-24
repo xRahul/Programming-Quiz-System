@@ -73,6 +73,16 @@ jobs:
           mysql --host=127.0.0.1 --user=quiz --password=ci_password debug \
             < quiz_system_git/database/debug-v2.sql
 
+      - name: Elevate test user for scratch provisioning
+        run: |
+          # Test suites self-provision scratch databases, grant/revoke on
+          # them, and toggle general_log (QuizQueryCountTest). The service
+          # default grants only cover the seed DB; mirror a dev superuser.
+          # ALL PRIVILEGES includes SUPER on MariaDB, which gates SET GLOBAL.
+          mysql --host=127.0.0.1 --user=root --password=ci_root_password -e \
+            "GRANT ALL PRIVILEGES ON *.* TO 'quiz'@'%' WITH GRANT OPTION;
+             FLUSH PRIVILEGES;"
+
       - name: Run PHPUnit
         working-directory: quiz_system_git
         env:
