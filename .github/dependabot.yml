@@ -9,3 +9,12 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    ignore:
+      # Major bumps churn pinned actions (checkout v4->v7, phpstan v2->v3
+      # opened failing PRs within hours); take majors deliberately instead.
+      - dependency-name: "actions/*"
+        versions: [">=5"]
+      - dependency-name: "php-actions/phpstan"
+        versions: [">=3"]
+      - dependency-name: "shivammathur/setup-php"
+        versions: [">=3"]
