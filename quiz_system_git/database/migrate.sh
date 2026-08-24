@@ -7,9 +7,12 @@
 # client additionally honors its standard environment overrides (MYSQL_HOST,
 # MYSQL_PWD, MYSQL_TCP_PORT, ...) and ~/.my.cnf credentials.
 #
-# Required env: DB_HOST, DB_NAME, DB_USER, DB_PASS must all be exported (e.g.
-# `export DB_USER=quiz DB_PASS=quizpass`) -- unix-socket OS auth does not apply
-# to the PDO step.
+# Credentials: every variable is OPTIONAL. When DB_HOST/DB_USER/DB_PASS are
+# exported they are passed to the mysql client explicitly; when omitted the
+# client falls back to its own defaults (unix-socket OS auth locally). The PDO
+# decode step (bin/decode-stored-entities.php) reads the same variables via
+# lib/config.php and does need real TCP credentials where socket auth cannot
+# apply.
 #
 # Applied files are recorded in a schema_migrations table, so running this a
 # second time is a no-op. Any failing statement aborts the run non-zero before
@@ -40,6 +43,13 @@ applied=0
 for file in "$DIR"/*.sql; do
   [ -e "$file" ] || continue
   name="$(basename "$file")"
+
+  # Filenames are interpolated into SQL below; repo-controlled input, but a
+  # stray quote would corrupt the statement -- refuse anything unusual.
+  if ! printf '%s' "$name" | grep -qE '^[A-Za-z0-9._-]+$'; then
+    echo "migrate: refusing unsafe migration filename: $name" >&2
+    exit 1
+  fi
 
   if [ "$(mysql_q "SELECT COUNT(*) FROM schema_migrations WHERE name = '$name'")" != "0" ]; then
     echo "migrate: skip   $name (already applied)"
