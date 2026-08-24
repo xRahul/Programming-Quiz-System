@@ -35,6 +35,9 @@ jobs:
   tests:
     name: Tests (PHP 8.3 / MariaDB 10.11)
     runs-on: ubuntu-latest
+    # Bounds a wedged test process (e.g. readiness loop against a server
+    # that never came up); local wall time is ~2 min even cold.
+    timeout-minutes: 25
 
     services:
       mariadb:
@@ -92,7 +95,8 @@ jobs:
           DB_PASS: ci_password
         run: |
           set -o pipefail
-          vendor/bin/phpunit 2>&1 | tee /tmp/phpunit.log
+          # Event log pinpoints the exact test a wedged run stalls on.
+          vendor/bin/phpunit --log-events-text /tmp/phpunit-events.log 2>&1 | tee /tmp/phpunit.log
           code=$?
           # Surface failures as check-run annotations (readable via API).
           grep -E '^[0-9]+\)|Access denied|did not become ready|Failed asserting' \
@@ -100,6 +104,16 @@ jobs:
               echo "::error::$line"
             done
           exit $code
+
+      - name: Upload test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpunit-diagnostics
+          path: |
+            /tmp/phpunit.log
+            /tmp/phpunit-events.log
+          if-no-files-found: ignore
 
   static-analysis:
     name: Static analysis (PHPStan level 5)
