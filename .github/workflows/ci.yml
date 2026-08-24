@@ -132,6 +132,18 @@ jobs:
               tail -60 /tmp/events.log || true
               echo '```'
             } >> "$GITHUB_STEP_SUMMARY"
+            # Belt-and-braces delivery: job summaries do not always surface in
+            # check-run output, but annotations do. Chunk the failing log tail
+            # into annotations so the content itself is anonymously fetchable.
+            tail -n 160 /tmp/phpunit.log > /tmp/taillog.txt
+            total=$(wc -l < /tmp/taillog.txt)
+            i=1
+            while [ "$i" -le "$total" ] && [ "$i" -le 160 ]; do
+              chunk=$(sed -n "${i},$((i + 15))p" /tmp/taillog.txt | sed ':a;N;$!ba;s/\n/%0A/g')
+              [ -z "$chunk" ] && break
+              echo "::error::LOG ${i}-$((i + 15)): ${chunk}"
+              i=$((i + 16))
+            done
           fi
           exit $code
 
