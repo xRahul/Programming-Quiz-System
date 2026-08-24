@@ -24,7 +24,9 @@ mysql debug -e "SELECT COUNT(*) FROM quizes"          # expect 2
 
 Coming from the legacy dataset instead? Import `database/debug.sql`, then
 apply the migration chain: `bash quiz_system_git/database/migrate.sh`
-(idempotent; records applied steps in `schema_migrations`). `debug-v2.sql`
+(idempotent; records applied steps in `schema_migrations`). Before running
+migrate.sh, export `DB_USER` / `DB_PASS` (the credentials created in §2) — its
+PDO step needs them; unix-socket root auth does not apply. `debug-v2.sql`
 already bakes in the fully migrated schema, so prefer it for fresh installs.
 
 Optional dedicated user instead of root/socket (choose your own strong password — nothing is stored in the repo):

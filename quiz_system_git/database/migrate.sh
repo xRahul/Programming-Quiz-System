@@ -7,6 +7,10 @@
 # client additionally honors its standard environment overrides (MYSQL_HOST,
 # MYSQL_PWD, MYSQL_TCP_PORT, ...) and ~/.my.cnf credentials.
 #
+# Required env: DB_HOST, DB_NAME, DB_USER, DB_PASS must all be exported (e.g.
+# `export DB_USER=quiz DB_PASS=quizpass`) -- unix-socket OS auth does not apply
+# to the PDO step.
+#
 # Applied files are recorded in a schema_migrations table, so running this a
 # second time is a no-op. Any failing statement aborts the run non-zero before
 # that file is recorded.
