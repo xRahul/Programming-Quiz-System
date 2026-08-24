@@ -28,7 +28,8 @@ jobs:
             -x "quiz_system_git/tests/*" \
             -x "quiz_system_git/vendor/*" \
             -x "quiz_system_git/phpunit.xml" \
-            -x "quiz_system_git/composer.lock"
+            -x "quiz_system_git/composer.lock" \
+            -x "quiz_system_git/.phpunit.result.cache"
           sha256sum artifact.zip > artifact.zip.sha256
 
       - name: Publish rolling prerelease (tag `latest`)
@@ -58,7 +59,8 @@ jobs:
             -x "quiz_system_git/tests/*" \
             -x "quiz_system_git/vendor/*" \
             -x "quiz_system_git/phpunit.xml" \
-            -x "quiz_system_git/composer.lock"
+            -x "quiz_system_git/composer.lock" \
+            -x "quiz_system_git/.phpunit.result.cache"
           sha256sum artifact.zip > artifact.zip.sha256
 
       - name: Extract changelog section for this version
