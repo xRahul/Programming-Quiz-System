@@ -56,7 +56,7 @@ final class ResetQuestionsHandlerTest extends TestCase
         self::$controller->exec(
             'CREATE DATABASE `' . self::$scratchDb . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
         );
-        self::$controller->exec("GRANT ALL PRIVILEGES ON `" . self::$scratchDb . "`.* TO ' . TestEnv::grantPrincipal() . '");
+        self::$controller->exec("GRANT ALL PRIVILEGES ON `" . self::$scratchDb . "`.* TO '" . TestEnv::grantPrincipal() . "'");
 
         $dump = dirname(__DIR__) . '/database/debug-v2.sql';
         exec(
@@ -114,7 +114,7 @@ final class ResetQuestionsHandlerTest extends TestCase
             try {
                 self::$controller->exec('DROP DATABASE IF EXISTS `' . self::$scratchDb . '`');
                 self::$controller->exec(
-                    "REVOKE ALL PRIVILEGES ON `" . self::$scratchDb . "`.* FROM ' . TestEnv::grantPrincipal() . '"
+                    "REVOKE ALL PRIVILEGES ON `" . self::$scratchDb . "`.* FROM '" . TestEnv::grantPrincipal() . "'"
                 );
             } catch (PDOException $e) {
                 fwrite(STDERR, '[ResetQuestionsHandlerTest] scratch teardown failed: ' . $e->getMessage() . "\n");
