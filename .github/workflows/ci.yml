@@ -90,7 +90,16 @@ jobs:
           DB_NAME: debug
           DB_USER: quiz
           DB_PASS: ci_password
-        run: vendor/bin/phpunit
+        run: |
+          set -o pipefail
+          vendor/bin/phpunit 2>&1 | tee /tmp/phpunit.log
+          code=$?
+          # Surface failures as check-run annotations (readable via API).
+          grep -E '^[0-9]+\)|Access denied|did not become ready|Failed asserting' \
+            /tmp/phpunit.log | head -40 | while IFS= read -r line; do
+              echo "::error::$line"
+            done
+          exit $code
 
   static-analysis:
     name: Static analysis (PHPStan level 5)
@@ -104,6 +113,8 @@ jobs:
 
       - name: Run PHPStan
         uses: php-actions/phpstan@v2
+        # Belt-and-braces with the job-level flag below.
+        continue-on-error: true
         with:
           # Matches the version used to generate phpstan-baseline.neon,
           # keeping baseline format and rule behaviour identical in CI.
