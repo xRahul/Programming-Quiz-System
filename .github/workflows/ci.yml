@@ -101,7 +101,10 @@ jobs:
           # naming the culprit test without any API credentials.
           vendor/bin/phpunit --log-events-text /tmp/events.log > /tmp/phpunit.log 2>&1 &
           PID=$!
-          for i in $(seq 1 300); do
+          # 20-min watchdog: must stay strictly below the job's
+          # timeout-minutes (25) or the runner kills the job before this
+          # diagnostic path can ever fire.
+          for i in $(seq 1 240); do
             kill -0 "$PID" 2>/dev/null || break
             sleep 5
           done
@@ -119,9 +122,11 @@ jobs:
           # Surface failures as check-run annotations (readable via API).
           # || true: a no-match grep must not trip set -e/pipefail before
           # the summary and chunked-annotation delivery below.
+          # Escape % first so log content can't inject workflow-command
+          # escapes (%0A, %3D, ...) into the annotation payload.
           grep -E '^[0-9]+\)|Access denied|did not become ready|Failed asserting|^Error|^Exception' \
             /tmp/phpunit.log | head -40 | while IFS= read -r line; do
-              echo "::error::$line"
+              echo "::error::${line//%/%25}"
             done || true
           # Full diagnostics ride the job summary -> check-run output.summary,
           # which the public API exposes without authentication. This makes CI
@@ -144,7 +149,7 @@ jobs:
             total=$(wc -l < /tmp/taillog.txt)
             i=1
             while [ "$i" -le "$total" ] && [ "$i" -le 160 ]; do
-              chunk=$(sed -n "${i},$((i + 15))p" /tmp/taillog.txt | sed ':a;N;$!ba;s/\n/%0A/g')
+              chunk=$(sed -n "${i},$((i + 15))p" /tmp/taillog.txt | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
               [ -z "$chunk" ] && break
               echo "::error::LOG ${i}-$((i + 15)): ${chunk}"
               i=$((i + 16))
