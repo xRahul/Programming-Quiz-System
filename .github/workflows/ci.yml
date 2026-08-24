@@ -114,10 +114,25 @@ jobs:
           wait "$PID"; code=$?
           cat /tmp/phpunit.log
           # Surface failures as check-run annotations (readable via API).
-          grep -E '^[0-9]+\)|Access denied|did not become ready|Failed asserting' \
+          grep -E '^[0-9]+\)|Access denied|did not become ready|Failed asserting|^Error|^Exception' \
             /tmp/phpunit.log | head -40 | while IFS= read -r line; do
               echo "::error::$line"
             done
+          # Full diagnostics ride the job summary -> check-run output.summary,
+          # which the public API exposes without authentication. This makes CI
+          # failures diagnosable from any machine, no token required.
+          if [ "$code" -ne 0 ]; then
+            {
+              echo "### PHPUnit output"
+              echo '```'
+              cat /tmp/phpunit.log
+              echo '```'
+              echo "### Last PHPUnit events"
+              echo '```'
+              tail -60 /tmp/events.log || true
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
           exit $code
 
       - name: Upload test diagnostics
